@@ -56,6 +56,10 @@ Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->prefix
     // Registration Periods
     Route::resource('periods', \App\Http\Controllers\Admin\RegistrationPeriodController::class);
     Route::post('/periods/{period}/toggle', [\App\Http\Controllers\Admin\RegistrationPeriodController::class, 'toggleActive'])->name('periods.toggle');
+    
+    // Registration Types
+    Route::resource('registration-types', \App\Http\Controllers\Admin\RegistrationTypeController::class);
+    Route::post('/registration-types/{registrationType}/toggle', [\App\Http\Controllers\Admin\RegistrationTypeController::class, 'toggleActive'])->name('registration-types.toggle');
 });
 
 // Profile routes (from Breeze)

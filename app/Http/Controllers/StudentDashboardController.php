@@ -42,6 +42,6 @@ class StudentDashboardController extends Controller
             ['name' => 'Selesai', 'completed' => false, 'active' => false],
         ];
 
-        return view('student.dashboard', compact('biodata', 'steps', 'announcements', 'activePeriod', 'rejectedVerifications'));
+        return view('student.dashboard', compact('biodata', 'registration', 'steps', 'announcements', 'activePeriod', 'rejectedVerifications'));
     }
 }

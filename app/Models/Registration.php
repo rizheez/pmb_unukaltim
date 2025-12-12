@@ -8,7 +8,7 @@ class Registration extends Model
 {
     protected $fillable = [
         'user_id',
-        'registration_type',
+        'registration_type_id',
         'choice_1',
         'choice_2',
         'choice_3',
@@ -24,6 +24,11 @@ class Registration extends Model
     public function registrationPeriod()
     {
         return $this->belongsTo(RegistrationPeriod::class);
+    }
+
+    public function registrationType()
+    {
+        return $this->belongsTo(RegistrationType::class);
     }
 
     /**

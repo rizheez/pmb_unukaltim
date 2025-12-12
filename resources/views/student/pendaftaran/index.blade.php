@@ -24,15 +24,16 @@
 
                     <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
                         <div class="sm:col-span-2">
-                            <label for="registration_type" class="block text-sm font-medium text-gray-700">Jenis
+                            <label for="registration_type_id" class="block text-sm font-medium text-gray-700">Jenis
                                 Pendaftaran</label>
-                            <select name="registration_type" id="registration_type"
+                            <select name="registration_type_id" id="registration_type_id"
                                 class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm">
                                 <option value="">Pilih Jenis Pendaftaran</option>
-                                <option value="Reguler">Reguler</option>
-                                <option value="CBT">CBT (Computer Based Test)</option>
+                                @foreach ($registrationTypes as $type)
+                                    <option value="{{ $type->id }}">{{ $type->name }}</option>
+                                @endforeach
                             </select>
-                            @error('registration_type')
+                            @error('registration_type_id')
                                 <span class="text-red-500 text-xs">{{ $message }}</span>
                             @enderror
                         </div>
@@ -143,7 +144,7 @@
                                                 {{ $registration->updated_at->format('d M Y') }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                {{ $registration->registration_type }}
+                                                {{ $registration->registrationType->name }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                                 {{ $registration->choice_1 }}

@@ -33,20 +33,24 @@
             </div>
             <nav class="mt-4">
                 <a href="{{ route('admin.dashboard') }}"
-                    class="block px-4 py-2 text-white hover:bg-gray-800 {{ request()->routeIs('admin.dashboard') ? 'bg-teal-600 font-semibold' : '' }}">
+                    class="block px-4 py-2 text-white hover:bg-gray-800 {{ request()->routeIs('admin.dashboard') ? 'bg-gray-500 font-semibold' : '' }}">
                     Dashboard
                 </a>
                 <a href="{{ route('admin.students.index') }}"
-                    class="block px-4 py-2 text-white hover:bg-gray-800 {{ request()->routeIs('admin.students.*') ? 'bg-teal-600 font-semibold' : '' }}">
+                    class="block px-4 py-2 text-white hover:bg-gray-800 {{ request()->routeIs('admin.students.*') ? 'bg-gray-500 font-semibold' : '' }}">
                     Students
                 </a>
                 <a href="{{ route('admin.periods.index') }}"
-                    class="block px-4 py-2 text-white hover:bg-gray-800 {{ request()->routeIs('admin.periods.*') ? 'bg-teal-600 font-semibold' : '' }}">
+                    class="block px-4 py-2 text-white hover:bg-gray-800 {{ request()->routeIs('admin.periods.*') ? 'bg-gray-500 font-semibold' : '' }}">
                     Periods
                 </a>
                 <a href="{{ route('admin.announcements.index') }}"
-                    class="block px-4 py-2 text-white hover:bg-gray-800 {{ request()->routeIs('admin.announcements.*') ? 'bg-teal-600 font-semibold' : '' }}">
+                    class="block px-4 py-2 text-white hover:bg-gray-800 {{ request()->routeIs('admin.announcements.*') ? 'bg-gray-500 font-semibold' : '' }}">
                     Announcements
+                </a>
+                <a href="{{ route('admin.registration-types.index') }}"
+                    class="block px-4 py-2 text-white hover:bg-gray-800 {{ request()->routeIs('admin.registration-types.*') ? 'bg-gray-500 font-semibold' : '' }}">
+                    Registration Types
                 </a>
             </nav>
             <div class="p-4 border-t mt-auto absolute bottom-0 w-64">
@@ -60,7 +64,7 @@
         </aside>
 
         <!-- Main Content -->
-        <main class="flex-1 px-8 relative flex flex-col min-h-screen">
+        <main class="flex-1 pt-8 px-8 relative flex flex-col min-h-screen">
             <!-- Mobile Toggle Button -->
             <button id="mobileToggle"
                 class="md:hidden fixed top-4 left-4 z-50 bg-teal-600 text-white p-3 rounded-md shadow-lg hover:bg-teal-700 transition-colors">

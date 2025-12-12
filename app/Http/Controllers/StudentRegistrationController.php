@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Registration;
 use App\Models\RegistrationPeriod;
+use App\Models\RegistrationType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,8 +27,9 @@ class StudentRegistrationController extends Controller
         }
 
         $registration = Registration::where('user_id', Auth::id())->first();
+        $registrationTypes = RegistrationType::active()->get();
         
-        return view('student.pendaftaran.index', compact('registration', 'activePeriod'));
+        return view('student.pendaftaran.index', compact('registration', 'activePeriod', 'registrationTypes'));
     }
 
     public function store(Request $request)
@@ -40,7 +42,7 @@ class StudentRegistrationController extends Controller
         }
 
         $request->validate([
-            'registration_type' => 'required',
+            'registration_type_id' => 'required|exists:registration_types,id',
             'choice_1' => 'required',
             'choice_2' => 'nullable',
         ]);
@@ -48,7 +50,7 @@ class StudentRegistrationController extends Controller
         Registration::updateOrCreate(
             ['user_id' => Auth::id()],
             [
-                'registration_type' => $request->registration_type,
+                'registration_type_id' => $request->registration_type_id,
                 'choice_1' => $request->choice_1,
                 'choice_2' => $request->choice_2,
                 'choice_3' => $request->choice_3,
