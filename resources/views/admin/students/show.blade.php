@@ -99,7 +99,8 @@
                     </div>
                     <div>
                         <dt class="text-sm font-medium text-gray-500">Pilihan 2</dt>
-                        <dd class="mt-1 text-sm text-gray-900">{{ $student->registration->choice_2 }}</dd>
+                        <dd class="mt-1 text-sm text-gray-900">
+                            {{ $student->registration->programStudiChoice2->full_name ?? '-' }}</dd>
                     </div>
                 </dl>
             @else
