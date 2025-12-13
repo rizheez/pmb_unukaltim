@@ -10,11 +10,8 @@ class StudentController extends Controller
 {
     public function index(Request $request)
     {
-        $students = User::with(['studentBiodata', 'registration'])
-            ->where('role', 'student')
-            ->get();
-
-        return view('admin.students.index', compact('students'));
+        $periods = \App\Models\RegistrationPeriod::orderBy('start_date', 'desc')->get();
+        return view('admin.students.index', compact('periods'));
     }
 
     public function datatable(Request $request)
@@ -26,11 +23,12 @@ class StudentController extends Controller
         $orderColumn = $request->get('order')[0]['column'] ?? 0;
         $orderDir = $request->get('order')[0]['dir'] ?? 'asc';
         $statusFilter = $request->get('status_filter'); // Filter status
+        $periodFilter = $request->get('period_filter'); // Filter period
 
         $columns = ['name', 'email', 'phone', 'created_at'];
         $orderBy = $columns[$orderColumn] ?? 'created_at';
 
-        $query = User::with(['studentBiodata', 'registration'])
+        $query = User::with(['studentBiodata', 'registration.registrationPeriod'])
             ->where('role', 'student');
 
         // Filter by Status
@@ -42,6 +40,13 @@ class StudentController extends Controller
                     $q->where('status', $statusFilter);
                 });
             }
+        }
+
+        // Filter by Period
+        if ($periodFilter && $periodFilter !== 'all') {
+            $query->whereHas('registration', function ($q) use ($periodFilter) {
+                $q->where('registration_period_id', $periodFilter);
+            });
         }
 
         // Search
@@ -69,6 +74,9 @@ class StudentController extends Controller
                 'status' => $student->registration 
                     ? '<span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">' . ucfirst($student->registration->status) . '</span>'
                     : '<span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800">Belum Daftar</span>',
+                'period_name' => $student->registration && $student->registration->registrationPeriod
+                    ? $student->registration->registrationPeriod->name
+                    : '-',
                 'registered_at' => $student->created_at->format('d M Y'),
                 'actions' => '<a href="' . route('admin.students.show', $student->id) . '" class="text-indigo-600 hover:text-indigo-900">Detail</a>',
             ];

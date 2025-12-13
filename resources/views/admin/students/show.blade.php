@@ -107,8 +107,6 @@
             @endif
         </div>
     </div>
-    </div>
-
     <!-- Document Verification Section -->
     @if ($student->studentBiodata)
         <div class="mt-6 bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
@@ -332,6 +330,9 @@
             </form>
         </div>
     @endif
+    </div>
+
+
 
     <script>
         // Form validation and confirmation

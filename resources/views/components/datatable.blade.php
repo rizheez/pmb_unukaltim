@@ -91,6 +91,11 @@
                                 if (statusFilter) {
                                     d.status_filter = statusFilter.value;
                                 }
+
+                                const periodFilter = document.getElementById('period-filter');
+                                if (periodFilter) {
+                                    d.period_filter = periodFilter.value;
+                                }
                             }
                         },
                         @if (count($columns) > 0)
