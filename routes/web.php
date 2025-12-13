@@ -5,7 +5,12 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentDashboardController;
 use App\Http\Controllers\StudentBiodataController;
 use App\Http\Controllers\StudentRegistrationController;
+use App\Http\Controllers\SitemapController;
 use Illuminate\Support\Facades\Route;
+
+// SEO Routes
+Route::get('/sitemap.xml', [SitemapController::class, 'index']);
+Route::get('/robots.txt', [SitemapController::class, 'robots']);
 
 // Landing page (public)
 Route::get('/', [LandingPageController::class, 'index'])->name('landing-page');

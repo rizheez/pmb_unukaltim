@@ -4,7 +4,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $settings['hero'][0]->value ?? 'PMB Universitas Nurul Kaltim' }}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Primary Meta Tags -->
+    <title>
+        {{ $settings['hero']->where('key', 'hero_title')->first()->value ?? 'PMB Universitas Nahdlatul Ulama Kalimantan Timur' }}
+    </title>
+    <meta name="title"
+        content="{{ $settings['hero']->where('key', 'hero_title')->first()->value ?? 'PMB Universitas Nahdlatul Ulama Kalimantan Timur' }}">
+    <meta name="description"
+        content="{{ $settings['hero']->where('key', 'hero_description')->first()->value ?? 'Pendaftaran Mahasiswa Baru Universitas Nahdlatul Ulama Kalimantan Timur. Kuliah mudah, terjangkau, dan berbasis nilai keislaman.' }}">
+    <meta name="keywords"
+        content="PMB UNU Kaltim, Universitas Nahdlatul Ulama Kalimantan Timur, Pendaftaran Mahasiswa Baru, Kuliah di Samarinda, Universitas Islam Kalimantan Timur, Beasiswa Kuliah, KIP Kuliah">
+    <meta name="author" content="Universitas Nahdlatul Ulama Kalimantan Timur">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="Indonesian">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ url()->current() }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title"
+        content="{{ $settings['hero']->where('key', 'hero_title')->first()->value ?? 'PMB Universitas Nahdlatul Ulama Kalimantan Timur' }}">
+    <meta property="og:description"
+        content="{{ $settings['hero']->where('key', 'hero_description')->first()->value ?? 'Pendaftaran Mahasiswa Baru Universitas Nahdlatul Ulama Kalimantan Timur' }}">
+    @if ($settings['hero']->where('key', 'hero_background_image')->first()?->value)
+        <meta property="og:image"
+            content="{{ Storage::url($settings['hero']->where('key', 'hero_background_image')->first()->value) }}">
+    @elseif($settings['contact']->where('key', 'university_logo')->first()?->value)
+        <meta property="og:image"
+            content="{{ Storage::url($settings['contact']->where('key', 'university_logo')->first()->value) }}">
+    @else
+        <meta property="og:image" content="{{ asset('assets/images/logo_unu.png') }}">
+    @endif
+    <meta property="og:locale" content="id_ID">
+    <meta property="og:site_name" content="PMB UNU Kaltim">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{{ url()->current() }}">
+    <meta name="twitter:title"
+        content="{{ $settings['hero']->where('key', 'hero_title')->first()->value ?? 'PMB Universitas Nahdlatul Ulama Kalimantan Timur' }}">
+    <meta name="twitter:description"
+        content="{{ $settings['hero']->where('key', 'hero_description')->first()->value ?? 'Pendaftaran Mahasiswa Baru Universitas Nahdlatul Ulama Kalimantan Timur' }}">
+    @if ($settings['hero']->where('key', 'hero_background_image')->first()?->value)
+        <meta name="twitter:image"
+            content="{{ Storage::url($settings['hero']->where('key', 'hero_background_image')->first()->value) }}">
+    @else
+        <meta name="twitter:image" content="{{ asset('assets/images/logo_unu.png') }}">
+    @endif
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="apple-touch-icon" href="{{ asset('assets/images/logo_unu.png') }}">
+
+    <!-- Structured Data (JSON-LD) for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "EducationalOrganization",
+        "name": "Universitas Nahdlatul Ulama Kalimantan Timur",
+        "alternateName": "UNU Kaltim",
+        "url": "{{ url('/') }}",
+        "logo": "{{ asset('assets/images/logo_unu.png') }}",
+        "description": "{{ $settings['about']->where('key', 'about_description')->first()->value ?? 'Universitas Nahdlatul Ulama Kalimantan Timur' }}",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "{{ $settings['contact']->where('key', 'contact_address')->first()->value ?? '' }}",
+            "addressLocality": "Samarinda",
+            "addressRegion": "Kalimantan Timur",
+            "addressCountry": "ID"
+        },
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "{{ $settings['contact']->where('key', 'contact_phone_1')->first()->value ?? '' }}",
+            "contactType": "Admissions",
+            "email": "{{ $settings['contact']->where('key', 'contact_email')->first()->value ?? '' }}",
+            "availableLanguage": ["Indonesian"]
+        },
+        "sameAs": [
+            "{{ $settings['social_media']->where('key', 'social_media_facebook')->first()->value ?? '' }}",
+            "{{ $settings['social_media']->where('key', 'social_media_instagram')->first()->value ?? '' }}",
+            "{{ $settings['social_media']->where('key', 'social_media_website')->first()->value ?? '' }}"
+        ]
+    }
+    </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -102,7 +189,8 @@
             <!-- Background Image -->
             <div class="absolute inset-0">
                 <img src="{{ Storage::url($settings['hero']->where('key', 'hero_background_image')->first()->value) }}"
-                    alt="Background" class="w-full h-full object-cover">
+                    alt="Kampus Universitas Nahdlatul Ulama Kalimantan Timur - PMB UNU Kaltim"
+                    class="w-full h-full object-cover">
             </div>
             <!-- Dark Overlay untuk memastikan teks tetap terbaca -->
             <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/60"></div>
