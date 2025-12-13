@@ -1,9 +1,9 @@
 <x-admin-layout>
     <div class="mb-6 flex justify-between items-center">
-        <h2 class="text-2xl font-bold text-gray-800">Registration Periods</h2>
+        <h2 class="text-2xl font-bold text-gray-800">Periode Pendaftaran</h2>
         <a href="{{ route('admin.periods.create') }}"
             class="bg-teal-600 text-white px-4 py-2 rounded-md hover:bg-teal-700">
-            Create New Period
+            Tambah Periode Baru
         </a>
     </div>
 
@@ -18,18 +18,19 @@
             <x-datatable id="periods-table">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name
-                        </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Wave
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama
                         </th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Academic Year</th>
+                            Gelombang
+                        </th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Period</th>
+                            Tahun Akademik</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Periode</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Status</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Action</th>
+                            Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
@@ -53,7 +54,7 @@
                                     @csrf
                                     <button type="submit"
                                         class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $period->is_active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">
-                                        {{ $period->is_active ? 'Active' : 'Inactive' }}
+                                        {{ $period->is_active ? 'Aktif' : 'Nonaktif' }}
                                     </button>
                                 </form>
                             </td>
@@ -61,10 +62,10 @@
                                 <a href="{{ route('admin.periods.edit', $period->id) }}"
                                     class="text-indigo-600 hover:text-indigo-900 mr-3">Edit</a>
                                 <form action="{{ route('admin.periods.destroy', $period->id) }}" method="POST"
-                                    class="inline" onsubmit="return confirm('Are you sure?');">
+                                    class="inline" onsubmit="return confirm('Yakin ingin menghapus?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
+                                    <button type="submit" class="text-red-600 hover:text-red-900">Hapus</button>
                                 </form>
                             </td>
                         </tr>

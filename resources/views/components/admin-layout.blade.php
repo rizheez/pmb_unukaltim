@@ -149,7 +149,7 @@
             </nav>
 
             <div class="p-4 border-t border-teal-700">
-                <form method="POST" action="{{ route('logout') }}">
+                {{-- <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit"
                         class="flex items-center w-full px-4 py-3 rounded-lg text-teal-100 hover:bg-teal-700 transition-colors">
@@ -160,7 +160,10 @@
                         </svg>
                         Log Out
                     </button>
-                </form>
+                </form> --}}
+
+                <p class="text-sm text-center">Copyright © 2025 UNUKALTIM</p>
+
             </div>
         </aside>
 
@@ -262,13 +265,6 @@
 
                 {{ $slot }}
             </main>
-
-            <!-- Footer -->
-            <footer class="text-gray-600 py-4 mt-auto">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <p class="text-sm">Copyright © 2025 Universitas Nahdlatul Ulama Kalimantan Timur</p>
-                </div>
-            </footer>
 
         </div>
 

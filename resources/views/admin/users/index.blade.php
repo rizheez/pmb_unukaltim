@@ -1,7 +1,7 @@
 <x-admin-layout>
     <div class="mb-6 flex justify-between items-center">
         <h2 class="font-semibold text-2xl text-gray-800">
-            User Management
+            Manajemen Pengguna
         </h2>
         <a href="{{ route('admin.users.create') }}"
             class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-md inline-flex items-center">

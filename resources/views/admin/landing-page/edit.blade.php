@@ -251,8 +251,6 @@
                 <p class="text-xs text-gray-500 mt-1">Max 2MB. Leave empty to keep current logo.</p>
             </div>
         </div>
-        </div>
-
         <!-- Social Media Section -->
         <div class="bg-white shadow rounded-lg p-6 mb-6">
             <h3 class="text-xl font-bold text-gray-900 mb-6 border-b pb-3">Social Media</h3>
@@ -298,6 +296,11 @@
                 Save Changes
             </button>
         </div>
+        </div>
+
+
+
+
     </form>
 
 </x-admin-layout>

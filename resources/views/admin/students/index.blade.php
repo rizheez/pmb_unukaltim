@@ -1,7 +1,7 @@
 <x-admin-layout>
     <div class="mb-6 flex justify-between items-center">
         <h2 class="font-semibold text-2xl text-gray-800">
-            Students
+            Mahasiswa
         </h2>
     </div>
 
@@ -43,7 +43,7 @@
                             Email
                         </th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Phone
+                            Telepon
                         </th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Status
