@@ -67,16 +67,25 @@
                 </a>
             </nav>
 
-            <div class="p-4 border-t border-teal-700">
+            {{-- <div class="p-4 border-t border-teal-700">
                 <div class="flex items-center">
-                    <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name ?? 'User') }}&background=random"
-                        alt="Avatar" class="w-8 h-8 rounded-full bg-teal-200">
+                    @php
+                        $biodata = Auth::user()->biodata;
+                        $sidebarPhotoUrl =
+                            $biodata && $biodata->photo_path
+                                ? Storage::url($biodata->photo_path)
+                                : 'https://ui-avatars.com/api/?name=' .
+                                    urlencode(Auth::user()->name ?? 'User') .
+                                    '&background=0d9488&color=fff&size=32';
+                    @endphp
+                    <img src="{{ $sidebarPhotoUrl }}" alt="Avatar"
+                        class="w-10 h-10 rounded-full ring-2 ring-teal-500 object-cover">
                     <div class="ml-3">
                         <p class="text-sm font-medium">{{ Auth::user()->name ?? 'Student Name' }}</p>
                         <p class="text-xs text-teal-300">Calon Mahasiswa</p>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </aside>
 
         <!-- MAIN WRAPPER (mendorong footer ke bawah) -->
@@ -108,7 +117,7 @@
                 </div>
 
                 <div class="flex items-center space-x-4">
-                    <button class="relative text-gray-400 hover:text-gray-600">
+                    {{-- <button class="relative text-gray-400 hover:text-gray-600">
                         <i data-lucide="bell" class="w-6 h-6"></i>
                         <span
                             class="absolute top-0 right-0 block h-2 w-2 rounded-full ring-2 ring-white bg-red-400"></span>
@@ -117,21 +126,35 @@
                     <span
                         class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-teal-100 text-teal-800">
                         Student
-                    </span>
+                    </span> --}}
 
                     <div class="relative" x-data="{ open: false }">
-                        <button @click="open = !open" class="flex items-center space-x-2 focus:outline-none">
+                        <button @click="open = !open"
+                            class="flex items-center space-x-2 focus:outline-none hover:bg-gray-50 rounded-lg px-2 py-1 transition-colors">
+                            @php
+                                $biodata = Auth::user()->biodata;
+                                $photoUrl =
+                                    $biodata && $biodata->photo_path
+                                        ? Storage::url($biodata->photo_path)
+                                        : 'https://ui-avatars.com/api/?name=' .
+                                            urlencode(Auth::user()->name ?? 'User') .
+                                            '&background=0d9488&color=fff&size=32';
+                            @endphp
+                            <img src="{{ $photoUrl }}" alt="Avatar"
+                                class="w-8 h-8 rounded-full ring-2 ring-teal-100 object-cover">
                             <span class="text-sm font-medium text-gray-700">{{ Auth::user()->name ?? 'User' }}</span>
                             <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400"></i>
                         </button>
 
                         <div x-show="open" x-cloak x-transition @click.away="open = false"
                             class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5">
+                            <x-responsive-nav-link :href="route('profile.edit')">
+                                {{ __('Profile') }}
+                            </x-responsive-nav-link>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <button type="submit"
-                                    class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sign
-                                    out</button>
+                                    class="block w-full ps-3 pe-4 py-2 border-l-4 border-transparent text-start text-base font-medium text-gray-60 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:text-gray-800 focus:bg-gray-50 focus:border-gray-300 transition duration-150 ease-in-out">Logout</button>
                             </form>
                         </div>
                     </div>

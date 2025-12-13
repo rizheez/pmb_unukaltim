@@ -58,6 +58,14 @@
                     class="block px-4 py-2 text-gray-600 hover:bg-gray-100 {{ request()->routeIs('admin.program-studi.*') ? 'bg-gray-100 font-semibold' : '' }}">
                     Program Studi
                 </a>
+
+                @if (auth()->user()->role === 'admin')
+                    <a href="{{ route('admin.users.index') }}"
+                        class="block px-4 py-2 text-gray-600 hover:bg-gray-100 {{ request()->routeIs('admin.users.*') ? 'bg-gray-100 font-semibold' : '' }}">
+                        User Management
+                    </a>
+                @endif
+
                 <a href="{{ route('admin.landing-page.edit') }}"
                     class="block px-4 py-2 text-gray-600 hover:bg-gray-100 {{ request()->routeIs('admin.landing-page.*') ? 'bg-gray-100 font-semibold' : '' }}">
                     Landing Page

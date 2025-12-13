@@ -63,6 +63,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(StudentBiodata::class);
     }
 
+    public function biodata()
+    {
+        return $this->hasOne(StudentBiodata::class);
+    }
+
     public function registration()
     {
         return $this->hasOne(Registration::class);

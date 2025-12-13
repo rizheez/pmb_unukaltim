@@ -69,26 +69,45 @@ class StudentBiodataController extends Controller
             'birth_date' => $request->birth_date,
         ];
 
+        // Get existing biodata to check for old files
+        $existingBiodata = StudentBiodata::where('user_id', Auth::id())->first();
+
         // Handle photo upload
         if ($request->hasFile('photo')) {
+            // Delete old photo if exists
+            if ($existingBiodata && $existingBiodata->photo_path) {
+                \Storage::disk('public')->delete($existingBiodata->photo_path);
+            }
             $path = $request->file('photo')->store('students/photos', 'public');
             $data['photo_path'] = $path;
         }
 
         // Handle KTP upload
         if ($request->hasFile('ktp')) {
+            // Delete old KTP if exists
+            if ($existingBiodata && $existingBiodata->ktp_path) {
+                \Storage::disk('public')->delete($existingBiodata->ktp_path);
+            }
             $path = $request->file('ktp')->store('students/ktp', 'public');
             $data['ktp_path'] = $path;
         }
 
         // Handle KK upload
         if ($request->hasFile('kk')) {
+            // Delete old KK if exists
+            if ($existingBiodata && $existingBiodata->kk_path) {
+                \Storage::disk('public')->delete($existingBiodata->kk_path);
+            }
             $path = $request->file('kk')->store('students/kk', 'public');
             $data['kk_path'] = $path;
         }
 
         // Handle Certificate upload
         if ($request->hasFile('certificate')) {
+            // Delete old certificate if exists
+            if ($existingBiodata && $existingBiodata->certificate_path) {
+                \Storage::disk('public')->delete($existingBiodata->certificate_path);
+            }
             $path = $request->file('certificate')->store('students/certificates', 'public');
             $data['certificate_path'] = $path;
         }
