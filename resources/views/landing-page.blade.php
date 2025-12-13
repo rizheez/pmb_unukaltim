@@ -476,7 +476,8 @@
     <footer class="bg-gray-900 text-white py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
-                <p class="text-gray-400">&copy; {{ date('Y') }} Universitas Nurul Kaltim. All rights reserved.</p>
+                <p class="text-gray-400">&copy; {{ date('Y') }} Universitas Nahdlatul Ulama Kalimantan Timur. All
+                    rights reserved.</p>
                 <div class="mt-4 flex justify-center items-center space-x-6">
                     @if ($settings['social_media']->where('key', 'social_media_facebook')->first()?->value)
                         <a href="{{ $settings['social_media']->where('key', 'social_media_facebook')->first()->value }}"
