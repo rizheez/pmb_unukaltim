@@ -28,6 +28,10 @@
             @if ($student->studentBiodata)
                 <dl class="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
                     <div class="sm:col-span-1">
+                        <dt class="text-sm font-medium text-gray-500">Nama Lengkap</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ $student->studentBiodata->name }}</dd>
+                    </div>
+                    <div class="sm:col-span-1">
                         <dt class="text-sm font-medium text-gray-500">NIK</dt>
                         <dd class="mt-1 text-sm text-gray-900">{{ $student->studentBiodata->nik }}</dd>
                     </div>
@@ -54,11 +58,11 @@
                         <dt class="text-sm font-medium text-gray-500">Agama</dt>
                         <dd class="mt-1 text-sm text-gray-900">{{ $student->studentBiodata->religion }}</dd>
                     </div>
-                    <div class="sm:col-span-2">
+                    <div class="sm:col-span-1">
                         <dt class="text-sm font-medium text-gray-500">Alamat Lengkap</dt>
                         <dd class="mt-1 text-sm text-gray-900">{{ $student->studentBiodata->address }}</dd>
                     </div>
-                    <div class="sm:col-span-2">
+                    <div class="sm:col-span-1">
                         <dt class="text-sm font-medium text-gray-500">Asal Sekolah</dt>
                         <dd class="mt-1 text-sm text-gray-900">{{ $student->studentBiodata->school_origin }}
                             ({{ $student->studentBiodata->major }})</dd>
@@ -77,8 +81,8 @@
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
             <h3 class="text-lg font-semibold text-gray-800 mb-4 border-b pb-2">Pendaftaran</h3>
             @if ($student->registration)
-                <dl class="grid grid-cols-1 gap-x-4 gap-y-4">
-                    <div>
+                <dl class="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
+                    <div class="sm:col-span-1">
                         <dt class="text-sm font-medium text-gray-500">Status</dt>
                         <dd class="mt-1">
                             <span
@@ -87,17 +91,17 @@
                             </span>
                         </dd>
                     </div>
-                    <div>
+                    <div class="sm:col-span-1">
                         <dt class="text-sm font-medium text-gray-500">Jenis Pendaftaran</dt>
                         <dd class="mt-1 text-sm text-gray-900">{{ $student->registration->registrationType->name }}
                         </dd>
                     </div>
-                    <div>
+                    <div class="sm:col-span-1">
                         <dt class="text-sm font-medium text-gray-500">Pilihan 1</dt>
                         <dd class="mt-1 text-sm text-gray-900">
                             {{ $student->registration->programStudiChoice1->full_name ?? '-' }}</dd>
                     </div>
-                    <div>
+                    <div class="sm:col-span-1">
                         <dt class="text-sm font-medium text-gray-500">Pilihan 2</dt>
                         <dd class="mt-1 text-sm text-gray-900">
                             {{ $student->registration->programStudiChoice2->full_name ?? '-' }}</dd>
@@ -187,7 +191,8 @@
                         @if ($student->studentBiodata->kk_path)
                             <div class="ml-4 w-64">
                                 <input type="hidden" name="verifications[1][document_type]" value="kk">
-                                <select name="verifications[1][status]" class="w-full rounded-md border-gray-300 mb-2">
+                                <select name="verifications[1][status]"
+                                    class="w-full rounded-md border-gray-300 mb-2">
                                     <option value="">-- Pilih Status --</option>
                                     <option value="approved">Setujui</option>
                                     <option value="rejected">Tolak</option>
@@ -289,10 +294,24 @@
                         <div class="flex-1">
                             <h4 class="font-medium text-gray-900 mb-2">Data Biodata</h4>
                             <div class="text-sm space-y-1">
+                                <p><span class="text-gray-600">Nama Lengkap:</span>
+                                    {{ $student->studentBiodata->name }}</p>
                                 <p><span class="text-gray-600">NIK:</span> {{ $student->studentBiodata->nik }}</p>
                                 <p><span class="text-gray-600">NISN:</span> {{ $student->studentBiodata->nisn }}</p>
                                 <p><span class="text-gray-600">Asal Sekolah:</span>
                                     {{ $student->studentBiodata->school_origin }}</p>
+                                <p><span class="text-gray-600">Telepon:</span> {{ $student->studentBiodata->phone }}
+                                </p>
+                                <p><span class="text-gray-600">Jenis Kelamin:</span>
+                                    {{ $student->studentBiodata->gender }}</p>
+                                <p><span class="text-gray-600">Tempat, Tanggal Lahir:</span>
+                                    {{ $student->studentBiodata->birth_place }},
+                                    {{ $student->studentBiodata->birth_date }}</p>
+                                <p><span class="text-gray-600">Agama:</span> {{ $student->studentBiodata->religion }}
+                                </p>
+                                <p><span class="text-gray-600">Alamat Lengkap:</span>
+                                    {{ $student->studentBiodata->address }}</p>
+
                             </div>
                             @php
                                 $biodataVerification = $student->studentBiodata->verifications
