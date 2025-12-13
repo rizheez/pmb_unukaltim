@@ -42,7 +42,7 @@ class StudentBiodataController extends Controller
                 'unique:student_biodatas,nik,' . (StudentBiodata::where('user_id', Auth::id())->first()->id ?? 'NULL')
             ],
             'nisn' => [
-                'nullable',
+                'required',
                 'numeric',
                 'unique:student_biodatas,nisn,' . (StudentBiodata::where('user_id', Auth::id())->first()->id ?? 'NULL')
             ],
@@ -51,10 +51,10 @@ class StudentBiodataController extends Controller
             'birth_place' => 'required|string|max:255',
             'religion' => 'required|string|max:255',
             'address' => 'required|string',
-            'photo' => 'nullable|image|max:1024', // 1MB Max
-            'ktp' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048', // 2MB Max
-            'kk' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048', // 2MB Max
-            'certificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048', // 2MB Max
+            'photo' => 'required|image|max:1024', // 1MB Max
+            'ktp' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048', // 2MB Max
+            'kk' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048', // 2MB Max
+            'certificate' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048', // 2MB Max
             'birth_date' => 'required|date|before:-15 years',
             'school_origin' => 'required|string',
         ], [
