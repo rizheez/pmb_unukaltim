@@ -1,7 +1,23 @@
 <x-admin-layout>
     <div class="mb-6">
         <a href="{{ route('admin.students.index') }}" class="text-blue-500 hover:text-blue-700">&larr; Back to List</a>
-        <h2 class="text-2xl font-bold text-gray-800 mt-2">Student Details: {{ $student->name }}</h2>
+        <div class="flex items-center justify-between mt-2">
+            <h2 class="text-2xl font-bold text-gray-800">Student Details: {{ $student->name }}</h2>
+            <div>
+                @if($student->email_verified_at)
+                    <span class="px-3 py-1 text-sm rounded bg-green-100 text-green-800">
+                        ✓ Email Verified
+                    </span>
+                    <span class="text-xs text-gray-500 ml-2">
+                        {{ $student->email_verified_at->format('d M Y') }}
+                    </span>
+                @else
+                    <span class="px-3 py-1 text-sm rounded bg-red-100 text-red-800">
+                        ✗ Email Not Verified
+                    </span>
+                @endif
+            </div>
+        </div>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -62,7 +78,7 @@
                     </div>
                     <div>
                         <dt class="text-sm font-medium text-gray-500">Choice 1</dt>
-                        <dd class="mt-1 text-sm text-gray-900">{{ $student->registration->choice_1 }}</dd>
+                        <dd class="mt-1 text-sm text-gray-900">{{ $student->registration->programStudiChoice1->full_name ?? '-' }}</dd>
                     </div>
                     <div>
                         <dt class="text-sm font-medium text-gray-500">Choice 2</dt>

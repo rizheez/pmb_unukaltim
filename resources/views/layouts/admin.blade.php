@@ -50,6 +50,18 @@
                     class="block px-4 py-2 text-gray-600 hover:bg-gray-100 {{ request()->routeIs('admin.registration-types.*') ? 'bg-gray-100 font-semibold' : '' }}">
                     Registration Types
                 </a>
+                <a href="{{ route('admin.fakultas.index') }}"
+                    class="block px-4 py-2 text-gray-600 hover:bg-gray-100 {{ request()->routeIs('admin.fakultas.*') ? 'bg-gray-100 font-semibold' : '' }}">
+                    Fakultas
+                </a>
+                <a href="{{ route('admin.program-studi.index') }}"
+                    class="block px-4 py-2 text-gray-600 hover:bg-gray-100 {{ request()->routeIs('admin.program-studi.*') ? 'bg-gray-100 font-semibold' : '' }}">
+                    Program Studi
+                </a>
+                <a href="{{ route('admin.landing-page.edit') }}"
+                    class="block px-4 py-2 text-gray-600 hover:bg-gray-100 {{ request()->routeIs('admin.landing-page.*') ? 'bg-gray-100 font-semibold' : '' }}">
+                    Landing Page
+                </a>
             </nav>
             <div class="p-4 border-t mt-auto absolute bottom-0 w-64">
                 <form method="POST" action="{{ route('logout') }}">

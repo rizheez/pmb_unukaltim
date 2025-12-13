@@ -40,11 +40,11 @@ Route::middleware('auth')->group(function () {
         ->name('verification.notice');
 
     Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)
-        ->middleware(['signed', 'throttle:6,1'])
+        ->middleware(['signed', 'throttle:6,1']) // Verifikasi link limit (klik link)
         ->name('verification.verify');
 
     Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
-        ->middleware('throttle:6,1')
+        ->middleware('throttle:2,1') // Resend button limit (klik tombol resend)
         ->name('verification.send');
 
     Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])

@@ -31,6 +31,21 @@ class Registration extends Model
         return $this->belongsTo(RegistrationType::class);
     }
 
+    public function programStudiChoice1()
+    {
+        return $this->belongsTo(ProgramStudi::class, 'choice_1');
+    }
+
+    public function programStudiChoice2()
+    {
+        return $this->belongsTo(ProgramStudi::class, 'choice_2');
+    }
+
+    public function programStudiChoice3()
+    {
+        return $this->belongsTo(ProgramStudi::class, 'choice_3');
+    }
+
     /**
      * Check if all required documents are verified
      */

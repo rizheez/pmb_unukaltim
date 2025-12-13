@@ -1,22 +1,16 @@
 <?php
 
+use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentDashboardController;
 use App\Http\Controllers\StudentBiodataController;
 use App\Http\Controllers\StudentRegistrationController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    if (auth()->check()) {
-        if (auth()->user()->isAdmin()) {
-            return redirect()->route('admin.dashboard');
-        }
-        return redirect()->route('student.dashboard');
-    }
-    return redirect()->route('login');
-});
+// Landing page (public)
+Route::get('/', [LandingPageController::class, 'index'])->name('landing-page');
 
-Route::middleware(['auth', \App\Http\Middleware\StudentMiddleware::class])->group(function () {
+Route::middleware(['auth', \App\Http\Middleware\StudentMiddleware::class, 'verified'])->group(function () {
     // Dashboard
     Route::get('/student/dashboard', [StudentDashboardController::class, 'index'])
         ->name('student.dashboard');
@@ -60,6 +54,18 @@ Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->prefix
     // Registration Types
     Route::resource('registration-types', \App\Http\Controllers\Admin\RegistrationTypeController::class);
     Route::post('/registration-types/{registrationType}/toggle', [\App\Http\Controllers\Admin\RegistrationTypeController::class, 'toggleActive'])->name('registration-types.toggle');
+    
+    // Fakultas routes
+    Route::resource('fakultas', \App\Http\Controllers\Admin\FakultasController::class);
+    Route::post('/fakultas/{fakulta}/toggle', [\App\Http\Controllers\Admin\FakultasController::class, 'toggleActive'])->name('fakultas.toggle');
+    
+    // Program Studi routes
+    Route::resource('program-studi', \App\Http\Controllers\Admin\ProgramStudiController::class);
+    Route::post('/program-studi/{programStudi}/toggle', [\App\Http\Controllers\Admin\ProgramStudiController::class, 'toggleActive'])->name('program-studi.toggle');
+    
+    // Landing Page Settings
+    Route::get('/landing-page', [\App\Http\Controllers\Admin\LandingPageSettingController::class, 'edit'])->name('landing-page.edit');
+    Route::put('/landing-page', [\App\Http\Controllers\Admin\LandingPageSettingController::class, 'update'])->name('landing-page.update');
 });
 
 // Profile routes (from Breeze)

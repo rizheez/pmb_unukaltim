@@ -29,7 +29,22 @@ class StudentRegistrationController extends Controller
         $registration = Registration::where('user_id', Auth::id())->first();
         $registrationTypes = RegistrationType::active()->get();
         
-        return view('student.pendaftaran.index', compact('registration', 'activePeriod', 'registrationTypes'));
+        // Get active program studi grouped by fakultas
+        $fakultas = \App\Models\Fakultas::active()
+            ->with(['programStudi' => function($query) {
+                $query->active()->orderBy('jenjang')->orderBy('name');
+            }])
+            ->orderBy('name')
+            ->get();
+        
+        // Also get flat list for non-grouped dropdown
+        $programStudi = \App\Models\ProgramStudi::with('fakultas')
+            ->active()
+            ->orderBy('jenjang')
+            ->orderBy('name')
+            ->get();
+        
+        return view('student.pendaftaran.index', compact('registration', 'activePeriod', 'registrationTypes', 'fakultas', 'programStudi'));
     }
 
     public function store(Request $request)
@@ -43,8 +58,9 @@ class StudentRegistrationController extends Controller
 
         $request->validate([
             'registration_type_id' => 'required|exists:registration_types,id',
-            'choice_1' => 'required',
-            'choice_2' => 'nullable',
+            'choice_1' => 'required|exists:program_studi,id',
+            'choice_2' => 'nullable|exists:program_studi,id|different:choice_1',
+            'choice_3' => 'nullable|exists:program_studi,id|different:choice_1,choice_2',
         ]);
 
         Registration::updateOrCreate(

@@ -38,21 +38,6 @@
                             @enderror
                         </div>
 
-                        @php
-                            $prodi = [
-                                'Arsitektur',
-                                'Hubungan Internasional',
-                                'Desain Interior',
-                                'Teknologi Industri Pertanian',
-                                'Pendidikan Anak Usia Dini',
-                                'Farmasi',
-                                'Ilmu Komunikasi',
-                                'Akuntansi',
-                                'Teknik Industri',
-                                'Teknik Informatika',
-                            ];
-                        @endphp
-
                         <!-- Program Studi Pilihan -->
                         <div class="sm:col-span-2">
                             <h4 class="text-sm font-medium text-gray-900 mb-2">Pilihan Program Studi (Maksimal 2)</h4>
@@ -63,8 +48,12 @@
                             <select name="choice_1" id="choice_1"
                                 class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm">
                                 <option value="">Pilih Program Studi 1</option>
-                                @foreach ($prodi as $p)
-                                    <option value="{{ $p }}">{{ $p }}</option>
+                                @foreach ($fakultas as $fak)
+                                    <optgroup label="{{ $fak->name }}">
+                                        @foreach ($fak->programStudi as $ps)
+                                            <option value="{{ $ps->id }}">{{ $ps->full_name }}</option>
+                                        @endforeach
+                                    </optgroup>
                                 @endforeach
                             </select>
                             @error('choice_1')
@@ -78,8 +67,12 @@
                             <select name="choice_2" id="choice_2"
                                 class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm">
                                 <option value="">Pilih Program Studi 2</option>
-                                @foreach ($prodi as $p)
-                                    <option value="{{ $p }}">{{ $p }}</option>
+                                @foreach ($fakultas as $fak)
+                                    <optgroup label="{{ $fak->name }}">
+                                        @foreach ($fak->programStudi as $ps)
+                                            <option value="{{ $ps->id }}">{{ $ps->full_name }}</option>
+                                        @endforeach
+                                    </optgroup>
                                 @endforeach
                             </select>
                         </div>
@@ -147,7 +140,7 @@
                                                 {{ $registration->registrationType->name }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                {{ $registration->choice_1 }}
+                                                {{ $registration->programStudiChoice1->full_name ?? '-' }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <span

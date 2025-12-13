@@ -16,7 +16,6 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @livewireStyles
 </head>
 
 <body class="font-sans antialiased bg-gray-50">
@@ -182,7 +181,6 @@
         });
     </script>
 
-    @livewireScripts
 </body>
 
 </html>

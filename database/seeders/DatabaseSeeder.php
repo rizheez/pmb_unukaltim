@@ -13,6 +13,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Seed fakultas and program studi first
+        $this->call([
+            FakultasSeeder::class,
+            ProgramStudiSeeder::class,
+            LandingPageSettingSeeder::class,
+        ]);
+
         User::factory(10)->create();
 
         // User::factory()->create([
