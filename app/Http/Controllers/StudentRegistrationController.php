@@ -59,8 +59,17 @@ class StudentRegistrationController extends Controller
         $request->validate([
             'registration_type_id' => 'required|exists:registration_types,id',
             'choice_1' => 'required|exists:program_studi,id',
-            'choice_2' => 'nullable|exists:program_studi,id|different:choice_1',
+            'choice_2' => 'required|exists:program_studi,id|different:choice_1',
             'choice_3' => 'nullable|exists:program_studi,id|different:choice_1,choice_2',
+        ], [
+            'required' => ':attribute wajib diisi.',
+            'exists' => ':attribute tidak valid.',
+            'different' => 'Program studi :attribute tidak boleh sama.',
+        ],[
+            'registration_type_id' => 'Jenis Pendaftaran',
+            'choice_1' => 'Pilihan 1',
+            'choice_2' => 'Pilihan 2',
+            'choice_3' => 'Pilihan 3',
         ]);
 
         Registration::updateOrCreate(
