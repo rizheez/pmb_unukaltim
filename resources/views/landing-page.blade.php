@@ -95,10 +95,24 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        /* 1. UPDATE: Import Font Merriweather (untuk Judul) dan Inter (untuk Isi) */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Merriweather:wght@300;400;700;900&display=swap');
 
-        * {
+        /* 2. UPDATE: Setting Font Family */
+        /* Default untuk body text tetap Inter agar bersih */
+        body {
             font-family: 'Inter', sans-serif;
+        }
+
+        /* Khusus Heading/Judul menggunakan Merriweather agar terlihat berwibawa/akademis */
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        .font-serif-heading {
+            font-family: 'Merriweather', serif;
         }
 
         .gradient-bg {
@@ -106,7 +120,7 @@
         }
 
         .hero-gradient {
-            background: linear-gradient(135deg, rgba(13, 148, 136, 0.85) 0%, rgba(6, 182, 212, 0.85) 100%);
+            background: linear-gradient(135deg, rgba(13, 148, 136, 0.90) 0%, rgba(6, 182, 212, 0.90) 100%);
         }
 
         .card-hover {
@@ -150,7 +164,7 @@
                         <img src="{{ Storage::url($settings['contact']->where('key', 'university_logo')->first()->value) }}"
                             alt="Logo" class="h-10 w-10 object-contain">
                     @endif
-                    <span class="text-xl font-bold text-teal-600">PMB UNUKALTIM</span>
+                    <span class="text-xl font-bold text-teal-600 font-serif-heading">PMB UNUKALTIM</span>
                 </div>
                 <div class="hidden md:flex space-x-8">
                     <a href="#home" class="text-gray-700 hover:text-teal-600 transition">Beranda</a>
@@ -363,7 +377,7 @@
                     <div class="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
                         <i data-lucide="map-pin" class="text-teal-600 w-8 h-8"></i>
                     </div>
-                    <h3 class="font-semibold text-gray-900 mb-2">Alamat</h3>
+                    <h3 class="font-semibold text-gray-900 mb-2 font-serif-heading">Alamat</h3>
                     <p class="text-gray-600">
                         {{ $settings['contact']->where('key', 'contact_address')->first()->value ?? '' }}
                     </p>
@@ -373,7 +387,7 @@
                     <div class="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
                         <i data-lucide="mail" class="text-teal-600 w-8 h-8"></i>
                     </div>
-                    <h3 class="font-semibold text-gray-900 mb-2">Email</h3>
+                    <h3 class="font-semibold text-gray-900 mb-2 font-serif-heading">Email</h3>
                     <p class="text-gray-600">
                         {{ $settings['contact']->where('key', 'contact_email')->first()->value ?? '' }}
                     </p>
@@ -383,7 +397,7 @@
                     <div class="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
                         <i data-lucide="phone" class="text-teal-600 w-8 h-8"></i>
                     </div>
-                    <h3 class="font-semibold text-gray-900 mb-2">Whatsapp</h3>
+                    <h3 class="font-semibold text-gray-900 mb-2 font-serif-heading">Whatsapp</h3>
                     <div class="text-gray-600 space-y-1">
                         @if ($settings['contact']->where('key', 'contact_phone_1')->first()?->value)
                             @php
