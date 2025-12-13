@@ -40,6 +40,7 @@ class LandingPageSettingController extends Controller
             
             'about_title' => 'required|string|max:255',
             'about_description' => 'required|string',
+            'about_image' => 'nullable|image|max:2048',
             
             'contact_address' => 'required|string',
             'contact_email' => 'required|email',
@@ -65,7 +66,7 @@ class LandingPageSettingController extends Controller
         $allSettings = LandingPageSetting::all()->keyBy('key');
 
         // Update text fields
-        foreach ($request->except(['_token', '_method', 'hero_background_image', 'university_logo']) as $key => $value) {
+        foreach ($request->except(['_token', '_method', 'hero_background_image', 'about_image', 'university_logo']) as $key => $value) {
             if ($allSettings->has($key)) {
                 $setting = $allSettings->get($key);
                 $setting->update(['value' => $value]);
@@ -91,6 +92,29 @@ class LandingPageSettingController extends Controller
                     'value' => $path,
                     'type' => 'image',
                     'group' => 'hero',
+                ]);
+            }
+        }
+
+        // Handle about image upload
+        if ($request->hasFile('about_image')) {
+            $setting = $allSettings->get('about_image');
+            
+            // Delete old image if exists
+            if ($setting && $setting->value) {
+                Storage::disk('public')->delete($setting->value);
+            }
+            
+            $path = $request->file('about_image')->store('landing-page', 'public');
+            
+            if ($setting) {
+                $setting->update(['value' => $path]);
+            } else {
+                LandingPageSetting::create([
+                    'key' => 'about_image',
+                    'value' => $path,
+                    'type' => 'image',
+                    'group' => 'about',
                 ]);
             }
         }

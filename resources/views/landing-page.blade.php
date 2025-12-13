@@ -335,7 +335,16 @@
                     </div>
                 </div>
                 <div class="relative">
-                    <div class="aspect-square bg-gradient-to-br from-teal-400 to-cyan-500 rounded-3xl"></div>
+                    @if ($settings['about']->where('key', 'about_image')->first()?->value)
+                        <!-- Display uploaded image -->
+                        <div class="aspect-square rounded-3xl overflow-hidden shadow-2xl">
+                            <img src="{{ Storage::url($settings['about']->where('key', 'about_image')->first()->value) }}"
+                                alt="Tentang {{ config('app.name') }}" class="w-full h-full object-cover">
+                        </div>
+                    @else
+                        <!-- Display gradient if no image -->
+                        <div class="aspect-square bg-gradient-to-br from-teal-400 to-cyan-500 rounded-3xl"></div>
+                    @endif
                 </div>
             </div>
         </div>

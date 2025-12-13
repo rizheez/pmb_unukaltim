@@ -141,6 +141,20 @@
                     <textarea name="about_description" rows="5"
                         class="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500" required>{{ old('about_description', $settings['about']->where('key', 'about_description')->first()->value ?? '') }}</textarea>
                 </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">About Image</label>
+                    @if ($settings['about']->where('key', 'about_image')->first()?->value)
+                        <div class="mb-2">
+                            <img src="{{ Storage::url($settings['about']->where('key', 'about_image')->first()->value) }}"
+                                alt="Current About Image" class="h-48 rounded-lg object-cover">
+                        </div>
+                    @endif
+                    <input type="file" name="about_image" accept="image/*"
+                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                    <p class="text-xs text-gray-500 mt-1">Max 2MB. Leave empty to keep current image. Jika tidak ada
+                        gambar, akan tampil gradient teal-cyan.</p>
+                </div>
             </div>
         </div>
 

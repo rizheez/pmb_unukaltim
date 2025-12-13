@@ -121,6 +121,12 @@ class LandingPageSettingSeeder extends Seeder
             'type' => 'textarea',
             'group' => 'about'
         ],
+        [
+            'key' => 'about_image',
+            'value' => null,
+            'type' => 'image',
+            'group' => 'about'
+        ],
 
         // Contact Section
         [
