@@ -23,11 +23,12 @@ class User extends Authenticatable implements MustVerifyEmail
         'phone',
         'role',
         'password',
+        'email_verified_at',
     ];
 
     public function isAdmin(): bool
     {
-        return $this->role === 'admin' || $this->role === 'staf';
+        return $this->role === 'admin' || $this->role === 'staff';
     }
 
     public function isStudent(): bool

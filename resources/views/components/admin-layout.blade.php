@@ -65,7 +65,7 @@
                             d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
                         </path>
                     </svg>
-                    Students
+                    Calon Mahasiswa
                 </a>
 
                 <a href="{{ route('admin.periods.index') }}"
@@ -76,7 +76,7 @@
                             d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
                         </path>
                     </svg>
-                    Periods
+                    Periode Pendaftaran
                 </a>
 
                 <a href="{{ route('admin.announcements.index') }}"
@@ -87,7 +87,7 @@
                             d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z">
                         </path>
                     </svg>
-                    Announcements
+                    Pengumuman
                 </a>
 
                 <a href="{{ route('admin.registration-types.index') }}"
@@ -98,7 +98,7 @@
                             d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                         </path>
                     </svg>
-                    Registration Types
+                    Jenis Pendaftaran
                 </a>
 
                 <a href="{{ route('admin.fakultas.index') }}"
@@ -132,20 +132,22 @@
                                 d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
                             </path>
                         </svg>
-                        User Management
+                        Manajemen Pengguna
                     </a>
                 @endif
 
-                <a href="{{ route('admin.landing-page.edit') }}"
-                    class="flex items-center px-4 py-3 rounded-lg transition-colors
+                @if (auth()->user()->role === 'admin')
+                    <a href="{{ route('admin.landing-page.edit') }}"
+                        class="flex items-center px-4 py-3 rounded-lg transition-colors
                     {{ request()->routeIs('admin.landing-page.*') ? 'bg-teal-900 text-white' : 'text-teal-100 hover:bg-teal-700' }}">
-                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
-                        </path>
-                    </svg>
-                    Landing Page
-                </a>
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                            </path>
+                        </svg>
+                        Pengaturan Landing Page
+                    </a>
+                @endif
             </nav>
 
             <div class="p-4 border-t border-teal-700">
@@ -182,7 +184,7 @@
                     </button>
 
                     <nav class="hidden md:flex text-sm text-gray-500">
-                        <span class="hover:text-teal-600 cursor-pointer">Home</span>
+                        <span class="hover:text-teal-600 cursor-pointer">Beranda</span>
                         <span class="mx-2">/</span>
                         <span class="hover:text-teal-600 cursor-pointer">Admin</span>
                         <span class="mx-2">/</span>
@@ -190,21 +192,21 @@
                             @if (request()->routeIs('admin.dashboard'))
                                 Dashboard
                             @elseif(request()->routeIs('admin.students.*'))
-                                Students
+                                Mahasiswa
                             @elseif(request()->routeIs('admin.periods.*'))
-                                Periods
+                                Periode Pendaftaran
                             @elseif(request()->routeIs('admin.announcements.*'))
-                                Announcements
+                                Pengumuman
                             @elseif(request()->routeIs('admin.registration-types.*'))
-                                Registration Types
+                                Jenis Pendaftaran
                             @elseif(request()->routeIs('admin.fakultas.*'))
                                 Fakultas
                             @elseif(request()->routeIs('admin.program-studi.*'))
                                 Program Studi
                             @elseif(request()->routeIs('admin.users.*'))
-                                User Management
+                                Manajemen Pengguna
                             @elseif(request()->routeIs('admin.landing-page.*'))
-                                Landing Page
+                                Pengaturan Landing Page
                             @endif
                         </span>
                     </nav>
@@ -233,13 +235,13 @@
                             class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5">
                             <a href="{{ route('profile.edit') }}"
                                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                Profile
+                                Profil
                             </a>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <button type="submit"
                                     class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                    Logout
+                                    Keluar
                                 </button>
                             </form>
                         </div>

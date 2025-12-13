@@ -1,19 +1,20 @@
 <x-admin-layout>
     <div class="mb-6">
-        <a href="{{ route('admin.students.index') }}" class="text-blue-500 hover:text-blue-700">&larr; Back to List</a>
+        <a href="{{ route('admin.students.index') }}" class="text-blue-500 hover:text-blue-700">&larr; Kembali ke
+            Daftar</a>
         <div class="flex items-center justify-between mt-2">
-            <h2 class="text-2xl font-bold text-gray-800">Student Details: {{ $student->name }}</h2>
+            <h2 class="text-2xl font-bold text-gray-800">Detail Calon Mahasiswa: {{ $student->name }}</h2>
             <div>
-                @if($student->email_verified_at)
+                @if ($student->email_verified_at)
                     <span class="px-3 py-1 text-sm rounded bg-green-100 text-green-800">
-                        ✓ Email Verified
+                        ✓ Email Terverifikasi
                     </span>
                     <span class="text-xs text-gray-500 ml-2">
                         {{ $student->email_verified_at->format('d M Y') }}
                     </span>
                 @else
                     <span class="px-3 py-1 text-sm rounded bg-red-100 text-red-800">
-                        ✗ Email Not Verified
+                        ✗ Email Belum Terverifikasi
                     </span>
                 @endif
             </div>
@@ -35,15 +36,30 @@
                         <dd class="mt-1 text-sm text-gray-900">{{ $student->studentBiodata->nisn }}</dd>
                     </div>
                     <div class="sm:col-span-1">
-                        <dt class="text-sm font-medium text-gray-500">Phone</dt>
+                        <dt class="text-sm font-medium text-gray-500">Telepon</dt>
                         <dd class="mt-1 text-sm text-gray-900">{{ $student->studentBiodata->phone }}</dd>
                     </div>
                     <div class="sm:col-span-1">
-                        <dt class="text-sm font-medium text-gray-500">Gender</dt>
+                        <dt class="text-sm font-medium text-gray-500">Jenis Kelamin</dt>
                         <dd class="mt-1 text-sm text-gray-900">{{ $student->studentBiodata->gender }}</dd>
                     </div>
+                    <div class="sm:col-span-1">
+                        <dt class="text-sm font-medium text-gray-500">Tempat, Tanggal Lahir</dt>
+                        <dd class="mt-1 text-sm text-gray-900">
+                            {{ $student->studentBiodata->birth_place }},
+                            {{ \Carbon\Carbon::parse($student->studentBiodata->birth_date)->format('d M Y') }}
+                        </dd>
+                    </div>
+                    <div class="sm:col-span-1">
+                        <dt class="text-sm font-medium text-gray-500">Agama</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ $student->studentBiodata->religion }}</dd>
+                    </div>
                     <div class="sm:col-span-2">
-                        <dt class="text-sm font-medium text-gray-500">School Origin</dt>
+                        <dt class="text-sm font-medium text-gray-500">Alamat Lengkap</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ $student->studentBiodata->address }}</dd>
+                    </div>
+                    <div class="sm:col-span-2">
+                        <dt class="text-sm font-medium text-gray-500">Asal Sekolah</dt>
                         <dd class="mt-1 text-sm text-gray-900">{{ $student->studentBiodata->school_origin }}
                             ({{ $student->studentBiodata->major }})</dd>
                     </div>
@@ -53,13 +69,13 @@
                         class="h-32 w-32 object-cover rounded-md border">
                 </div>
             @else
-                <p class="text-gray-500 italic">Biodata not filled yet.</p>
+                <p class="text-gray-500 italic">Biodata belum diisi.</p>
             @endif
         </div>
 
         <!-- Registration -->
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-            <h3 class="text-lg font-semibold text-gray-800 mb-4 border-b pb-2">Registration</h3>
+            <h3 class="text-lg font-semibold text-gray-800 mb-4 border-b pb-2">Pendaftaran</h3>
             @if ($student->registration)
                 <dl class="grid grid-cols-1 gap-x-4 gap-y-4">
                     <div>
@@ -72,21 +88,22 @@
                         </dd>
                     </div>
                     <div>
-                        <dt class="text-sm font-medium text-gray-500">Registration Type</dt>
+                        <dt class="text-sm font-medium text-gray-500">Jenis Pendaftaran</dt>
                         <dd class="mt-1 text-sm text-gray-900">{{ $student->registration->registrationType->name }}
                         </dd>
                     </div>
                     <div>
-                        <dt class="text-sm font-medium text-gray-500">Choice 1</dt>
-                        <dd class="mt-1 text-sm text-gray-900">{{ $student->registration->programStudiChoice1->full_name ?? '-' }}</dd>
+                        <dt class="text-sm font-medium text-gray-500">Pilihan 1</dt>
+                        <dd class="mt-1 text-sm text-gray-900">
+                            {{ $student->registration->programStudiChoice1->full_name ?? '-' }}</dd>
                     </div>
                     <div>
-                        <dt class="text-sm font-medium text-gray-500">Choice 2</dt>
+                        <dt class="text-sm font-medium text-gray-500">Pilihan 2</dt>
                         <dd class="mt-1 text-sm text-gray-900">{{ $student->registration->choice_2 }}</dd>
                     </div>
                 </dl>
             @else
-                <p class="text-gray-500 italic">Registration not submitted yet.</p>
+                <p class="text-gray-500 italic">Pendaftaran belum disubmit.</p>
             @endif
         </div>
     </div>

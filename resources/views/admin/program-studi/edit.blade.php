@@ -15,7 +15,8 @@
                     required>
                     <option value="">Pilih Fakultas</option>
                     @foreach ($fakultas as $fak)
-                        <option value="{{ $fak->id }}" {{ old('fakultas_id', $programStudi->fakultas_id) == $fak->id ? 'selected' : '' }}>
+                        <option value="{{ $fak->id }}"
+                            {{ old('fakultas_id', $programStudi->fakultas_id) == $fak->id ? 'selected' : '' }}>
                             {{ $fak->name }}
                         </option>
                     @endforeach
@@ -51,11 +52,16 @@
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500"
                     required>
                     <option value="">Pilih Jenjang</option>
-                    <option value="D3" {{ old('jenjang', $programStudi->jenjang) == 'D3' ? 'selected' : '' }}>D3</option>
-                    <option value="D4" {{ old('jenjang', $programStudi->jenjang) == 'D4' ? 'selected' : '' }}>D4</option>
-                    <option value="S1" {{ old('jenjang', $programStudi->jenjang) == 'S1' ? 'selected' : '' }}>S1</option>
-                    <option value="S2" {{ old('jenjang', $programStudi->jenjang) == 'S2' ? 'selected' : '' }}>S2</option>
-                    <option value="S3" {{ old('jenjang', $programStudi->jenjang) == 'S3' ? 'selected' : '' }}>S3</option>
+                    <option value="D3" {{ old('jenjang', $programStudi->jenjang) == 'D3' ? 'selected' : '' }}>D3
+                    </option>
+                    <option value="D4" {{ old('jenjang', $programStudi->jenjang) == 'D4' ? 'selected' : '' }}>D4
+                    </option>
+                    <option value="S1" {{ old('jenjang', $programStudi->jenjang) == 'S1' ? 'selected' : '' }}>S1
+                    </option>
+                    <option value="S2" {{ old('jenjang', $programStudi->jenjang) == 'S2' ? 'selected' : '' }}>S2
+                    </option>
+                    <option value="S3" {{ old('jenjang', $programStudi->jenjang) == 'S3' ? 'selected' : '' }}>S3
+                    </option>
                 </select>
                 @error('jenjang')
                     <span class="text-red-500 text-xs">{{ $message }}</span>
@@ -64,7 +70,8 @@
 
             <div class="mb-4">
                 <label for="quota" class="block text-sm font-medium text-gray-700">Kuota</label>
-                <input type="number" name="quota" id="quota" value="{{ old('quota', $programStudi->quota) }}" min="0"
+                <input type="number" name="quota" id="quota" value="{{ old('quota', $programStudi->quota) }}"
+                    min="0"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
                 @error('quota')
                     <span class="text-red-500 text-xs">{{ $message }}</span>
@@ -82,7 +89,8 @@
 
             <div class="mb-4">
                 <label class="flex items-center">
-                    <input type="checkbox" name="is_active" value="1" {{ old('is_active', $programStudi->is_active) ? 'checked' : '' }}
+                    <input type="checkbox" name="is_active" value="1"
+                        {{ old('is_active', $programStudi->is_active) ? 'checked' : '' }}
                         class="rounded border-gray-300 text-teal-600 shadow-sm focus:border-teal-500 focus:ring-teal-500">
                     <span class="ml-2 text-sm text-gray-700">Aktif</span>
                 </label>
@@ -94,7 +102,7 @@
                     Batal
                 </a>
                 <button type="submit" class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-md">
-                    Update
+                    Perbarui
                 </button>
             </div>
         </form>

@@ -13,8 +13,14 @@ class UserController extends Controller
     /**
      * Display a listing of admin and staff users.
      */
+
     public function index()
     {
+        // Pengecekan hanya untuk Role Admin
+        if (auth()->user()->role !== 'admin') {
+            return redirect()->route('admin.dashboard')->with('error', 'Anda tidak memiliki akses ke halaman User Management!');
+        }
+
         // Only show admin and staff users
         $users = User::whereIn('role', ['admin', 'staff'])
             ->orderBy('created_at', 'desc')
@@ -28,6 +34,9 @@ class UserController extends Controller
      */
     public function create()
     {
+        if (auth()->user()->role !== 'admin') {
+            return redirect()->route('admin.dashboard')->with('error', 'Anda tidak memiliki akses!');
+        }
         return view('admin.users.create');
     }
 
@@ -36,6 +45,9 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        if (auth()->user()->role !== 'admin') {
+            return redirect()->route('admin.dashboard')->with('error', 'Anda tidak memiliki akses!');
+        }
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -62,6 +74,10 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        if (auth()->user()->role !== 'admin') {
+            return redirect()->route('admin.dashboard')->with('error', 'Anda tidak memiliki akses!');
+        }
+
         // Only allow editing admin and staff
         if (!in_array($user->role, ['admin', 'staff'])) {
             abort(403, 'Unauthorized action.');
@@ -75,6 +91,10 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        if (auth()->user()->role !== 'admin') {
+            return redirect()->route('admin.dashboard')->with('error', 'Anda tidak memiliki akses!');
+        }
+        
         // Only allow updating admin and staff
         if (!in_array($user->role, ['admin', 'staff'])) {
             abort(403, 'Unauthorized action.');
@@ -86,6 +106,7 @@ class UserController extends Controller
             'phone' => ['required', 'string', 'max:20'],
             'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
             'role' => ['required', 'in:admin,staff'],
+
         ]);
 
         $data = [
@@ -111,6 +132,10 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        if (auth()->user()->role !== 'admin') {
+            return redirect()->route('admin.dashboard')->with('error', 'Anda tidak memiliki akses!');
+        }
+
         // Only allow deleting admin and staff
         if (!in_array($user->role, ['admin', 'staff'])) {
             abort(403, 'Unauthorized action.');

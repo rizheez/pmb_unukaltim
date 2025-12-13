@@ -69,7 +69,7 @@ Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->prefix
     Route::resource('program-studi', \App\Http\Controllers\Admin\ProgramStudiController::class);
     Route::post('/program-studi/{programStudi}/toggle', [\App\Http\Controllers\Admin\ProgramStudiController::class, 'toggleActive'])->name('program-studi.toggle');
     
-    // User Management (Admin & Staff only)
+    // User Management (Admin Only) - Logic check in Controller
     Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
     
     // Landing Page Settings

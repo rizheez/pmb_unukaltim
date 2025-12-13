@@ -48,12 +48,49 @@ class StudentBiodataController extends Controller
             ],
             'phone' => 'required|string',
             'gender' => 'required|in:Laki-laki,Perempuan',
+            'birth_place' => 'required|string|max:255',
+            'religion' => 'required|string|max:255',
+            'address' => 'required|string',
             'photo' => 'nullable|image|max:1024', // 1MB Max
             'ktp' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048', // 2MB Max
             'kk' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048', // 2MB Max
             'certificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048', // 2MB Max
-            'birth_date' => 'required|date',
+            'birth_date' => 'required|date|before:-15 years',
             'school_origin' => 'required|string',
+        ], [
+            'required' => ':attribute wajib diisi.',
+            'string' => ':attribute harus berupa teks.',
+            'numeric' => ':attribute harus berupa angka.',
+            'digits' => ':attribute harus berjumlah :digits digit.',
+            'unique' => ':attribute sudah terdaftar dalam sistem.',
+            'in' => 'Pilihan :attribute tidak valid.',
+            'image' => ':attribute harus berupa gambar.',
+            'mimes' => 'Format file :attribute harus berupa: :values.',
+            'date' => ':attribute bukan tanggal yang valid.',
+            'birth_date.before' => 'Umur Anda harus minimal 15 tahun untuk mendaftar.',
+            
+            // Pesan spesifik untuk ukuran file
+            'photo.max' => 'Ukuran Foto maksimal 1MB.',
+            'ktp.max' => 'Ukuran file KTP maksimal 2MB.',
+            'kk.max' => 'Ukuran file KK maksimal 2MB.',
+            'certificate.max' => 'Ukuran file Ijazah maksimal 2MB.',
+        ], [
+            'name' => 'Nama Lengkap',
+            'nik' => 'NIK',
+            'nisn' => 'NISN',
+            'phone' => 'Nomor Telepon',
+            'gender' => 'Jenis Kelamin',
+            'birth_place' => 'Tempat Lahir',
+            'religion' => 'Agama',
+            'address' => 'Alamat Lengkap',
+            'photo' => 'Foto',
+            'ktp' => 'File KTP',
+            'kk' => 'File KK',
+            'certificate' => 'File Ijazah',
+            'birth_date' => 'Tanggal Lahir',
+            'school_origin' => 'Asal Sekolah',
+            'major' => 'Jurusan Sekolah',
+            'last_education' => 'Pendidikan Terakhir',
         ]);
 
         $data = [
@@ -61,6 +98,9 @@ class StudentBiodataController extends Controller
             'name' => $request->name,
             'nik' => $request->nik,
             'nisn' => $request->nisn,
+            'birth_place' => $request->birth_place,
+            'religion' => $request->religion,
+            'address' => $request->address,
             'last_education' => $request->last_education,
             'school_origin' => $request->school_origin,
             'major' => $request->major,

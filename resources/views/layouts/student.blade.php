@@ -100,9 +100,9 @@
                     </button>
 
                     <nav class="hidden md:flex text-sm text-gray-500">
-                        <span class="hover:text-teal-600 cursor-pointer">Home</span>
+                        <span class="hover:text-teal-600 cursor-pointer">Beranda</span>
                         <span class="mx-2">/</span>
-                        <span class="hover:text-teal-600 cursor-pointer">Student</span>
+                        <span class="hover:text-teal-600 cursor-pointer">Calon Mahasiswa</span>
                         <span class="mx-2">/</span>
                         <span class="font-medium text-gray-900">
                             @if (request()->routeIs('student.dashboard'))

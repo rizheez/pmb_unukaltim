@@ -1,7 +1,7 @@
 <x-admin-layout>
     <div class="mb-6 flex justify-between items-center">
         <h2 class="font-semibold text-2xl text-gray-800">
-            Mahasiswa
+            Calon Mahasiswa
         </h2>
     </div>
 

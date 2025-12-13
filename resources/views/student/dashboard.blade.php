@@ -181,11 +181,6 @@
                             <span class="text-gray-500">Telepon</span>
                             <span class="font-medium text-gray-900">{{ $biodata->phone ?? '-' }}</span>
                         </div>
-
-                        <div class="flex justify-between">
-                            <span class="text-gray-500">Status</span>
-                            <span class="font-medium text-gray-900">{{ $biodata->registration ?? '-' }}</span>
-                        </div>
                     </div>
                 @else
                     <div class="text-center py-4">
@@ -220,7 +215,8 @@
                         </div>
                         <div class="flex justify-between border-b pb-2">
                             <span class="text-gray-500">Pilihan 1</span>
-                            <span class="font-medium text-gray-900">{{ $registration->programStudiChoice1->full_name ?? '-' }}</span>
+                            <span
+                                class="font-medium text-gray-900">{{ $registration->programStudiChoice1->full_name ?? '-' }}</span>
                         </div>
                         @if ($registration->choice_2)
                             <div class="flex justify-between border-b pb-2">

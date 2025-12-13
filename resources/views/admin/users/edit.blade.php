@@ -1,7 +1,7 @@
 <x-admin-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Edit User') }}
+            {{ __('Edit Pengguna') }}
         </h2>
     </x-slot>
 
@@ -89,7 +89,7 @@
                             </a>
                             <button type="submit"
                                 class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-md">
-                                Update
+                                Perbarui
                             </button>
                         </div>
                     </form>

@@ -11,12 +11,18 @@ class LandingPageSettingController extends Controller
 {
     public function edit()
     {
+        if (auth()->user()->role !== 'admin') {
+            return redirect()->route('admin.dashboard')->with('error', 'Anda tidak memiliki akses ke halaman pengaturan landing page!');
+        }
         $settings = LandingPageSetting::getAllGrouped();
         return view('admin.landing-page.edit', compact('settings'));
     }
 
     public function update(Request $request)
     {
+        if (auth()->user()->role !== 'admin') {
+            return redirect()->route('admin.dashboard')->with('error', 'Anda tidak memiliki akses ke halaman pengaturan landing page!');
+        }
         // Validate all inputs
         $request->validate([
             'hero_title' => 'required|string|max:255',
