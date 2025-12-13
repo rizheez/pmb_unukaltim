@@ -10,22 +10,75 @@ class StudentController extends Controller
 {
     public function index(Request $request)
     {
+        $students = User::with(['studentBiodata', 'registration'])
+            ->where('role', 'student')
+            ->get();
+
+        return view('admin.students.index', compact('students'));
+    }
+
+    public function datatable(Request $request)
+    {
+        $draw = $request->get('draw');
+        $start = $request->get('start', 0);
+        $length = $request->get('length', 10);
+        $search = $request->get('search')['value'] ?? '';
+        $orderColumn = $request->get('order')[0]['column'] ?? 0;
+        $orderDir = $request->get('order')[0]['dir'] ?? 'asc';
+        $statusFilter = $request->get('status_filter'); // Filter status
+
+        $columns = ['name', 'email', 'phone', 'created_at'];
+        $orderBy = $columns[$orderColumn] ?? 'created_at';
+
         $query = User::with(['studentBiodata', 'registration'])
             ->where('role', 'student');
-            
-        if ($request->search) {
-            $query->where(function ($q) use ($request) {
-                $q->where('name', 'like', '%' . $request->search . '%')
-                  ->orWhere('email', 'like', '%' . $request->search . '%');
+
+        // Filter by Status
+        if ($statusFilter && $statusFilter !== 'all') {
+            if ($statusFilter === 'no_registration') {
+                $query->doesntHave('registration');
+            } else {
+                $query->whereHas('registration', function ($q) use ($statusFilter) {
+                    $q->where('status', $statusFilter);
+                });
+            }
+        }
+
+        // Search
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('phone', 'like', "%{$search}%");
             });
         }
 
-        $students = $query->paginate(10)
-            ->withQueryString();
+        $totalRecords = User::where('role', 'student')->count();
+        $filteredRecords = $query->count();
 
-        return view('admin.students.index', [
-            'students' => $students,
-            'filters' => $request->only(['search']),
+        $students = $query->orderBy($orderBy, $orderDir)
+            ->skip($start)
+            ->take($length)
+            ->get();
+
+        $data = $students->map(function ($student) {
+            return [
+                'name' => $student->name,
+                'email' => $student->email,
+                'phone' => $student->phone ?? '-',
+                'status' => $student->registration 
+                    ? '<span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">' . ucfirst($student->registration->status) . '</span>'
+                    : '<span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800">Belum Daftar</span>',
+                'registered_at' => $student->created_at->format('d M Y'),
+                'actions' => '<a href="' . route('admin.students.show', $student->id) . '" class="text-indigo-600 hover:text-indigo-900">Detail</a>',
+            ];
+        });
+
+        return response()->json([
+            'draw' => intval($draw),
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => $filteredRecords,
+            'data' => $data,
         ]);
     }
 

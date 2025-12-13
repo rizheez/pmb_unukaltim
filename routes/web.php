@@ -46,6 +46,7 @@ Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->prefix
     
     // Students
     Route::get('/students', [\App\Http\Controllers\Admin\StudentController::class, 'index'])->name('students.index');
+    Route::get('/students/datatable', [\App\Http\Controllers\Admin\StudentController::class, 'datatable'])->name('students.datatable');
     Route::get('/students/{id}', [\App\Http\Controllers\Admin\StudentController::class, 'show'])->name('students.show');
     Route::post('/students/{biodata}/verify', [\App\Http\Controllers\Admin\DocumentVerificationController::class, 'bulkVerify'])->name('students.verify');
     

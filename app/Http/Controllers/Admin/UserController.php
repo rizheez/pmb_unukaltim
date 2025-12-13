@@ -18,7 +18,7 @@ class UserController extends Controller
         // Only show admin and staff users
         $users = User::whereIn('role', ['admin', 'staff'])
             ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            ->get();
 
         return view('admin.users.index', compact('users'));
     }

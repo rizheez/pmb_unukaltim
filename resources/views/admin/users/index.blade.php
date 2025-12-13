@@ -26,7 +26,7 @@
 
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
         <div class="p-6">
-            <table class="min-w-full divide-y divide-gray-200">
+            <x-datatable id="users-table">
                 <thead class="bg-gray-50">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -44,7 +44,8 @@
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Terdaftar
                         </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            data-sortable="false">
                             Aksi
                         </th>
                     </tr>
@@ -97,11 +98,7 @@
                         </tr>
                     @endforelse
                 </tbody>
-            </table>
-
-            <div class="mt-4">
-                {{ $users->links() }}
-            </div>
+            </x-datatable>
         </div>
     </div>
 </x-admin-layout>
