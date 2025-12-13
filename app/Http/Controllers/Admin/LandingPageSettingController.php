@@ -43,10 +43,23 @@ class LandingPageSettingController extends Controller
             
             'contact_address' => 'required|string',
             'contact_email' => 'required|email',
-            'contact_phone' => 'required|string|max:20',
-            'contact_whatsapp' => 'required|string|max:20',
+            
+            'contact_phone_1' => 'required|string|max:20',
+            'contact_phone_1_label' => 'required|string|max:100',
+            'contact_phone_2' => 'nullable|string|max:20',
+            'contact_phone_2_label' => 'nullable|string|max:100',
+            'contact_phone_3' => 'nullable|string|max:20',
+            'contact_phone_3_label' => 'nullable|string|max:100',
+            
             'university_logo' => 'nullable|image|max:2048',
+            
+            'social_media_facebook' => 'nullable|url|max:255',
+            'social_media_instagram' => 'nullable|url|max:255',
+            'social_media_website' => 'nullable|url|max:255',
         ]);
+
+
+
 
         // Get all settings
         $allSettings = LandingPageSetting::all()->keyBy('key');

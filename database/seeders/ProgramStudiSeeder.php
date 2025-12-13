@@ -45,7 +45,7 @@ class ProgramStudiSeeder extends Seeder
                 'code' => 'TIN',
                 'jenjang' => 'S1',
                 'description' => 'Program Studi Teknik Industri',
-                'quota' => 80,
+                'quota' => 200,
                 'is_active' => true,
             ],
             [
