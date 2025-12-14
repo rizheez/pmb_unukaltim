@@ -43,7 +43,7 @@
                                 <a href="{{ route('admin.announcements.edit', $announcement->id) }}"
                                     class="text-indigo-600 hover:text-indigo-900 mr-3">Edit</a>
                                 <form action="{{ route('admin.announcements.destroy', $announcement->id) }}"
-                                    method="POST" class="inline" onsubmit="return confirm('Are you sure?');">
+                                    method="POST" class="inline" onsubmit="return confirmDelete(this)">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>

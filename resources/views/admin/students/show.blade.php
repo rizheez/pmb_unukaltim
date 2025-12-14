@@ -373,15 +373,31 @@
 
                     if (!hasSelection) {
                         e.preventDefault();
-                        alert('Silakan pilih status verifikasi untuk minimal satu dokumen.');
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Perhatian!',
+                            text: 'Silakan pilih status verifikasi untuk minimal satu dokumen.',
+                            confirmButtonColor: '#0d9488'
+                        });
                         return false;
                     }
 
                     // Confirm submission
-                    if (!confirm('Apakah Anda yakin ingin menyimpan verifikasi ini?')) {
-                        e.preventDefault();
-                        return false;
-                    }
+                    e.preventDefault();
+                    Swal.fire({
+                        title: 'Konfirmasi',
+                        text: 'Apakah Anda yakin ingin menyimpan verifikasi ini?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#0d9488',
+                        cancelButtonColor: '#6b7280',
+                        confirmButtonText: 'Ya, Simpan',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            verificationForm.submit();
+                        }
+                    });
                 });
             }
         });

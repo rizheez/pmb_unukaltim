@@ -68,7 +68,7 @@
                                 <a href="{{ route('admin.program-studi.edit', $ps) }}"
                                     class="text-indigo-600 hover:text-indigo-900 mr-3">Edit</a>
                                 <form action="{{ route('admin.program-studi.destroy', $ps) }}" method="POST"
-                                    class="inline" onsubmit="return confirm('Yakin ingin menghapus?')">
+                                    class="inline" onsubmit="return confirmDelete(this)">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="text-red-600 hover:text-red-900">Hapus</button>

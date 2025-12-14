@@ -100,24 +100,35 @@
 
             <script>
                 function dismissNotification() {
-                    if (confirm('Tandai notifikasi sebagai sudah dibaca?')) {
-                        fetch('{{ route('student.verifications.mark-read') }}', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                                }
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                document.getElementById('verification-alert').style.display = 'none';
-                            })
-                            .catch(error => {
-                                console.error('Error:', error);
-                                // Hide anyway on error
-                                document.getElementById('verification-alert').style.display = 'none';
-                            });
-                    }
+                    Swal.fire({
+                        title: 'Tandai sebagai sudah dibaca?',
+                        text: 'Notifikasi ini akan disembunyikan',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#0d9488',
+                        cancelButtonColor: '#6b7280',
+                        confirmButtonText: 'Ya',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            fetch('{{ route('student.verifications.mark-read') }}', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                    }
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    document.getElementById('verification-alert').style.display = 'none';
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                    // Hide anyway on error
+                                    document.getElementById('verification-alert').style.display = 'none';
+                                });
+                        }
+                    });
                 }
             </script>
         @endif
