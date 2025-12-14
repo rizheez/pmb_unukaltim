@@ -22,7 +22,10 @@
                     <input type="file" wire:model="photo" class="hidden">
                 </label>
             </div>
-            @error('photo') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+            @error('photo')
+                <span class="text-red-500 text-xs">{{ $message }}</span>
+            @enderror
+            <p class="text-xs text-gray-500 mt-1">Foto ukuran 4x6 (Max: 1MB)</p>
         </div>
 
         <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
@@ -33,7 +36,10 @@
                     <input type="text" wire:model="name" id="name"
                         class="shadow-sm focus:ring-teal-500 focus:border-teal-500 block w-full sm:text-sm border-gray-300 rounded-md">
                 </div>
-                @error('name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                @error('name')
+                    <span class="text-red-500 text-xs">{{ $message }}</span>
+                @enderror
+                <p class="text-xs text-gray-500 mt-1">Nama sesuai KTP/Ijazah</p>
             </div>
 
             <!-- NIK -->
@@ -43,7 +49,10 @@
                     <input type="text" wire:model="nik" id="nik"
                         class="shadow-sm focus:ring-teal-500 focus:border-teal-500 block w-full sm:text-sm border-gray-300 rounded-md">
                 </div>
-                @error('nik') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                @error('nik')
+                    <span class="text-red-500 text-xs">{{ $message }}</span>
+                @enderror
+                <p class="text-xs text-gray-500 mt-1">16 digit angka</p>
             </div>
 
             <!-- NISN -->
@@ -53,7 +62,10 @@
                     <input type="text" wire:model="nisn" id="nisn"
                         class="shadow-sm focus:ring-teal-500 focus:border-teal-500 block w-full sm:text-sm border-gray-300 rounded-md">
                 </div>
-                @error('nisn') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                @error('nisn')
+                    <span class="text-red-500 text-xs">{{ $message }}</span>
+                @enderror
+                <p class="text-xs text-gray-500 mt-1">10 digit angka</p>
             </div>
 
             <!-- Gender -->
@@ -67,7 +79,9 @@
                         <option value="Perempuan">Perempuan</option>
                     </select>
                 </div>
-                @error('gender') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                @error('gender')
+                    <span class="text-red-500 text-xs">{{ $message }}</span>
+                @enderror
             </div>
 
             <!-- Birth Date -->
@@ -77,7 +91,9 @@
                     <input type="date" wire:model="birth_date" id="birth_date"
                         class="shadow-sm focus:ring-teal-500 focus:border-teal-500 block w-full sm:text-sm border-gray-300 rounded-md">
                 </div>
-                @error('birth_date') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                @error('birth_date')
+                    <span class="text-red-500 text-xs">{{ $message }}</span>
+                @enderror
             </div>
 
             <!-- Phone -->
@@ -87,7 +103,10 @@
                     <input type="text" wire:model="phone" id="phone"
                         class="shadow-sm focus:ring-teal-500 focus:border-teal-500 block w-full sm:text-sm border-gray-300 rounded-md">
                 </div>
-                @error('phone') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                @error('phone')
+                    <span class="text-red-500 text-xs">{{ $message }}</span>
+                @enderror
+                <p class="text-xs text-gray-500 mt-1">Contoh: 08123456789 (tanpa tanda - atau +62)</p>
             </div>
 
             <!-- School Origin -->
@@ -97,7 +116,9 @@
                     <input type="text" wire:model="school_origin" id="school_origin"
                         class="shadow-sm focus:ring-teal-500 focus:border-teal-500 block w-full sm:text-sm border-gray-300 rounded-md">
                 </div>
-                @error('school_origin') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                @error('school_origin')
+                    <span class="text-red-500 text-xs">{{ $message }}</span>
+                @enderror
             </div>
 
             <!-- Last Education -->
@@ -118,7 +139,9 @@
                         <option value="S2">S2</option>
                     </select>
                 </div>
-                @error('last_education') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                @error('last_education')
+                    <span class="text-red-500 text-xs">{{ $message }}</span>
+                @enderror
             </div>
 
             <!-- Major -->
@@ -128,7 +151,9 @@
                     <input type="text" wire:model="major" id="major"
                         class="shadow-sm focus:ring-teal-500 focus:border-teal-500 block w-full sm:text-sm border-gray-300 rounded-md">
                 </div>
-                @error('major') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                @error('major')
+                    <span class="text-red-500 text-xs">{{ $message }}</span>
+                @enderror
             </div>
         </div>
 
@@ -140,16 +165,18 @@
                 <div>
                     <label for="kk" class="block text-sm font-medium text-gray-700">Kartu Keluarga (KK)</label>
                     <div class="mt-1">
-                        <label class="cursor-pointer bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 block text-center">
+                        <label
+                            class="cursor-pointer bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 block text-center">
                             <span>{{ $kk ? $kk->getClientOriginalName() : 'Pilih File' }}</span>
-                            <input type="file" wire:model="kk" id="kk" class="hidden" accept=".pdf,.jpg,.jpeg,.png">
+                            <input type="file" wire:model="kk" id="kk" class="hidden"
+                                accept=".pdf,.jpg,.jpeg,.png">
                         </label>
                     </div>
-                    
+
                     <!-- Preview -->
-                    @if($kk)
+                    @if ($kk)
                         <div class="mt-2 p-2 border border-gray-200 rounded">
-                            @if(in_array($kk->getClientOriginalExtension(), ['jpg', 'jpeg', 'png']))
+                            @if (in_array($kk->getClientOriginalExtension(), ['jpg', 'jpeg', 'png']))
                                 <img src="{{ $kk->temporaryUrl() }}" class="w-full h-32 object-cover rounded">
                             @else
                                 <div class="flex items-center justify-center h-32 bg-gray-100 rounded">
@@ -162,14 +189,17 @@
                         </div>
                     @elseif($existingKk)
                         <div class="mt-2">
-                            <a href="{{ $existingKk }}" target="_blank" class="text-xs text-teal-600 hover:text-teal-800 inline-flex items-center">
+                            <a href="{{ $existingKk }}" target="_blank"
+                                class="text-xs text-teal-600 hover:text-teal-800 inline-flex items-center">
                                 <i data-lucide="external-link" class="w-3 h-3 mr-1"></i>
                                 Lihat file saat ini
                             </a>
                         </div>
                     @endif
-                    
-                    @error('kk') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+
+                    @error('kk')
+                        <span class="text-red-500 text-xs">{{ $message }}</span>
+                    @enderror
                     <p class="text-xs text-gray-500 mt-1">PDF, JPG, PNG (Max: 2MB)</p>
                 </div>
 
@@ -177,16 +207,18 @@
                 <div>
                     <label for="ktp" class="block text-sm font-medium text-gray-700">KTP</label>
                     <div class="mt-1">
-                        <label class="cursor-pointer bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 block text-center">
+                        <label
+                            class="cursor-pointer bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 block text-center">
                             <span>{{ $ktp ? $ktp->getClientOriginalName() : 'Pilih File' }}</span>
-                            <input type="file" wire:model="ktp" id="ktp" class="hidden" accept=".pdf,.jpg,.jpeg,.png">
+                            <input type="file" wire:model="ktp" id="ktp" class="hidden"
+                                accept=".pdf,.jpg,.jpeg,.png">
                         </label>
                     </div>
-                    
+
                     <!-- Preview -->
-                    @if($ktp)
+                    @if ($ktp)
                         <div class="mt-2 p-2 border border-gray-200 rounded">
-                            @if(in_array($ktp->getClientOriginalExtension(), ['jpg', 'jpeg', 'png']))
+                            @if (in_array($ktp->getClientOriginalExtension(), ['jpg', 'jpeg', 'png']))
                                 <img src="{{ $ktp->temporaryUrl() }}" class="w-full h-32 object-cover rounded">
                             @else
                                 <div class="flex items-center justify-center h-32 bg-gray-100 rounded">
@@ -199,14 +231,17 @@
                         </div>
                     @elseif($existingKtp)
                         <div class="mt-2">
-                            <a href="{{ $existingKtp }}" target="_blank" class="text-xs text-teal-600 hover:text-teal-800 inline-flex items-center">
+                            <a href="{{ $existingKtp }}" target="_blank"
+                                class="text-xs text-teal-600 hover:text-teal-800 inline-flex items-center">
                                 <i data-lucide="external-link" class="w-3 h-3 mr-1"></i>
                                 Lihat file saat ini
                             </a>
                         </div>
                     @endif
-                    
-                    @error('ktp') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+
+                    @error('ktp')
+                        <span class="text-red-500 text-xs">{{ $message }}</span>
+                    @enderror
                     <p class="text-xs text-gray-500 mt-1">PDF, JPG, PNG (Max: 2MB)</p>
                 </div>
 
@@ -214,36 +249,43 @@
                 <div>
                     <label for="certificate" class="block text-sm font-medium text-gray-700">Ijazah/SKL</label>
                     <div class="mt-1">
-                        <label class="cursor-pointer bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 block text-center">
+                        <label
+                            class="cursor-pointer bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 block text-center">
                             <span>{{ $certificate ? $certificate->getClientOriginalName() : 'Pilih File' }}</span>
-                            <input type="file" wire:model="certificate" id="certificate" class="hidden" accept=".pdf,.jpg,.jpeg,.png">
+                            <input type="file" wire:model="certificate" id="certificate" class="hidden"
+                                accept=".pdf,.jpg,.jpeg,.png">
                         </label>
                     </div>
-                    
+
                     <!-- Preview -->
-                    @if($certificate)
+                    @if ($certificate)
                         <div class="mt-2 p-2 border border-gray-200 rounded">
-                            @if(in_array($certificate->getClientOriginalExtension(), ['jpg', 'jpeg', 'png']))
-                                <img src="{{ $certificate->temporaryUrl() }}" class="w-full h-32 object-cover rounded">
+                            @if (in_array($certificate->getClientOriginalExtension(), ['jpg', 'jpeg', 'png']))
+                                <img src="{{ $certificate->temporaryUrl() }}"
+                                    class="w-full h-32 object-cover rounded">
                             @else
                                 <div class="flex items-center justify-center h-32 bg-gray-100 rounded">
                                     <div class="text-center">
                                         <i data-lucide="file-text" class="w-8 h-8 mx-auto text-gray-400"></i>
-                                        <p class="text-xs text-gray-500 mt-1">{{ $certificate->getClientOriginalName() }}</p>
+                                        <p class="text-xs text-gray-500 mt-1">
+                                            {{ $certificate->getClientOriginalName() }}</p>
                                     </div>
                                 </div>
                             @endif
                         </div>
                     @elseif($existingCertificate)
                         <div class="mt-2">
-                            <a href="{{ $existingCertificate }}" target="_blank" class="text-xs text-teal-600 hover:text-teal-800 inline-flex items-center">
+                            <a href="{{ $existingCertificate }}" target="_blank"
+                                class="text-xs text-teal-600 hover:text-teal-800 inline-flex items-center">
                                 <i data-lucide="external-link" class="w-3 h-3 mr-1"></i>
                                 Lihat file saat ini
                             </a>
                         </div>
                     @endif
-                    
-                    @error('certificate') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+
+                    @error('certificate')
+                        <span class="text-red-500 text-xs">{{ $message }}</span>
+                    @enderror
                     <p class="text-xs text-gray-500 mt-1">PDF, JPG, PNG (Max: 2MB)</p>
                 </div>
             </div>

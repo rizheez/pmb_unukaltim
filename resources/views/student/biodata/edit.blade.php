@@ -33,7 +33,7 @@
                     <label class="block text-sm font-medium text-gray-700">Foto Calon Mahasiswa</label>
                     <div class="mt-2 flex items-center space-x-4">
                         <img src="{{ $biodata->photo_url ?? asset('images/default-avatar.png') }}" id="photo-preview"
-                            class="h-24 w-24 rounded-full object-cover">
+                            class="h-32 w-32 rounded-2xl object-cover">
 
                         <label
                             class="cursor-pointer bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
@@ -45,6 +45,7 @@
                     @error('photo')
                         <span class="text-red-500 text-xs">{{ $message }}</span>
                     @enderror
+                    <p class="text-xs text-gray-500 mt-1">Foto ukuran 4x6 latar belakang merah (Max: 1MB)</p>
                 </div>
 
                 <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
@@ -59,11 +60,12 @@
                         @error('name')
                             <span class="text-red-500 text-xs">{{ $message }}</span>
                         @enderror
+                        <p class="text-xs text-gray-500 mt-1">Nama sesuai KTP/Ijazah</p>
                     </div>
 
                     <!-- NIK -->
                     <div>
-                        <label for="nik" class="block text-sm font-medium text-gray-700">NIK</label>
+                        <label for="nik" class="block text-sm font-medium text-gray-700">No KTP</label>
                         <div class="mt-1">
                             <input type="text" name="nik" id="nik" value="{{ old('nik', $biodata->nik) }}"
                                 class="shadow-sm focus:ring-teal-500 focus:border-teal-500 block w-full sm:text-sm border-gray-300 rounded-md">
@@ -71,6 +73,7 @@
                         @error('nik')
                             <span class="text-red-500 text-xs">{{ $message }}</span>
                         @enderror
+                        <p class="text-xs text-gray-500 mt-1">16 digit angka</p>
                     </div>
 
                     <!-- NISN -->
@@ -83,6 +86,7 @@
                         @error('nisn')
                             <span class="text-red-500 text-xs">{{ $message }}</span>
                         @enderror
+                        <p class="text-xs text-gray-500 mt-1">10 digit angka (kosongkan jika tidak mempunyai NISN)</p>
                     </div>
 
                     <!-- Gender -->
@@ -116,6 +120,7 @@
                         @error('birth_place')
                             <span class="text-red-500 text-xs">{{ $message }}</span>
                         @enderror
+                        <p class="text-xs text-gray-500 mt-1">Tempat lahir sesuai KTP/Akta Kelahiran</p>
                     </div>
 
                     <!-- Birth Date -->
@@ -170,6 +175,7 @@
                         @error('address')
                             <span class="text-red-500 text-xs">{{ $message }}</span>
                         @enderror
+                        <p class="text-xs text-gray-500 mt-1">Alamat lengkap sesuai KTP</p>
                     </div>
 
                     <!-- Phone -->
@@ -184,6 +190,7 @@
                         @error('phone')
                             <span class="text-red-500 text-xs">{{ $message }}</span>
                         @enderror
+                        <p class="text-xs text-gray-500 mt-1">Contoh: 08123456789 (tanpa tanda - atau +62)</p>
                     </div>
 
                     <!-- School Origin -->
@@ -284,7 +291,7 @@
                             @error('kk')
                                 <span class="text-red-500 text-xs">{{ $message }}</span>
                             @enderror
-                            <p class="text-xs text-gray-500 mt-1">PDF, JPG, PNG (Max: 2MB)</p>
+                            <p class="text-xs text-gray-500 mt-1">PDF, JPG, PNG (Max: 2MB) - Wajib diisi jika belum ada</p>
                         </div>
 
                         <!-- KTP -->
@@ -311,7 +318,7 @@
                             @error('ktp')
                                 <span class="text-red-500 text-xs">{{ $message }}</span>
                             @enderror
-                            <p class="text-xs text-gray-500 mt-1">PDF, JPG, PNG (Max: 2MB)</p>
+                            <p class="text-xs text-gray-500 mt-1">PDF, JPG, PNG (Max: 2MB) - Wajib diisi jika belum ada</p>
                         </div>
 
                         <!-- Surat Keterangan Lain -->
@@ -339,7 +346,7 @@
                             @error('certificate')
                                 <span class="text-red-500 text-xs">{{ $message }}</span>
                             @enderror
-                            <p class="text-xs text-gray-500 mt-1">PDF, JPG, PNG (Max: 2MB)</p>
+                            <p class="text-xs text-gray-500 mt-1">PDF, JPG, PNG (Max: 2MB) - Wajib diisi jika belum ada</p>
                         </div>
                     </div>
                 </div>

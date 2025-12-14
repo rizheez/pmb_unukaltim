@@ -33,28 +33,31 @@ class StudentBiodataController extends Controller
     // kept for compatibility if needed, but Livewire handles update
     public function update(Request $request)
     {
+        // Get existing biodata to check for old files
+        $existingBiodata = StudentBiodata::where('user_id', Auth::id())->first();
+
         $request->validate([
             'name' => 'required|string|max:255',
             'nik' => [
                 'required',
                 'numeric',
                 'digits:16',
-                'unique:student_biodatas,nik,' . (StudentBiodata::where('user_id', Auth::id())->first()->id ?? 'NULL')
+                'unique:student_biodatas,nik,' . ($existingBiodata->id ?? 'NULL')
             ],
             'nisn' => [
-                'required',
+                'nullable',
                 'numeric',
-                'unique:student_biodatas,nisn,' . (StudentBiodata::where('user_id', Auth::id())->first()->id ?? 'NULL')
+                'unique:student_biodatas,nisn,' . ($existingBiodata->id ?? 'NULL')
             ],
             'phone' => 'required|string',
             'gender' => 'required|in:Laki-laki,Perempuan',
             'birth_place' => 'required|string|max:255',
             'religion' => 'required|string|max:255',
             'address' => 'required|string',
-            'photo' => 'required|image|max:1024', // 1MB Max
-            'ktp' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048', // 2MB Max
-            'kk' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048', // 2MB Max
-            'certificate' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048', // 2MB Max
+            'photo' => ($existingBiodata && $existingBiodata->photo_path ? 'nullable' : 'required') . '|image|max:1024', // 1MB Max
+            'ktp' => ($existingBiodata && $existingBiodata->ktp_path ? 'nullable' : 'required') . '|file|mimes:pdf,jpg,jpeg,png|max:2048', // 2MB Max
+            'kk' => ($existingBiodata && $existingBiodata->kk_path ? 'nullable' : 'required') . '|file|mimes:pdf,jpg,jpeg,png|max:2048', // 2MB Max
+            'certificate' => ($existingBiodata && $existingBiodata->certificate_path ? 'nullable' : 'required') . '|file|mimes:pdf,jpg,jpeg,png|max:2048', // 2MB Max
             'birth_date' => 'required|date|before:-15 years',
             'school_origin' => 'required|string',
         ], [
@@ -108,9 +111,6 @@ class StudentBiodataController extends Controller
             'gender' => $request->gender,
             'birth_date' => $request->birth_date,
         ];
-
-        // Get existing biodata to check for old files
-        $existingBiodata = StudentBiodata::where('user_id', Auth::id())->first();
 
         // Handle photo upload
         if ($request->hasFile('photo')) {

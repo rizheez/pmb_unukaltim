@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Exports\StudentsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class StudentController extends Controller
 {
@@ -24,7 +26,6 @@ class StudentController extends Controller
         $orderDir = $request->get('order')[0]['dir'] ?? 'asc';
         $statusFilter = $request->get('status_filter'); // Filter status
         $periodFilter = $request->get('period_filter'); // Filter period
-
         $columns = ['name', 'email', 'phone', 'created_at'];
         $orderBy = $columns[$orderColumn] ?? 'created_at';
 
@@ -99,5 +100,18 @@ class StudentController extends Controller
         return view('admin.students.show', [
             'student' => $student,
         ]);
+    }
+
+    public function export(Request $request)
+    {
+        $periodFilter = $request->get('period_filter');
+        $statusFilter = $request->get('status_filter');
+
+        $filename = 'Data_Calon_Mahasiswa_' . date('Y-m-d_His') . '.xlsx';
+        
+        return Excel::download(
+            new StudentsExport($periodFilter, $statusFilter), 
+            $filename
+        );
     }
 }

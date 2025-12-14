@@ -12,7 +12,11 @@
 
         <!-- Pendaftaran Form -->
         <div class="bg-white shadow rounded-lg p-6">
-            @if ($registration && $registration->status == 'submitted')
+            @if (
+                $registration &&
+                    ($registration->status !== 'submitted' ||
+                        $registration->status !== 'rejected' ||
+                        $registration->status !== 'draft'))
                 <div class="text-center py-8">
                     <i data-lucide="check-circle" class="mx-auto h-12 w-12 text-green-500"></i>
                     <h3 class="mt-2 text-sm font-medium text-gray-900">Pendaftaran Berhasil Dikirim</h3>
