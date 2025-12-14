@@ -221,7 +221,8 @@
                         @if ($registration->choice_2)
                             <div class="flex justify-between border-b pb-2">
                                 <span class="text-gray-500">Pilihan 2</span>
-                                <span class="font-medium text-gray-900">{{ $registration->choice_2 }}</span>
+                                <span
+                                    class="font-medium text-gray-900">{{ optional($registration->programStudiChoice2)->full_name ?? '-' }}</span>
                             </div>
                         @endif
                         <div class="flex justify-between">
