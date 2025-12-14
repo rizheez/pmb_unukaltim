@@ -3,14 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Models\StudentBiodata;
+use App\Services\ImageOptimizationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class StudentBiodataController extends Controller
 {
+    protected $imageOptimizer;
+
+    public function __construct(ImageOptimizationService $imageOptimizer)
+    {
+        $this->imageOptimizer = $imageOptimizer;
+    }
+
     public function index()
     {
         $biodata = StudentBiodata::where('user_id', Auth::id())->first();
+
         return view('student.biodata.index', compact('biodata'));
     }
 
@@ -18,8 +27,8 @@ class StudentBiodataController extends Controller
     {
         // Check if there's an active registration period
         $activePeriod = \App\Models\RegistrationPeriod::active()->first();
-        
-        if (!$activePeriod) {
+
+        if (! $activePeriod) {
             return redirect()->route('student.biodata.index')
                 ->with('error', 'Tidak ada periode pendaftaran yang aktif saat ini. Biodata tidak dapat diubah.');
         }
@@ -42,22 +51,22 @@ class StudentBiodataController extends Controller
                 'required',
                 'numeric',
                 'digits:16',
-                'unique:student_biodatas,nik,' . ($existingBiodata->id ?? 'NULL')
+                'unique:student_biodatas,nik,'.($existingBiodata->id ?? 'NULL'),
             ],
             'nisn' => [
                 'nullable',
                 'numeric',
-                'unique:student_biodatas,nisn,' . ($existingBiodata->id ?? 'NULL')
+                'unique:student_biodatas,nisn,'.($existingBiodata->id ?? 'NULL'),
             ],
             'phone' => 'required|string',
             'gender' => 'required|in:Laki-laki,Perempuan',
             'birth_place' => 'required|string|max:255',
             'religion' => 'required|string|max:255',
             'address' => 'required|string',
-            'photo' => ($existingBiodata && $existingBiodata->photo_path ? 'nullable' : 'required') . '|image|max:1024', // 1MB Max
-            'ktp' => ($existingBiodata && $existingBiodata->ktp_path ? 'nullable' : 'required') . '|file|mimes:pdf,jpg,jpeg,png|max:2048', // 2MB Max
-            'kk' => ($existingBiodata && $existingBiodata->kk_path ? 'nullable' : 'required') . '|file|mimes:pdf,jpg,jpeg,png|max:2048', // 2MB Max
-            'certificate' => ($existingBiodata && $existingBiodata->certificate_path ? 'nullable' : 'required') . '|file|mimes:pdf,jpg,jpeg,png|max:2048', // 2MB Max
+            'photo' => ($existingBiodata && $existingBiodata->photo_path ? 'nullable' : 'required').'|image|max:1024', // 1MB Max
+            'ktp' => ($existingBiodata && $existingBiodata->ktp_path ? 'nullable' : 'required').'|file|mimes:pdf,jpg,jpeg,png|max:2048', // 2MB Max
+            'kk' => ($existingBiodata && $existingBiodata->kk_path ? 'nullable' : 'required').'|file|mimes:pdf,jpg,jpeg,png|max:2048', // 2MB Max
+            'certificate' => ($existingBiodata && $existingBiodata->certificate_path ? 'nullable' : 'required').'|file|mimes:pdf,jpg,jpeg,png|max:2048', // 2MB Max
             'birth_date' => 'required|date|before:-15 years',
             'school_origin' => 'required|string',
         ], [
@@ -71,7 +80,7 @@ class StudentBiodataController extends Controller
             'mimes' => 'Format file :attribute harus berupa: :values.',
             'date' => ':attribute bukan tanggal yang valid.',
             'birth_date.before' => 'Umur Anda harus minimal 15 tahun untuk mendaftar.',
-            
+
             // Pesan spesifik untuk ukuran file
             'photo.max' => 'Ukuran Foto maksimal 1MB.',
             'ktp.max' => 'Ukuran file KTP maksimal 2MB.',
@@ -112,44 +121,52 @@ class StudentBiodataController extends Controller
             'birth_date' => $request->birth_date,
         ];
 
-        // Handle photo upload
+        // Handle photo upload with optimization
         if ($request->hasFile('photo')) {
             // Delete old photo if exists
-            if ($existingBiodata && $existingBiodata->photo_path) {
-                \Storage::disk('public')->delete($existingBiodata->photo_path);
-            }
-            $path = $request->file('photo')->store('students/photos', 'public');
-            $data['photo_path'] = $path;
+            $this->imageOptimizer->deleteOldImage($existingBiodata?->photo_path);
+
+            // Optimize and store (max 800px, quality 85%)
+            $data['photo_path'] = $this->imageOptimizer->optimizePhoto(
+                $request->file('photo'),
+                'students/photos'
+            );
         }
 
-        // Handle KTP upload
+        // Handle KTP upload with optimization
         if ($request->hasFile('ktp')) {
             // Delete old KTP if exists
-            if ($existingBiodata && $existingBiodata->ktp_path) {
-                \Storage::disk('public')->delete($existingBiodata->ktp_path);
-            }
-            $path = $request->file('ktp')->store('students/ktp', 'public');
-            $data['ktp_path'] = $path;
+            $this->imageOptimizer->deleteOldImage($existingBiodata?->ktp_path);
+
+            // Optimize and store (max 1920px, quality 90% for document clarity)
+            $data['ktp_path'] = $this->imageOptimizer->optimizeDocument(
+                $request->file('ktp'),
+                'students/ktp'
+            );
         }
 
-        // Handle KK upload
+        // Handle KK upload with optimization
         if ($request->hasFile('kk')) {
             // Delete old KK if exists
-            if ($existingBiodata && $existingBiodata->kk_path) {
-                \Storage::disk('public')->delete($existingBiodata->kk_path);
-            }
-            $path = $request->file('kk')->store('students/kk', 'public');
-            $data['kk_path'] = $path;
+            $this->imageOptimizer->deleteOldImage($existingBiodata?->kk_path);
+
+            // Optimize and store (max 1920px, quality 90% for document clarity)
+            $data['kk_path'] = $this->imageOptimizer->optimizeDocument(
+                $request->file('kk'),
+                'students/kk'
+            );
         }
 
-        // Handle Certificate upload
+        // Handle Certificate upload with optimization
         if ($request->hasFile('certificate')) {
             // Delete old certificate if exists
-            if ($existingBiodata && $existingBiodata->certificate_path) {
-                \Storage::disk('public')->delete($existingBiodata->certificate_path);
-            }
-            $path = $request->file('certificate')->store('students/certificates', 'public');
-            $data['certificate_path'] = $path;
+            $this->imageOptimizer->deleteOldImage($existingBiodata?->certificate_path);
+
+            // Optimize and store (max 1920px, quality 90% for document clarity)
+            $data['certificate_path'] = $this->imageOptimizer->optimizeDocument(
+                $request->file('certificate'),
+                'students/certificates'
+            );
         }
 
         StudentBiodata::updateOrCreate(

@@ -43,6 +43,15 @@
                     <x-input-error :messages="$errors->get('password')" class="mt-2" />
                 </div>
 
+                <!-- Remember Me -->
+                <div class="block mt-4">
+                    <label for="remember_me" class="inline-flex items-center">
+                        <input id="remember_me" type="checkbox"
+                            class="rounded border-gray-300 text-teal-600 shadow-sm focus:ring-teal-500" name="remember">
+                        <span class="ml-2 text-sm text-gray-600">Ingat saya</span>
+                    </label>
+                </div>
+
                 <!-- Forgot Password Link -->
                 @if (Route::has('password.request'))
                     <div class='pt-3 text-right'>
