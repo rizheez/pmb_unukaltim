@@ -129,7 +129,7 @@
                     <h3 class="text-lg font-medium text-gray-900">Pengumuman</h3>
                 </div>
                 @if ($announcements->count() > 0)
-                    <div class="space-y-4 overflow-y-auto max-h-96">
+                    <div class="space-y-4 overflow-y-auto max-h-64 lg:max-h-96 pr-1">
                         @foreach ($announcements as $announcement)
                             <div class="border-l-4 border-teal-500 bg-teal-50 p-4 rounded">
                                 <div class="flex">
@@ -138,7 +138,7 @@
                                     </div>
                                     <div class="ml-3 flex-1">
                                         <h4 class="text-sm font-medium text-teal-800">{{ $announcement->title }}</h4>
-                                        <div class="mt-2 text-sm text-teal-700">
+                                        <div class="mt-2 text-sm text-teal-700 text-left lg:text-justify">
                                             <p>{{ $announcement->content }}</p>
                                         </div>
                                         <div class="mt-2 text-xs text-teal-600">
