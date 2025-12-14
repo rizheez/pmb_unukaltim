@@ -44,8 +44,8 @@
                         class="rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-sm w-40">
                         <option value="all">Semua Status</option>
                         <option value="no_registration">Belum Daftar</option>
-                        <option value="pending">Pending</option>
-                        <option value="approved">Approved</option>
+                        <option value="verified">Verified</option>
+                        <option value="accepted">Accepted</option>
                         <option value="rejected">Rejected</option>
                     </select>
                 </div>
