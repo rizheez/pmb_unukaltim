@@ -11,8 +11,9 @@ class AnnouncementController extends Controller
     public function index()
     {
         $announcements = Announcement::latest()->paginate(10);
+
         return view('admin.announcements.index', [
-            'announcements' => $announcements
+            'announcements' => $announcements,
         ]);
     }
 
@@ -28,20 +29,20 @@ class AnnouncementController extends Controller
             'content' => 'required|string',
             'is_published' => 'boolean',
         ]);
-        
+
         // Checkbox handling for boolean
         $validated['is_published'] = $request->has('is_published');
 
         Announcement::create($validated);
 
         return redirect()->route('admin.announcements.index')
-            ->with('success', 'Announcement created successfully.');
+            ->with('success', 'Pengumuman berhasil ditambahkan.');
     }
 
     public function edit(Announcement $announcement)
     {
         return view('admin.announcements.edit', [
-            'announcement' => $announcement
+            'announcement' => $announcement,
         ]);
     }
 
@@ -52,13 +53,13 @@ class AnnouncementController extends Controller
             'content' => 'required|string',
             'is_published' => 'boolean',
         ]);
-        
+
         $validated['is_published'] = $request->has('is_published');
 
         $announcement->update($validated);
 
         return redirect()->route('admin.announcements.index')
-            ->with('success', 'Announcement updated successfully.');
+            ->with('success', 'Pengumuman berhasil diperbarui.');
     }
 
     public function destroy(Announcement $announcement)
@@ -66,6 +67,6 @@ class AnnouncementController extends Controller
         $announcement->delete();
 
         return redirect()->back()
-            ->with('success', 'Announcement deleted successfully.');
+            ->with('success', 'Pengumuman berhasil dihapus.');
     }
 }

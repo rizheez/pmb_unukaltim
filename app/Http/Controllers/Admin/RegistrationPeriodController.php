@@ -11,6 +11,7 @@ class RegistrationPeriodController extends Controller
     public function index()
     {
         $periods = RegistrationPeriod::latest()->paginate(10);
+
         return view('admin.periods.index', compact('periods'));
     }
 
@@ -41,7 +42,7 @@ class RegistrationPeriodController extends Controller
         RegistrationPeriod::create($validated);
 
         return redirect()->route('admin.periods.index')
-            ->with('success', 'Period created successfully.');
+            ->with('success', 'Periode berhasil ditambahkan.');
     }
 
     public function edit(RegistrationPeriod $period)
@@ -73,7 +74,7 @@ class RegistrationPeriodController extends Controller
         $period->update($validated);
 
         return redirect()->route('admin.periods.index')
-            ->with('success', 'Period updated successfully.');
+            ->with('success', 'Periode berhasil diperbarui.');
     }
 
     public function destroy(RegistrationPeriod $period)
@@ -81,19 +82,19 @@ class RegistrationPeriodController extends Controller
         $period->delete();
 
         return redirect()->back()
-            ->with('success', 'Period deleted successfully.');
+            ->with('success', 'Periode berhasil dihapus.');
     }
 
     public function toggleActive(RegistrationPeriod $period)
     {
-        if (!$period->is_active) {
+        if (! $period->is_active) {
             // Deactivate all other periods
             RegistrationPeriod::where('is_active', true)->update(['is_active' => false]);
         }
 
-        $period->update(['is_active' => !$period->is_active]);
+        $period->update(['is_active' => ! $period->is_active]);
 
         return redirect()->back()
-            ->with('success', 'Period status updated.');
+            ->with('success', 'Status Periode berhasil diubah.');
     }
 }

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\User;
 use App\Exports\StudentsExport;
+use App\Http\Controllers\Controller;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
 class StudentController extends Controller
@@ -13,6 +13,7 @@ class StudentController extends Controller
     public function index(Request $request)
     {
         $periods = \App\Models\RegistrationPeriod::orderBy('start_date', 'desc')->get();
+
         return view('admin.students.index', compact('periods'));
     }
 
@@ -29,18 +30,16 @@ class StudentController extends Controller
         $columns = ['name', 'email', 'phone', 'created_at'];
         $orderBy = $columns[$orderColumn] ?? 'created_at';
 
+        // Hanya tampilkan mahasiswa yang sudah mendaftar (punya registration)
         $query = User::with(['studentBiodata', 'registration.registrationPeriod'])
-            ->where('role', 'student');
+            ->where('role', 'student')
+            ->whereHas('registration'); // Exclude yang belum daftar
 
         // Filter by Status
         if ($statusFilter && $statusFilter !== 'all') {
-            if ($statusFilter === 'no_registration') {
-                $query->doesntHave('registration');
-            } else {
-                $query->whereHas('registration', function ($q) use ($statusFilter) {
-                    $q->where('status', $statusFilter);
-                });
-            }
+            $query->whereHas('registration', function ($q) use ($statusFilter) {
+                $q->where('status', $statusFilter);
+            });
         }
 
         // Filter by Period
@@ -54,12 +53,13 @@ class StudentController extends Controller
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('phone', 'like', "%{$search}%");
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('phone', 'like', "%{$search}%");
             });
         }
 
-        $totalRecords = User::where('role', 'student')->count();
+        // Hanya hitung mahasiswa yang sudah mendaftar
+        $totalRecords = User::where('role', 'student')->whereHas('registration')->count();
         $filteredRecords = $query->count();
 
         $students = $query->orderBy($orderBy, $orderDir)
@@ -72,14 +72,16 @@ class StudentController extends Controller
                 'name' => $student->name,
                 'email' => $student->email,
                 'phone' => $student->phone ?? '-',
-                'status' => $student->registration 
-                    ? '<span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">' . ucfirst($student->registration->status) . '</span>'
+                'status' => $student->registration
+                    ? '<span class="px-2 py-1 text-xs rounded-full '.$student->registration->status_badge_class.'">'.$student->registration->status_label.'</span>'
                     : '<span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800">Belum Daftar</span>',
                 'period_name' => $student->registration && $student->registration->registrationPeriod
                     ? $student->registration->registrationPeriod->name
                     : '-',
-                'registered_at' => $student->created_at->format('d M Y'),
-                'actions' => '<a href="' . route('admin.students.show', $student->id) . '" class="text-indigo-600 hover:text-indigo-900">Detail</a>',
+                'registered_at' => optional($student->created_at)
+                    ->locale('id')
+                    ->translatedFormat('d F Y'),
+                'actions' => '<a href="'.route('admin.students.show', $student->id).'" class="text-indigo-600 hover:text-indigo-900">Detail</a>',
             ];
         });
 
@@ -107,10 +109,10 @@ class StudentController extends Controller
         $periodFilter = $request->get('period_filter');
         $statusFilter = $request->get('status_filter');
 
-        $filename = 'Data_Calon_Mahasiswa_' . date('Y-m-d_His') . '.xlsx';
-        
+        $filename = 'Data_Calon_Mahasiswa_'.date('Y-m-d_His').'.xlsx';
+
         return Excel::download(
-            new StudentsExport($periodFilter, $statusFilter), 
+            new StudentsExport($periodFilter, $statusFilter),
             $filename
         );
     }

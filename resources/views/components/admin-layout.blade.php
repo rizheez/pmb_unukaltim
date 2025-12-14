@@ -45,7 +45,8 @@
                 </button>
             </div>
 
-            <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+            <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+                <!-- Dashboard -->
                 <a href="{{ route('admin.dashboard') }}"
                     class="flex items-center px-4 py-3 rounded-lg transition-colors
                     {{ request()->routeIs('admin.dashboard') ? 'bg-teal-900 text-white' : 'text-teal-100 hover:bg-teal-700' }}">
@@ -56,6 +57,11 @@
                     </svg>
                     Dashboard
                 </a>
+
+                <!-- PENDAFTARAN -->
+                <div class="pt-4 pb-2">
+                    <p class="px-4 text-xs font-semibold text-teal-300 uppercase tracking-wider">Pendaftaran</p>
+                </div>
 
                 <a href="{{ route('admin.students.index') }}"
                     class="flex items-center px-4 py-3 rounded-lg transition-colors
@@ -79,17 +85,6 @@
                     Periode Pendaftaran
                 </a>
 
-                <a href="{{ route('admin.announcements.index') }}"
-                    class="flex items-center px-4 py-3 rounded-lg transition-colors
-                    {{ request()->routeIs('admin.announcements.*') ? 'bg-teal-900 text-white' : 'text-teal-100 hover:bg-teal-700' }}">
-                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z">
-                        </path>
-                    </svg>
-                    Pengumuman
-                </a>
-
                 <a href="{{ route('admin.registration-types.index') }}"
                     class="flex items-center px-4 py-3 rounded-lg transition-colors
                     {{ request()->routeIs('admin.registration-types.*') ? 'bg-teal-900 text-white' : 'text-teal-100 hover:bg-teal-700' }}">
@@ -100,6 +95,11 @@
                     </svg>
                     Jenis Pendaftaran
                 </a>
+
+                <!-- AKADEMIK -->
+                <div class="pt-4 pb-2">
+                    <p class="px-4 text-xs font-semibold text-teal-300 uppercase tracking-wider">Akademik</p>
+                </div>
 
                 <a href="{{ route('admin.fakultas.index') }}"
                     class="flex items-center px-4 py-3 rounded-lg transition-colors
@@ -123,18 +123,21 @@
                     Program Studi
                 </a>
 
-                @if (auth()->user()->role === 'admin')
-                    <a href="{{ route('admin.users.index') }}"
-                        class="flex items-center px-4 py-3 rounded-lg transition-colors
-                        {{ request()->routeIs('admin.users.*') ? 'bg-teal-900 text-white' : 'text-teal-100 hover:bg-teal-700' }}">
-                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
-                            </path>
-                        </svg>
-                        Manajemen Pengguna
-                    </a>
-                @endif
+                <!-- KONTEN -->
+                <div class="pt-4 pb-2">
+                    <p class="px-4 text-xs font-semibold text-teal-300 uppercase tracking-wider">Konten</p>
+                </div>
+
+                <a href="{{ route('admin.announcements.index') }}"
+                    class="flex items-center px-4 py-3 rounded-lg transition-colors
+                    {{ request()->routeIs('admin.announcements.*') ? 'bg-teal-900 text-white' : 'text-teal-100 hover:bg-teal-700' }}">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z">
+                        </path>
+                    </svg>
+                    Pengumuman
+                </a>
 
                 @if (auth()->user()->role === 'admin')
                     <a href="{{ route('admin.landing-page.edit') }}"
@@ -145,7 +148,25 @@
                                 d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
                             </path>
                         </svg>
-                        Pengaturan Landing Page
+                        Landing Page
+                    </a>
+                @endif
+
+                <!-- SISTEM -->
+                @if (auth()->user()->role === 'admin')
+                    <div class="pt-4 pb-2">
+                        <p class="px-4 text-xs font-semibold text-teal-300 uppercase tracking-wider">Sistem</p>
+                    </div>
+
+                    <a href="{{ route('admin.users.index') }}"
+                        class="flex items-center px-4 py-3 rounded-lg transition-colors
+                        {{ request()->routeIs('admin.users.*') ? 'bg-teal-900 text-white' : 'text-teal-100 hover:bg-teal-700' }}">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
+                            </path>
+                        </svg>
+                        Manajemen Pengguna
                     </a>
                 @endif
             </nav>
