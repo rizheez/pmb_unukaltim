@@ -169,11 +169,71 @@ class StudentBiodataController extends Controller
             );
         }
 
-        StudentBiodata::updateOrCreate(
+        // Update or create biodata
+        $biodata = StudentBiodata::updateOrCreate(
             ['user_id' => Auth::id()],
             $data
         );
 
+        // Reset verification status to pending if documents or biodata changed
+        $this->resetVerificationStatus($biodata, $request);
+
         return redirect()->route('student.biodata.index')->with('message', 'Biodata berhasil disimpan.');
+    }
+
+    /**
+     * Reset verification status to pending when documents or biodata are updated
+     */
+    private function resetVerificationStatus($biodata, $request)
+    {
+        $verificationsToReset = [];
+
+        // Check if photo was uploaded
+        if ($request->hasFile('photo')) {
+            $verificationsToReset[] = 'photo';
+        }
+
+        // Check if KTP was uploaded
+        if ($request->hasFile('ktp')) {
+            $verificationsToReset[] = 'ktp';
+        }
+
+        // Check if KK was uploaded
+        if ($request->hasFile('kk')) {
+            $verificationsToReset[] = 'kk';
+        }
+
+        // Check if Certificate was uploaded
+        if ($request->hasFile('certificate')) {
+            $verificationsToReset[] = 'certificate';
+        }
+
+        // Check if biodata fields were changed (NIK, NISN, name, etc)
+        $biodataFields = ['name', 'nik', 'nisn', 'birth_place', 'birth_date', 'address', 'phone'];
+        $biodataChanged = false;
+        
+        foreach ($biodataFields as $field) {
+            if ($request->filled($field) && $request->$field != $biodata->getOriginal($field)) {
+                $biodataChanged = true;
+                break;
+            }
+        }
+
+        if ($biodataChanged) {
+            $verificationsToReset[] = 'biodata';
+        }
+
+        // Reset verification status for changed documents/biodata
+        if (!empty($verificationsToReset)) {
+            \App\Models\DocumentVerification::where('student_biodata_id', $biodata->id)
+                ->whereIn('document_type', $verificationsToReset)
+                ->update([
+                    'status' => 'pending',
+                    'notes' => null,  // Clear old rejection notes
+                    'verified_at' => null,  // Clear verification timestamp
+                    'verified_by' => null,  // Clear verifier
+                    'is_read' => false,  // Mark as unread for student notification
+                ]);
+        }
     }
 }

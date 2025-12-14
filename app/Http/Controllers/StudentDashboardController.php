@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\StudentBiodata;
-use App\Models\Registration;
 use App\Models\Announcement;
-use Illuminate\Http\Request;
+use App\Models\Registration;
+use App\Models\StudentBiodata;
 use Illuminate\Support\Facades\Auth;
 
 class StudentDashboardController extends Controller
@@ -16,17 +15,17 @@ class StudentDashboardController extends Controller
             ->where('user_id', Auth::id())
             ->first();
         $registration = Registration::where('user_id', Auth::id())->first();
-        
+
         // Get published announcements
         $announcements = Announcement::where('is_published', true)
             ->latest()
             ->get();
-        
+
         // Get active registration period
         $activePeriod = \App\Models\RegistrationPeriod::active()->first();
 
         // Get unread rejected verifications
-        $rejectedVerifications = $biodata 
+        $rejectedVerifications = $biodata
             ? $biodata->verifications()
                 ->where('status', 'rejected')
                 ->where('is_read', false)
@@ -34,8 +33,8 @@ class StudentDashboardController extends Controller
             : collect();
 
         $steps = [
-            ['name' => 'Pengisian Biodata', 'completed' => (bool)$biodata, 'active' => !$biodata],
-            ['name' => 'Pendaftaran', 'completed' => (bool)$registration, 'active' => $biodata && !$registration],
+            ['name' => 'Pengisian Biodata', 'completed' => (bool) $biodata, 'active' => ! $biodata],
+            ['name' => 'Pendaftaran', 'completed' => (bool) $registration, 'active' => $biodata && ! $registration],
             // ['name' => 'Pembayaran', 'completed' => false, 'active' => false],
             ['name' => 'Proses Ujian', 'completed' => false, 'active' => false],
             ['name' => 'Registrasi Ulang', 'completed' => false, 'active' => false],

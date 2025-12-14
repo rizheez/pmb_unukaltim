@@ -71,6 +71,11 @@
                 <div class="mt-4">
                     <img src="{{ $student->studentBiodata->photo_url }}" alt="Student Photo"
                         class="h-32 w-32 object-cover rounded-md border">
+                    {{-- button lihat foto --}}
+                    <a href="{{ $student->studentBiodata->photo_url }}" target="_blank"
+                        class="mt-2 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                        Lihat Foto
+                    </a>
                 </div>
             @else
                 <p class="text-gray-500 italic">Biodata belum diisi.</p>
@@ -179,7 +184,8 @@
                                     <div class="mt-2">
                                         <span class="text-sm">Status: {!! $kkVerification->status_badge !!}</span>
                                         @if ($kkVerification->notes)
-                                            <p class="text-sm text-gray-600 mt-1">Catatan: {{ $kkVerification->notes }}
+                                            <p class="text-sm text-gray-600 mt-1">Catatan:
+                                                {{ $kkVerification->notes }}
                                             </p>
                                         @endif
                                     </div>
