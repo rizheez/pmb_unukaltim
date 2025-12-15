@@ -28,6 +28,7 @@ class StudentRegistrationController extends Controller
 
         $registration = Registration::where('user_id', Auth::id())->first();
         $registrationTypes = RegistrationType::active()->get();
+        $registrationPaths = ['Umum', 'Kelas Karyawan'];
         
         // Get active program studi grouped by fakultas
         $fakultas = \App\Models\Fakultas::active()
@@ -44,7 +45,7 @@ class StudentRegistrationController extends Controller
             ->orderBy('name')
             ->get();
         
-        return view('student.pendaftaran.index', compact('registration', 'activePeriod', 'registrationTypes', 'fakultas', 'programStudi'));
+        return view('student.pendaftaran.index', compact('registration', 'activePeriod', 'registrationTypes', 'registrationPaths', 'fakultas', 'programStudi'));
     }
 
     public function store(Request $request)
@@ -58,15 +59,18 @@ class StudentRegistrationController extends Controller
 
         $request->validate([
             'registration_type_id' => 'required|exists:registration_types,id',
+            'registration_path' => 'required|in:Umum,Kelas Karyawan',
             'choice_1' => 'required|exists:program_studi,id',
             'choice_2' => 'required|exists:program_studi,id|different:choice_1',
             'choice_3' => 'nullable|exists:program_studi,id|different:choice_1,choice_2',
         ], [
             'required' => ':attribute wajib diisi.',
             'exists' => ':attribute tidak valid.',
+            'in' => ':attribute tidak valid.',
             'different' => 'Program studi :attribute tidak boleh sama.',
         ],[
             'registration_type_id' => 'Jenis Pendaftaran',
+            'registration_path' => 'Jalur Pendaftaran',
             'choice_1' => 'Pilihan 1',
             'choice_2' => 'Pilihan 2',
             'choice_3' => 'Pilihan 3',
@@ -76,6 +80,7 @@ class StudentRegistrationController extends Controller
             ['user_id' => Auth::id()],
             [
                 'registration_type_id' => $request->registration_type_id,
+                'registration_path' => $request->registration_path,
                 'choice_1' => $request->choice_1,
                 'choice_2' => $request->choice_2,
                 'choice_3' => $request->choice_3,

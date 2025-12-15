@@ -42,6 +42,21 @@
                             @enderror
                         </div>
 
+                        <div class="sm:col-span-2">
+                            <label for="registration_path" class="block text-sm font-medium text-gray-700">Jalur
+                                Pendaftaran</label>
+                            <select name="registration_path" id="registration_path"
+                                class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm">
+                                <option value="">Pilih Jalur Pendaftaran</option>
+                                @foreach ($registrationPaths as $path)
+                                    <option value="{{ $path }}">{{ $path }}</option>
+                                @endforeach
+                            </select>
+                            @error('registration_path')
+                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                            @enderror
+                        </div>
+
                         <!-- Program Studi Pilihan -->
                         <div class="sm:col-span-2">
                             <h4 class="text-sm font-medium text-gray-900 mb-2">Pilihan Program Studi (Maksimal 2)</h4>
@@ -132,6 +147,9 @@
                                                 Jenis</th>
                                             <th scope="col"
                                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Jalur</th>
+                                            <th scope="col"
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                 Pilihan 1</th>
                                             <th scope="col"
                                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -145,6 +163,9 @@
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                                 {{ $registration->registrationType->name }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                {{ $registration->registration_path ?? '-' }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                                 {{ $registration->programStudiChoice1->full_name ?? '-' }}

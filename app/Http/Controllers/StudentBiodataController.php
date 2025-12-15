@@ -66,7 +66,7 @@ class StudentBiodataController extends Controller
             'photo' => ($existingBiodata && $existingBiodata->photo_path ? 'nullable' : 'required').'|image|max:1024', // 1MB Max
             'ktp' => ($existingBiodata && $existingBiodata->ktp_path ? 'nullable' : 'required').'|file|mimes:pdf,jpg,jpeg,png|max:2048', // 2MB Max
             'kk' => ($existingBiodata && $existingBiodata->kk_path ? 'nullable' : 'required').'|file|mimes:pdf,jpg,jpeg,png|max:2048', // 2MB Max
-            'certificate' => ($existingBiodata && $existingBiodata->certificate_path ? 'nullable' : 'required').'|file|mimes:pdf,jpg,jpeg,png|max:2048', // 2MB Max
+            'certificate' => ($existingBiodata && $existingBiodata->certificate_path ? 'nullable' : 'nullable').'|file|mimes:pdf,jpg,jpeg,png|max:2048', // 2MB Max
             'birth_date' => 'required|date|before:-15 years',
             'school_origin' => 'required|string',
         ], [
@@ -211,9 +211,9 @@ class StudentBiodataController extends Controller
         // Check if biodata fields were changed (NIK, NISN, name, etc)
         $biodataFields = ['name', 'nik', 'nisn', 'birth_place', 'birth_date', 'address', 'phone'];
         $biodataChanged = false;
-        
+
         foreach ($biodataFields as $field) {
-            if ($request->filled($field) && $request->$field != $biodata->getOriginal($field)) {
+            if ($request->filled($field) && $biodata->getOriginal($field) != $request->$field) {
                 $biodataChanged = true;
                 break;
             }
@@ -224,7 +224,7 @@ class StudentBiodataController extends Controller
         }
 
         // Reset verification status for changed documents/biodata
-        if (!empty($verificationsToReset)) {
+        if (! empty($verificationsToReset)) {
             \App\Models\DocumentVerification::where('student_biodata_id', $biodata->id)
                 ->whereIn('document_type', $verificationsToReset)
                 ->update([

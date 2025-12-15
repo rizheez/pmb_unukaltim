@@ -51,6 +51,10 @@ Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->prefix
     Route::get('/students/{id}', [\App\Http\Controllers\Admin\StudentController::class, 'show'])->name('students.show');
     Route::post('/students/{biodata}/verify', [\App\Http\Controllers\Admin\DocumentVerificationController::class, 'bulkVerify'])->name('students.verify');
     
+    // Manual Registration
+    Route::get('/manual-registration/create', [\App\Http\Controllers\Admin\ManualRegistrationController::class, 'create'])->name('manual-registration.create');
+    Route::post('/manual-registration', [\App\Http\Controllers\Admin\ManualRegistrationController::class, 'store'])->name('manual-registration.store');
+    
     // Announcements
     Route::resource('announcements', \App\Http\Controllers\Admin\AnnouncementController::class);
     

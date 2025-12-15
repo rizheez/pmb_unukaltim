@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\RegistrationType;
+use Illuminate\Database\Seeder;
 
 class RegistrationTypeSeeder extends Seeder
 {
@@ -26,7 +26,10 @@ class RegistrationTypeSeeder extends Seeder
         ];
 
         foreach ($types as $type) {
-            RegistrationType::create($type);
+            RegistrationType::updateOrCreate(
+                ['name' => $type['name']],
+                $type
+            );
         }
     }
 }

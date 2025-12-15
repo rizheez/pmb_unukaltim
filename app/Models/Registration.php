@@ -9,6 +9,7 @@ class Registration extends Model
     protected $fillable = [
         'user_id',
         'registration_type_id',
+        'registration_path',
         'choice_1',
         'choice_2',
         'choice_3',
@@ -52,8 +53,8 @@ class Registration extends Model
     public function checkAndUpdateVerificationStatus()
     {
         $biodata = $this->user->studentBiodata;
-        
-        if (!$biodata) {
+
+        if (! $biodata) {
             return false;
         }
 
@@ -69,11 +70,11 @@ class Registration extends Model
 
         foreach ($requiredDocs as $docType) {
             $verification = $verifications->where('document_type', $docType)->first();
-            
-            if (!$verification || $verification->status !== 'approved') {
+
+            if (! $verification || $verification->status !== 'approved') {
                 $allApproved = false;
             }
-            
+
             if ($verification && $verification->status === 'rejected') {
                 $hasRejected = true;
             }
@@ -82,10 +83,12 @@ class Registration extends Model
         // Update registration status based on verification
         if ($allApproved && $this->status === 'submitted') {
             $this->update(['status' => 'verified']);
+
             return true;
         } elseif ($hasRejected && $this->status === 'verified') {
             // Revert to submitted if any document is rejected
             $this->update(['status' => 'submitted']);
+
             return false;
         }
 
