@@ -60,6 +60,8 @@ class StudentRegistrationController extends Controller
         $request->validate([
             'registration_type_id' => 'required|exists:registration_types,id',
             'registration_path' => 'required|in:Umum,Kelas Karyawan',
+            'referral_source' => 'nullable|string|max:255',
+            'referral_detail' => 'required_if:referral_source,Lainnya,Dosen/Panitia PMB UNU Kaltim|nullable|string|max:255',
             'choice_1' => 'required|exists:program_studi,id',
             'choice_2' => 'required|exists:program_studi,id|different:choice_1',
             'choice_3' => 'nullable|exists:program_studi,id|different:choice_1,choice_2',
@@ -68,9 +70,12 @@ class StudentRegistrationController extends Controller
             'exists' => ':attribute tidak valid.',
             'in' => ':attribute tidak valid.',
             'different' => 'Program studi :attribute tidak boleh sama.',
+            'required_if' => ':attribute wajib diisi jika memilih "Lainnya".',
         ],[
             'registration_type_id' => 'Jenis Pendaftaran',
             'registration_path' => 'Jalur Pendaftaran',
+            'referral_source' => 'Sumber Informasi',
+            'referral_detail' => 'Detail Sumber Informasi',
             'choice_1' => 'Pilihan 1',
             'choice_2' => 'Pilihan 2',
             'choice_3' => 'Pilihan 3',
@@ -81,6 +86,8 @@ class StudentRegistrationController extends Controller
             [
                 'registration_type_id' => $request->registration_type_id,
                 'registration_path' => $request->registration_path,
+                'referral_source' => $request->referral_source,
+                'referral_detail' => $request->referral_detail,
                 'choice_1' => $request->choice_1,
                 'choice_2' => $request->choice_2,
                 'choice_3' => $request->choice_3,

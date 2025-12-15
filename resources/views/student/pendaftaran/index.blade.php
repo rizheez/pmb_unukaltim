@@ -57,6 +57,42 @@
                             @enderror
                         </div>
 
+
+                        <!-- Referral Source -->
+                        <div class="sm:col-span-2">
+                            <label for="referral_source" class="block text-sm font-medium text-gray-700">Dari mana Anda
+                                mengetahui informasi PMB UNU Kaltim?</label>
+                            <select name="referral_source" id="referral_source"
+                                class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm">
+                                <option value="">Pilih Sumber Informasi</option>
+                                <option value="Dosen/Panitia PMB UNU Kaltim">Dosen/Panitia PMB UNU Kaltim</option>
+                                <option value="Media Sosial (Instagram/Facebook/Twitter)">Media Sosial
+                                    (Instagram/Facebook/Twitter)</option>
+                                <option value="Website Resmi UNU Kaltim">Website Resmi UNU Kaltim</option>
+                                <option value="Teman/Keluarga">Teman/Keluarga</option>
+                                <option value="Sekolah/Guru">Sekolah/Guru</option>
+                                <option value="Brosur/Spanduk">Brosur/Spanduk</option>
+                                <option value="Event/Pameran Pendidikan">Event/Pameran Pendidikan</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                            @error('referral_source')
+                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <!-- Referral Detail (shown when "Dosen/Panitia PMB UNU Kaltim" or "Lainnya" is selected) -->
+                        <div class="sm:col-span-2" id="referral_detail_wrapper" style="display: none;">
+                            <label for="referral_detail" class="block text-sm font-medium text-gray-700"
+                                id="referral_detail_label">Sebutkan sumber
+                                informasi lainnya</label>
+                            <input type="text" name="referral_detail" id="referral_detail"
+                                class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
+                                placeholder="Contoh: Radio, Iklan Google, dll">
+                            @error('referral_detail')
+                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                            @enderror
+                        </div>
+
                         <!-- Program Studi Pilihan -->
                         <div class="sm:col-span-2">
                             <h4 class="text-sm font-medium text-gray-900 mb-2">Pilihan Program Studi (Maksimal 2)</h4>
@@ -192,3 +228,34 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const referralSourceSelect = document.getElementById('referral_source');
+            const referralDetailWrapper = document.getElementById('referral_detail_wrapper');
+            const referralDetailInput = document.getElementById('referral_detail');
+            const referralDetailLabel = document.getElementById('referral_detail_label');
+
+            if (referralSourceSelect) {
+                referralSourceSelect.addEventListener('change', function() {
+                    if (this.value === 'Dosen/Panitia PMB UNU Kaltim') {
+                        referralDetailWrapper.style.display = 'block';
+                        referralDetailInput.required = true;
+                        referralDetailLabel.textContent = 'Nama Dosen/Panitia PMB';
+                        referralDetailInput.placeholder = 'Contoh: Dr. Ahmad Fauzi, M.Pd';
+                    } else if (this.value === 'Lainnya') {
+                        referralDetailWrapper.style.display = 'block';
+                        referralDetailInput.required = true;
+                        referralDetailLabel.textContent = 'Sebutkan sumber informasi lainnya';
+                        referralDetailInput.placeholder = 'Contoh: Radio, Iklan Google, dll';
+                    } else {
+                        referralDetailWrapper.style.display = 'none';
+                        referralDetailInput.required = false;
+                        referralDetailInput.value = '';
+                    }
+                });
+            }
+        });
+    </script>
+@endpush

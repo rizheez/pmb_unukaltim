@@ -3,18 +3,19 @@
         <div class="md:flex md:items-center md:justify-between">
             <div class="flex-1 min-w-0">
                 <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
-                    Daftarkan Calon Mahasiswa Manual
+                    Edit Biodata Calon Mahasiswa
                 </h2>
                 <p class="mt-1 text-sm text-gray-500">
-                    Bantu calon mahasiswa yang kesulitan mendaftar secara online
+                    Edit biodata untuk: <strong>{{ $student->name }}</strong>
                 </p>
             </div>
         </div>
 
         <div class="bg-white shadow rounded-lg">
-            <form action="{{ route('admin.manual-registration.store') }}" method="POST" enctype="multipart/form-data"
-                class="p-6 space-y-8">
+            <form action="{{ route('admin.students.update-biodata', $student->id) }}" method="POST"
+                enctype="multipart/form-data" class="p-6 space-y-8">
                 @csrf
+                @method('PUT')
 
                 {{-- Data Akun --}}
                 <div>
@@ -23,7 +24,8 @@
                         <div>
                             <label for="email" class="block text-sm font-medium text-gray-700">Email <span
                                     class="text-red-500">*</span></label>
-                            <input type="email" name="email" id="email" value="{{ old('email') }}"
+                            <input type="email" name="email" id="email"
+                                value="{{ old('email', $student->email) }}"
                                 class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm">
                             @error('email')
                                 <span class="text-red-500 text-xs">{{ $message }}</span>
@@ -33,17 +35,14 @@
                         <div>
                             <label for="phone" class="block text-sm font-medium text-gray-700">Nomor Telepon <span
                                     class="text-red-500">*</span></label>
-                            <input type="text" name="phone" id="phone" value="{{ old('phone') }}"
+                            <input type="text" name="phone" id="phone"
+                                value="{{ old('phone', $student->phone) }}"
                                 class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm">
                             @error('phone')
                                 <span class="text-red-500 text-xs">{{ $message }}</span>
                             @enderror
                         </div>
                     </div>
-                    <p class="mt-2 text-sm text-gray-500">
-                        <i data-lucide="info" class="inline w-4 h-4"></i>
-                        Password akan digenerate otomatis dan dikirim ke email calon mahasiswa
-                    </p>
                 </div>
 
                 {{-- Data Pribadi --}}
@@ -53,7 +52,8 @@
                         <div class="sm:col-span-2">
                             <label for="name" class="block text-sm font-medium text-gray-700">Nama Lengkap <span
                                     class="text-red-500">*</span></label>
-                            <input type="text" name="name" id="name" value="{{ old('name') }}"
+                            <input type="text" name="name" id="name"
+                                value="{{ old('name', $student->studentBiodata->name) }}"
                                 class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm">
                             @error('name')
                                 <span class="text-red-500 text-xs">{{ $message }}</span>
@@ -63,8 +63,8 @@
                         <div>
                             <label for="nik" class="block text-sm font-medium text-gray-700">NIK <span
                                     class="text-red-500">*</span></label>
-                            <input type="text" name="nik" id="nik" value="{{ old('nik') }}"
-                                maxlength="16"
+                            <input type="text" name="nik" id="nik"
+                                value="{{ old('nik', $student->studentBiodata->nik) }}" maxlength="16"
                                 class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm">
                             @error('nik')
                                 <span class="text-red-500 text-xs">{{ $message }}</span>
@@ -73,7 +73,8 @@
 
                         <div>
                             <label for="nisn" class="block text-sm font-medium text-gray-700">NISN</label>
-                            <input type="text" name="nisn" id="nisn" value="{{ old('nisn') }}"
+                            <input type="text" name="nisn" id="nisn"
+                                value="{{ old('nisn', $student->studentBiodata->nisn) }}"
                                 class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm">
                             @error('nisn')
                                 <span class="text-red-500 text-xs">{{ $message }}</span>
@@ -86,10 +87,12 @@
                             <select name="gender" id="gender"
                                 class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm">
                                 <option value="">Pilih Jenis Kelamin</option>
-                                <option value="Laki-laki" {{ old('gender') == 'Laki-laki' ? 'selected' : '' }}>
+                                <option value="Laki-laki"
+                                    {{ old('gender', $student->studentBiodata->gender) == 'Laki-laki' ? 'selected' : '' }}>
                                     Laki-laki
                                 </option>
-                                <option value="Perempuan" {{ old('gender') == 'Perempuan' ? 'selected' : '' }}>
+                                <option value="Perempuan"
+                                    {{ old('gender', $student->studentBiodata->gender) == 'Perempuan' ? 'selected' : '' }}>
                                     Perempuan
                                 </option>
                             </select>
@@ -101,7 +104,8 @@
                         <div>
                             <label for="birth_place" class="block text-sm font-medium text-gray-700">Tempat Lahir <span
                                     class="text-red-500">*</span></label>
-                            <input type="text" name="birth_place" id="birth_place" value="{{ old('birth_place') }}"
+                            <input type="text" name="birth_place" id="birth_place"
+                                value="{{ old('birth_place', $student->studentBiodata->birth_place) }}"
                                 class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm">
                             @error('birth_place')
                                 <span class="text-red-500 text-xs">{{ $message }}</span>
@@ -111,7 +115,8 @@
                         <div>
                             <label for="birth_date" class="block text-sm font-medium text-gray-700">Tanggal Lahir <span
                                     class="text-red-500">*</span></label>
-                            <input type="date" name="birth_date" id="birth_date" value="{{ old('birth_date') }}"
+                            <input type="date" name="birth_date" id="birth_date"
+                                value="{{ old('birth_date', $student->studentBiodata->birth_date) }}"
                                 class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm">
                             @error('birth_date')
                                 <span class="text-red-500 text-xs">{{ $message }}</span>
@@ -124,17 +129,28 @@
                             <select name="religion" id="religion"
                                 class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm">
                                 <option value="">Pilih Agama</option>
-                                <option value="Islam" {{ old('religion') == 'Islam' ? 'selected' : '' }}>Islam
+                                <option value="Islam"
+                                    {{ old('religion', $student->studentBiodata->religion) == 'Islam' ? 'selected' : '' }}>
+                                    Islam
                                 </option>
-                                <option value="Kristen" {{ old('religion') == 'Kristen' ? 'selected' : '' }}>Kristen
+                                <option value="Kristen"
+                                    {{ old('religion', $student->studentBiodata->religion) == 'Kristen' ? 'selected' : '' }}>
+                                    Kristen
                                 </option>
-                                <option value="Katolik" {{ old('religion') == 'Katolik' ? 'selected' : '' }}>Katolik
+                                <option value="Katolik"
+                                    {{ old('religion', $student->studentBiodata->religion) == 'Katolik' ? 'selected' : '' }}>
+                                    Katolik
                                 </option>
-                                <option value="Hindu" {{ old('religion') == 'Hindu' ? 'selected' : '' }}>Hindu
+                                <option value="Hindu"
+                                    {{ old('religion', $student->studentBiodata->religion) == 'Hindu' ? 'selected' : '' }}>
+                                    Hindu
                                 </option>
-                                <option value="Buddha" {{ old('religion') == 'Buddha' ? 'selected' : '' }}>Buddha
+                                <option value="Buddha"
+                                    {{ old('religion', $student->studentBiodata->religion) == 'Buddha' ? 'selected' : '' }}>
+                                    Buddha
                                 </option>
-                                <option value="Konghucu" {{ old('religion') == 'Konghucu' ? 'selected' : '' }}>
+                                <option value="Konghucu"
+                                    {{ old('religion', $student->studentBiodata->religion) == 'Konghucu' ? 'selected' : '' }}>
                                     Konghucu
                                 </option>
                             </select>
@@ -147,7 +163,7 @@
                             <label for="address" class="block text-sm font-medium text-gray-700">Alamat Lengkap <span
                                     class="text-red-500">*</span></label>
                             <textarea name="address" id="address" rows="3"
-                                class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm">{{ old('address') }}</textarea>
+                                class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm">{{ old('address', $student->studentBiodata->address) }}</textarea>
                             @error('address')
                                 <span class="text-red-500 text-xs">{{ $message }}</span>
                             @enderror
@@ -160,12 +176,17 @@
                             <select name="last_education" id="last_education"
                                 class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm">
                                 <option value="">Pilih Pendidikan Terakhir</option>
-                                <option value="SMA/SMK" {{ old('last_education') == 'SMA/SMK' ? 'selected' : '' }}>
+                                <option value="SMA/SMK"
+                                    {{ old('last_education', $student->studentBiodata->last_education) == 'SMA/SMK' ? 'selected' : '' }}>
                                     SMA/SMK
                                 </option>
-                                <option value="D3" {{ old('last_education') == 'D3' ? 'selected' : '' }}>D3
+                                <option value="D3"
+                                    {{ old('last_education', $student->studentBiodata->last_education) == 'D3' ? 'selected' : '' }}>
+                                    D3
                                 </option>
-                                <option value="S1" {{ old('last_education') == 'S1' ? 'selected' : '' }}>S1
+                                <option value="S1"
+                                    {{ old('last_education', $student->studentBiodata->last_education) == 'S1' ? 'selected' : '' }}>
+                                    S1
                                 </option>
                             </select>
                             @error('last_education')
@@ -177,7 +198,7 @@
                             <label for="school_origin" class="block text-sm font-medium text-gray-700">Asal Sekolah
                                 <span class="text-red-500">*</span></label>
                             <input type="text" name="school_origin" id="school_origin"
-                                value="{{ old('school_origin') }}"
+                                value="{{ old('school_origin', $student->studentBiodata->school_origin) }}"
                                 class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm">
                             @error('school_origin')
                                 <span class="text-red-500 text-xs">{{ $message }}</span>
@@ -187,7 +208,8 @@
                         <div>
                             <label for="major" class="block text-sm font-medium text-gray-700">Jurusan
                                 Sekolah</label>
-                            <input type="text" name="major" id="major" value="{{ old('major') }}"
+                            <input type="text" name="major" id="major"
+                                value="{{ old('major', $student->studentBiodata->major) }}"
                                 class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm">
                             @error('major')
                                 <span class="text-red-500 text-xs">{{ $message }}</span>
@@ -201,8 +223,8 @@
                     <h3 class="text-lg font-medium text-gray-900 border-b pb-2 mb-4">Dokumen Pendukung</h3>
                     <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
                         <div>
-                            <label for="photo" class="block text-sm font-medium text-gray-700">Foto <span
-                                    class="text-red-500">*</span></label>
+                            <label for="photo" class="block text-sm font-medium text-gray-700">Foto (Opsional -
+                                Upload baru jika ingin ganti)</label>
                             <input type="file" name="photo" id="photo" accept="image/*"
                                 class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100">
                             <p class="mt-1 text-xs text-gray-500">Maksimal 1MB</p>
@@ -212,8 +234,8 @@
                         </div>
 
                         <div>
-                            <label for="ktp" class="block text-sm font-medium text-gray-700">KTP <span
-                                    class="text-red-500">*</span></label>
+                            <label for="ktp" class="block text-sm font-medium text-gray-700">KTP (Opsional -
+                                Upload baru jika ingin ganti)</label>
                             <input type="file" name="ktp" id="ktp" accept="image/*,.pdf"
                                 class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100">
                             <p class="mt-1 text-xs text-gray-500">Maksimal 2MB (PDF/JPG/PNG)</p>
@@ -223,8 +245,8 @@
                         </div>
 
                         <div>
-                            <label for="kk" class="block text-sm font-medium text-gray-700">Kartu Keluarga <span
-                                    class="text-red-500">*</span></label>
+                            <label for="kk" class="block text-sm font-medium text-gray-700">Kartu Keluarga
+                                (Opsional - Upload baru jika ingin ganti)</label>
                             <input type="file" name="kk" id="kk" accept="image/*,.pdf"
                                 class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100">
                             <p class="mt-1 text-xs text-gray-500">Maksimal 2MB (PDF/JPG/PNG)</p>
@@ -256,10 +278,12 @@
                                 Pendaftaran <span class="text-red-500">*</span></label>
                             <select name="registration_type_id" id="registration_type_id"
                                 class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm">
+
                                 <option value="">Pilih Jenis Pendaftaran</option>
+
                                 @foreach ($registrationTypes as $type)
                                     <option value="{{ $type->id }}"
-                                        {{ old('registration_type_id') == $type->id ? 'selected' : '' }}>
+                                        {{ old('registration_type_id', $student->registration->registration_type_id ?? '') == $type->id ? 'selected' : '' }}>
                                         {{ $type->name }}
                                     </option>
                                 @endforeach
@@ -277,7 +301,7 @@
                                 <option value="">Pilih Jalur Pendaftaran</option>
                                 @foreach ($registrationPaths as $path)
                                     <option value="{{ $path }}"
-                                        {{ old('registration_path') == $path ? 'selected' : '' }}>
+                                        {{ old('registration_path', $student->registration->registration_path ?? '') == $path ? 'selected' : '' }}>
                                         {{ $path }}
                                     </option>
                                 @endforeach
@@ -286,6 +310,7 @@
                                 <span class="text-red-500 text-xs">{{ $message }}</span>
                             @enderror
                         </div>
+
 
                         <div>
                             <label for="choice_1" class="block text-sm font-medium text-gray-700">Pilihan 1 <span
@@ -297,7 +322,7 @@
                                     <optgroup label="{{ $fak->name }}">
                                         @foreach ($fak->programStudi as $ps)
                                             <option value="{{ $ps->id }}"
-                                                {{ old('choice_1') == $ps->id ? 'selected' : '' }}>
+                                                {{ old('choice_1', $student->registration->choice_1 ?? '') == $ps->id ? 'selected' : '' }}>
                                                 {{ $ps->full_name }}
                                             </option>
                                         @endforeach
@@ -319,7 +344,7 @@
                                     <optgroup label="{{ $fak->name }}">
                                         @foreach ($fak->programStudi as $ps)
                                             <option value="{{ $ps->id }}"
-                                                {{ old('choice_2') == $ps->id ? 'selected' : '' }}>
+                                                {{ old('choice_2', $student->registration->choice_2 ?? '') == $ps->id ? 'selected' : '' }}>
                                                 {{ $ps->full_name }}
                                             </option>
                                         @endforeach
@@ -345,27 +370,31 @@
                                 class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm">
                                 <option value="">Pilih Sumber Informasi</option>
                                 <option value="Dosen/Panitia PMB UNU Kaltim"
-                                    {{ old('referral_source') == 'Dosen/Panitia PMB UNU Kaltim' ? 'selected' : '' }}>
+                                    {{ old('referral_source', $student->registration->referral_source ?? '') == 'Dosen/Panitia PMB UNU Kaltim' ? 'selected' : '' }}>
                                     Dosen/Panitia PMB UNU Kaltim</option>
                                 <option value="Media Sosial (Instagram/Facebook/Twitter)"
-                                    {{ old('referral_source') == 'Media Sosial (Instagram/Facebook/Twitter)' ? 'selected' : '' }}>
+                                    {{ old('referral_source', $student->registration->referral_source ?? '') == 'Media Sosial (Instagram/Facebook/Twitter)' ? 'selected' : '' }}>
                                     Media Sosial (Instagram/Facebook/Twitter)</option>
                                 <option value="Website Resmi UNU Kaltim"
-                                    {{ old('referral_source') == 'Website Resmi UNU Kaltim' ? 'selected' : '' }}>
+                                    {{ old('referral_source', $student->registration->referral_source ?? '') == 'Website Resmi UNU Kaltim' ? 'selected' : '' }}>
                                     Website Resmi UNU Kaltim</option>
                                 <option value="Teman/Keluarga"
-                                    {{ old('referral_source') == 'Teman/Keluarga' ? 'selected' : '' }}>Teman/Keluarga
+                                    {{ old('referral_source', $student->registration->referral_source ?? '') == 'Teman/Keluarga' ? 'selected' : '' }}>
+                                    Teman/Keluarga
                                 </option>
                                 <option value="Sekolah/Guru"
-                                    {{ old('referral_source') == 'Sekolah/Guru' ? 'selected' : '' }}>Sekolah/Guru
+                                    {{ old('referral_source', $student->registration->referral_source ?? '') == 'Sekolah/Guru' ? 'selected' : '' }}>
+                                    Sekolah/Guru
                                 </option>
                                 <option value="Brosur/Spanduk"
-                                    {{ old('referral_source') == 'Brosur/Spanduk' ? 'selected' : '' }}>Brosur/Spanduk
+                                    {{ old('referral_source', $student->registration->referral_source ?? '') == 'Brosur/Spanduk' ? 'selected' : '' }}>
+                                    Brosur/Spanduk
                                 </option>
                                 <option value="Event/Pameran Pendidikan"
-                                    {{ old('referral_source') == 'Event/Pameran Pendidikan' ? 'selected' : '' }}>
+                                    {{ old('referral_source', $student->registration->referral_source ?? '') == 'Event/Pameran Pendidikan' ? 'selected' : '' }}>
                                     Event/Pameran Pendidikan</option>
-                                <option value="Lainnya" {{ old('referral_source') == 'Lainnya' ? 'selected' : '' }}>
+                                <option value="Lainnya"
+                                    {{ old('referral_source', $student->registration->referral_source ?? '') == 'Lainnya' ? 'selected' : '' }}>
                                     Lainnya</option>
                             </select>
                             @error('referral_source')
@@ -375,14 +404,14 @@
 
                         <!-- Referral Detail -->
                         <div class="sm:col-span-2" id="referral_detail_wrapper_admin"
-                            style="display: {{ old('referral_source') == 'Lainnya' || old('referral_source') == 'Dosen/Panitia PMB UNU Kaltim' ? 'block' : 'none' }};">
+                            style="display: {{ old('referral_source', $student->registration->referral_source ?? '') == 'Lainnya' || old('referral_source', $student->registration->referral_source ?? '') == 'Dosen/Panitia PMB UNU Kaltim' ? 'block' : 'none' }};">
                             <label for="referral_detail" class="block text-sm font-medium text-gray-700"
                                 id="referral_detail_label_admin">
-                                {{ old('referral_source') == 'Dosen/Panitia PMB UNU Kaltim' ? 'Nama Dosen/Panitia PMB' : 'Sebutkan sumber informasi lainnya' }}</label>
+                                {{ old('referral_source', $student->registration->referral_source ?? '') == 'Dosen/Panitia PMB UNU Kaltim' ? 'Nama Dosen/Panitia PMB' : 'Sebutkan sumber informasi lainnya' }}</label>
                             <input type="text" name="referral_detail" id="referral_detail_admin"
-                                value="{{ old('referral_detail') }}"
+                                value="{{ old('referral_detail', $student->registration->referral_detail ?? '') }}"
                                 class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
-                                placeholder="{{ old('referral_source') == 'Dosen/Panitia PMB UNU Kaltim' ? 'Contoh: Dr. Ahmad Fauzi, M.Pd' : 'Contoh: Radio, Iklan Google, dll' }}">
+                                placeholder="{{ old('referral_source', $student->registration->referral_source ?? '') == 'Dosen/Panitia PMB UNU Kaltim' ? 'Contoh: Dr. Ahmad Fauzi, M.Pd' : 'Contoh: Radio, Iklan Google, dll' }}">
                             @error('referral_detail')
                                 <span class="text-red-500 text-xs">{{ $message }}</span>
                             @enderror
@@ -392,13 +421,13 @@
 
                 {{-- Actions --}}
                 <div class="flex justify-end space-x-3 pt-4 border-t">
-                    <a href="{{ route('admin.students.index') }}"
+                    <a href="{{ route('admin.students.show', $student->id) }}"
                         class="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
                         Batal
                     </a>
                     <button type="submit"
                         class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
-                        Daftarkan Mahasiswa
+                        Update Biodata
                     </button>
                 </div>
             </form>

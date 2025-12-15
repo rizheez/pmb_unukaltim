@@ -13,7 +13,6 @@ class UserController extends Controller
     /**
      * Display a listing of admin and staff users.
      */
-
     public function index()
     {
         // Pengecekan hanya untuk Role Admin
@@ -22,7 +21,7 @@ class UserController extends Controller
         }
 
         // Only show admin and staff users
-        $users = User::whereIn('role', ['admin', 'staff'])
+        $users = User::whereIn('role', ['admin', 'staff', 'student'])
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -37,6 +36,7 @@ class UserController extends Controller
         if (auth()->user()->role !== 'admin') {
             return redirect()->route('admin.dashboard')->with('error', 'Anda tidak memiliki akses!');
         }
+
         return view('admin.users.create');
     }
 
@@ -79,7 +79,7 @@ class UserController extends Controller
         }
 
         // Only allow editing admin and staff
-        if (!in_array($user->role, ['admin', 'staff'])) {
+        if (! in_array($user->role, ['admin', 'staff'])) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -94,15 +94,15 @@ class UserController extends Controller
         if (auth()->user()->role !== 'admin') {
             return redirect()->route('admin.dashboard')->with('error', 'Anda tidak memiliki akses!');
         }
-        
+
         // Only allow updating admin and staff
-        if (!in_array($user->role, ['admin', 'staff'])) {
+        if (! in_array($user->role, ['admin', 'staff'])) {
             abort(403, 'Unauthorized action.');
         }
 
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$user->id],
             'phone' => ['required', 'string', 'max:20'],
             'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
             'role' => ['required', 'in:admin,staff'],
@@ -137,7 +137,7 @@ class UserController extends Controller
         }
 
         // Only allow deleting admin and staff
-        if (!in_array($user->role, ['admin', 'staff'])) {
+        if (! in_array($user->role, ['admin', 'staff'])) {
             abort(403, 'Unauthorized action.');
         }
 

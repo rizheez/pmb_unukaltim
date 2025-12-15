@@ -43,14 +43,24 @@
                                 {{ $period->start_date->format('d M Y') }} - {{ $period->end_date->format('d M Y') }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <form action="{{ route('admin.periods.toggle', $period->id) }}" method="POST"
-                                    class="inline">
-                                    @csrf
-                                    <button type="submit"
-                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $period->is_active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">
-                                        {{ $period->is_active ? 'Aktif' : 'Nonaktif' }}
-                                    </button>
-                                </form>
+                                @if ($period->canBeActivated())
+                                    {{-- Periode dalam range, bisa di-toggle --}}
+                                    <form action="{{ route('admin.periods.toggle', $period->id) }}" method="POST"
+                                        class="inline">
+                                        @csrf
+                                        <button type="submit"
+                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $period->status_badge_class }} hover:opacity-80 transition">
+                                            {{ $period->status }}
+                                        </button>
+                                    </form>
+                                @else
+                                    {{-- Periode expired/upcoming, tidak bisa di-toggle --}}
+                                    <span
+                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $period->status_badge_class }}"
+                                        title="{{ $period->isExpired() ? 'Periode sudah berakhir' : 'Periode belum dimulai' }}">
+                                        {{ $period->status }}
+                                    </span>
+                                @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 <a href="{{ route('admin.periods.edit', $period->id) }}"

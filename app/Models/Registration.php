@@ -10,6 +10,8 @@ class Registration extends Model
         'user_id',
         'registration_type_id',
         'registration_path',
+        'referral_source',
+        'referral_detail',
         'choice_1',
         'choice_2',
         'choice_3',
@@ -58,19 +60,23 @@ class Registration extends Model
             return false;
         }
 
-        // Get all verifications for required documents
-        $requiredDocs = ['photo', 'kk', 'ktp', 'certificate', 'biodata'];
-        $verifications = $biodata->verifications()
-            ->whereIn('document_type', $requiredDocs)
-            ->get();
+        // Required documents (MUST be uploaded and verified)
+        $requiredDocs = ['photo', 'kk', 'ktp', 'biodata'];
+
+        // Optional documents (only check if uploaded)
+        $optionalDocs = ['certificate'];
+
+        $verifications = $biodata->verifications()->get();
 
         // Check if all required documents are verified and approved
         $allApproved = true;
         $hasRejected = false;
 
+        // Check REQUIRED documents
         foreach ($requiredDocs as $docType) {
             $verification = $verifications->where('document_type', $docType)->first();
 
+            // Required document must exist and be approved
             if (! $verification || $verification->status !== 'approved') {
                 $allApproved = false;
             }
@@ -78,6 +84,24 @@ class Registration extends Model
             if ($verification && $verification->status === 'rejected') {
                 $hasRejected = true;
             }
+        }
+
+        // Check OPTIONAL documents (only if they exist)
+        foreach ($optionalDocs as $docType) {
+            $verification = $verifications->where('document_type', $docType)->first();
+
+            // If optional document exists, it must be approved
+            // If not uploaded, skip (don't block verification)
+            if ($verification) {
+                if ($verification->status !== 'approved') {
+                    $allApproved = false;
+                }
+
+                if ($verification->status === 'rejected') {
+                    $hasRejected = true;
+                }
+            }
+            // If no verification exists for optional doc, it's OK (not uploaded)
         }
 
         // Update registration status based on verification

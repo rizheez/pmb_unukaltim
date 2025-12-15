@@ -214,12 +214,7 @@
                             <select name="last_education" id="last_education"
                                 class="shadow-sm focus:ring-teal-500 focus:border-teal-500 block w-full sm:text-sm border-gray-300 rounded-md">
                                 <option value="">Pilih...</option>
-                                <option value="SD"
-                                    {{ old('last_education', $biodata->last_education) == 'SD' ? 'selected' : '' }}>SD
-                                </option>
-                                <option value="SMP"
-                                    {{ old('last_education', $biodata->last_education) == 'SMP' ? 'selected' : '' }}>SMP
-                                </option>
+
                                 <option value="SMA/SMK Sederajat"
                                     {{ old('last_education', $biodata->last_education) == 'SMA/SMK Sederajat' ? 'selected' : '' }}>
                                     SMA/SMK Sederajat</option>
@@ -238,9 +233,7 @@
                                 <option value="S1"
                                     {{ old('last_education', $biodata->last_education) == 'S1' ? 'selected' : '' }}>S1
                                 </option>
-                                <option value="S2"
-                                    {{ old('last_education', $biodata->last_education) == 'S2' ? 'selected' : '' }}>S2
-                                </option>
+
                             </select>
                         </div>
                         @error('last_education')
@@ -346,7 +339,7 @@
                             @error('certificate')
                                 <span class="text-red-500 text-xs">{{ $message }}</span>
                             @enderror
-                            <p class="text-xs text-gray-500 mt-1">PDF, JPG, PNG (Max: 2MB) - Wajib diisi jika belum ada</p>
+                            <p class="text-xs text-gray-500 mt-1">PDF, JPG, PNG (Max: 2MB) - Opsional jika belum ada</p>
                         </div>
                     </div>
                 </div>

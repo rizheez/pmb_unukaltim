@@ -4,18 +4,31 @@
             Daftar</a>
         <div class="flex items-center justify-between mt-2">
             <h2 class="text-2xl font-bold text-gray-800">Detail Calon Mahasiswa: {{ $student->name }}</h2>
-            <div>
+            <div class="flex items-center space-x-3">
                 @if ($student->email_verified_at)
                     <span class="px-3 py-1 text-sm rounded bg-green-100 text-green-800">
                         ✓ Email Terverifikasi
                     </span>
-                    <span class="text-xs text-gray-500 ml-2">
-                        {{ $student->email_verified_at->format('d M Y') }}
+                    <span class="text-xs text-gray-500">
+                        {{ $student->email_verified_at->locale('id')->isoFormat('D MMMM Y') }}
                     </span>
                 @else
                     <span class="px-3 py-1 text-sm rounded bg-red-100 text-red-800">
                         ✗ Email Belum Terverifikasi
                     </span>
+                @endif
+
+                <!-- Edit Biodata Button -->
+                @if ($student->studentBiodata)
+                    <button onclick="confirmEdit()"
+                        class="inline-flex items-center px-4 py-2 bg-yellow-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-yellow-700 focus:bg-yellow-700 active:bg-yellow-900 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                            </path>
+                        </svg>
+                        Edit Biodata
+                    </button>
                 @endif
             </div>
         </div>
@@ -87,6 +100,19 @@
             <h3 class="text-lg font-semibold text-gray-800 mb-4 border-b pb-2">Pendaftaran</h3>
             @if ($student->registration)
                 <dl class="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
+
+                    <div class="sm:col-span-1">
+                        <dt class="text-sm font-medium text-gray-500">Jenis Pendaftaran</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ $student->registration->registrationType->name }}
+                        </dd>
+                    </div>
+                    @if ($student->registration->registration_path)
+                        <div class="sm:col-span-1">
+                            <dt class="text-sm font-medium text-gray-500">Jalur Pendaftaran</dt>
+                            <dd class="mt-1 text-sm text-gray-900">{{ $student->registration->registration_path }}
+                            </dd>
+                        </div>
+                    @endif
                     <div class="sm:col-span-1">
                         <dt class="text-sm font-medium text-gray-500">Status</dt>
                         <dd class="mt-1">
@@ -96,11 +122,7 @@
                             </span>
                         </dd>
                     </div>
-                    <div class="sm:col-span-1">
-                        <dt class="text-sm font-medium text-gray-500">Jenis Pendaftaran</dt>
-                        <dd class="mt-1 text-sm text-gray-900">{{ $student->registration->registrationType->name }}
-                        </dd>
-                    </div>
+
                     <div class="sm:col-span-1">
                         <dt class="text-sm font-medium text-gray-500">Pilihan 1</dt>
                         <dd class="mt-1 text-sm text-gray-900">
@@ -111,6 +133,30 @@
                         <dd class="mt-1 text-sm text-gray-900">
                             {{ $student->registration->programStudiChoice2->full_name ?? '-' }}</dd>
                     </div>
+
+                    @if ($student->registration->referral_source)
+                        <div class="sm:col-span-1">
+                            <dt class="text-sm font-medium text-gray-500">Sumber Informasi</dt>
+                            <dd class="mt-1 text-sm text-gray-900">
+                                {{ $student->registration->referral_source }}
+                            </dd>
+                        </div>
+                    @endif
+
+                    @if ($student->registration->referral_detail)
+                        <div class="sm:col-span-1">
+                            <dt class="text-sm font-medium text-gray-500">
+                                @if ($student->registration->referral_source == 'Dosen/Panitia PMB UNU Kaltim')
+                                    Nama Dosen/Panitia PMB
+                                @else
+                                    Detail Sumber Informasi
+                                @endif
+                            </dt>
+                            <dd class="mt-1 text-sm text-gray-900">
+                                {{ $student->registration->referral_detail }}
+                            </dd>
+                        </div>
+                    @endif
                 </dl>
             @else
                 <p class="text-gray-500 italic">Pendaftaran belum disubmit.</p>
@@ -155,7 +201,8 @@
                         @if ($student->studentBiodata->photo_path)
                             <div class="ml-4 w-64">
                                 <input type="hidden" name="verifications[0][document_type]" value="photo">
-                                <select name="verifications[0][status]" class="w-full rounded-md border-gray-300 mb-2">
+                                <select name="verifications[0][status]"
+                                    class="w-full rounded-md border-gray-300 mb-2">
                                     <option value="">-- Pilih Status --</option>
                                     <option value="approved">Setujui</option>
                                     <option value="rejected">Tolak</option>
@@ -407,5 +454,37 @@
                 });
             }
         });
+
+        // Confirm Edit Biodata
+        function confirmEdit() {
+            Swal.fire({
+                title: 'Edit Biodata Mahasiswa?',
+                html: `
+                    <div class="text-left">
+                        <p class="text-gray-700 mb-2">Anda akan mengedit biodata mahasiswa:</p>
+                        <p class="font-semibold text-gray-900">{{ $student->name }}</p>
+                        <div class="mt-4 p-3 bg-yellow-50 border-l-4 border-yellow-400 text-sm">
+                            <p class="text-yellow-800">
+                                <strong>⚠️ Perhatian:</strong><br>
+                                • Pastikan data yang diubah sudah benar<br>
+                                • Perubahan akan tersimpan di database<br>
+                                • Calon Mahasiswa akan melihat data yang diupdate
+                            </p>
+                        </div>
+                    </div>
+                `,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d97706',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Ya, Edit Biodata',
+                cancelButtonText: 'Batal',
+                width: '500px'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '{{ route('admin.students.edit-biodata', $student->id) }}';
+                }
+            });
+        }
     </script>
 </x-admin-layout>

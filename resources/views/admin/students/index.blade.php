@@ -51,6 +51,7 @@
                 ['data' => 'phone', 'name' => 'phone'],
                 ['data' => 'status', 'name' => 'status', 'orderable' => false],
                 ['data' => 'period_name', 'name' => 'period_name', 'orderable' => false],
+                ['data' => 'referral_source', 'name' => 'referral_source', 'orderable' => false],
                 ['data' => 'registered_at', 'name' => 'registered_at'],
                 ['data' => 'actions', 'name' => 'actions', 'orderable' => false, 'searchable' => false],
             ]">
@@ -70,6 +71,9 @@
                         </th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Gelombang
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Sumber Info
                         </th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Terdaftar

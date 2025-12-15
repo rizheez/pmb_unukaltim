@@ -61,11 +61,13 @@
                                 {{ $user->created_at->format('d M Y') }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <a href="{{ route('admin.users.edit', $user) }}"
-                                    class="text-indigo-600 hover:text-indigo-900 mr-3">
-                                    Edit
-                                </a>
-                                @if ($user->id !== auth()->id())
+                                @if (auth()->user()->role == 'admin' && $user->role !== 'student')
+                                    <a href="{{ route('admin.users.edit', $user) }}"
+                                        class="text-indigo-600 hover:text-indigo-900 mr-3">
+                                        Edit
+                                    </a>
+                                @endif
+                                @if ($user->id !== auth()->id() && auth()->user()->role == 'admin' && $user->role !== 'student')
                                     <form action="{{ route('admin.users.destroy', $user) }}" method="POST"
                                         class="inline"
                                         onsubmit="return confirmDelete(this, 'User ini akan dihapus secara permanen!')">

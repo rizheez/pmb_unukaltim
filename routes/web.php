@@ -2,10 +2,10 @@
 
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\StudentDashboardController;
-use App\Http\Controllers\StudentBiodataController;
-use App\Http\Controllers\StudentRegistrationController;
 use App\Http\Controllers\SitemapController;
+use App\Http\Controllers\StudentBiodataController;
+use App\Http\Controllers\StudentDashboardController;
+use App\Http\Controllers\StudentRegistrationController;
 use Illuminate\Support\Facades\Route;
 
 // SEO Routes
@@ -43,43 +43,50 @@ Route::middleware(['auth', \App\Http\Middleware\StudentMiddleware::class, 'verif
 
 Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
-    
+
     // Students
     Route::get('/students', [\App\Http\Controllers\Admin\StudentController::class, 'index'])->name('students.index');
     Route::get('/students/datatable', [\App\Http\Controllers\Admin\StudentController::class, 'datatable'])->name('students.datatable');
     Route::get('/students/export', [\App\Http\Controllers\Admin\StudentController::class, 'export'])->name('students.export');
     Route::get('/students/{id}', [\App\Http\Controllers\Admin\StudentController::class, 'show'])->name('students.show');
     Route::post('/students/{biodata}/verify', [\App\Http\Controllers\Admin\DocumentVerificationController::class, 'bulkVerify'])->name('students.verify');
-    
+
     // Manual Registration
     Route::get('/manual-registration/create', [\App\Http\Controllers\Admin\ManualRegistrationController::class, 'create'])->name('manual-registration.create');
     Route::post('/manual-registration', [\App\Http\Controllers\Admin\ManualRegistrationController::class, 'store'])->name('manual-registration.store');
-    
+
+    // Edit Student Biodata
+    Route::get('/students/{student}/edit-biodata', [\App\Http\Controllers\Admin\StudentController::class, 'editBiodata'])->name('students.edit-biodata');
+    Route::put('/students/{student}/update-biodata', [\App\Http\Controllers\Admin\StudentController::class, 'updateBiodata'])->name('students.update-biodata');
+
     // Announcements
     Route::resource('announcements', \App\Http\Controllers\Admin\AnnouncementController::class);
-    
+
     // Registration Periods
     Route::resource('periods', \App\Http\Controllers\Admin\RegistrationPeriodController::class);
     Route::post('/periods/{period}/toggle', [\App\Http\Controllers\Admin\RegistrationPeriodController::class, 'toggleActive'])->name('periods.toggle');
-    
+
     // Registration Types
     Route::resource('registration-types', \App\Http\Controllers\Admin\RegistrationTypeController::class);
     Route::post('/registration-types/{registrationType}/toggle', [\App\Http\Controllers\Admin\RegistrationTypeController::class, 'toggleActive'])->name('registration-types.toggle');
-    
+
     // Fakultas routes
     Route::resource('fakultas', \App\Http\Controllers\Admin\FakultasController::class);
     Route::post('/fakultas/{fakulta}/toggle', [\App\Http\Controllers\Admin\FakultasController::class, 'toggleActive'])->name('fakultas.toggle');
-    
+
     // Program Studi routes
     Route::resource('program-studi', \App\Http\Controllers\Admin\ProgramStudiController::class);
     Route::post('/program-studi/{programStudi}/toggle', [\App\Http\Controllers\Admin\ProgramStudiController::class, 'toggleActive'])->name('program-studi.toggle');
-    
+
     // User Management (Admin Only) - Logic check in Controller
     Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
-    
+
     // Landing Page Settings
     Route::get('/landing-page', [\App\Http\Controllers\Admin\LandingPageSettingController::class, 'edit'])->name('landing-page.edit');
     Route::put('/landing-page', [\App\Http\Controllers\Admin\LandingPageSettingController::class, 'update'])->name('landing-page.update');
+
+    // Documentation
+    Route::get('/documentation', [\App\Http\Controllers\Admin\DocumentationController::class, 'index'])->name('documentation.index');
 });
 
 // Profile routes (from Breeze)

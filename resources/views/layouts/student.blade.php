@@ -44,7 +44,7 @@
                 </button>
             </div>
 
-            <nav class="flex-1 px-4 py-6 space-y-2">
+            <nav class="flex-1 px-4 py-6 space-y-2 sidebar-scroll">
                 <a href="{{ route('student.dashboard') }}"
                     class="flex items-center px-4 py-3 rounded-lg transition-colors
                     {{ request()->routeIs('student.dashboard') ? 'bg-teal-900 text-white' : 'text-teal-100 hover:bg-teal-700' }}">
@@ -204,6 +204,7 @@
         });
     </script>
 
+    @stack('scripts')
 </body>
 
 </html>
