@@ -73,10 +73,25 @@ class ImageOptimizationService
 
     /**
      * Optimize document scan (KTP, KK, Ijazah)
+     * Handles both images and PDFs
      */
     public function optimizeDocument(UploadedFile $file, string $directory): string
     {
-        // For documents, keep higher resolution for readability
+        // Check if file is PDF
+        $mimeType = $file->getMimeType();
+
+        if ($mimeType === 'application/pdf') {
+            // For PDF, just store without optimization
+            $extension = $file->getClientOriginalExtension();
+            $filename = Str::random(40).'.'.$extension;
+            $path = $directory.'/'.$filename;
+
+            Storage::disk('public')->putFileAs($directory, $file, $filename);
+
+            return $path;
+        }
+
+        // For images, keep higher resolution for readability
         // Quality 90% to preserve text clarity
         return $this->optimizeAndStore($file, $directory, maxWidth: 1920, quality: 80);
     }
