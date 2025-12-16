@@ -12,15 +12,32 @@
         @endif
         
         <div class="mt-4 flex items-center justify-between">
-            <form method="POST" action="{{ route('verification.send') }}">
+            <form method="POST" action="{{ route('verification.send') }}" id="resendVerificationForm">
                 @csrf
                 
                 <div>
-                    <x-primary-button>
-                        {{ __('Kirim Ulang Email Verifikasi') }}
+                    <x-primary-button id="resendBtn" type="submit">
+                        <span id="btnText">{{ __('Kirim Ulang Email Verifikasi') }}</span>
+                        <span id="btnLoading" class="hidden">{{ __('Mengirim...') }}</span>
                     </x-primary-button>
                 </div>
             </form>
+            
+            <script>
+                document.getElementById('resendVerificationForm').addEventListener('submit', function(e) {
+                    const btn = document.getElementById('resendBtn');
+                    const btnText = document.getElementById('btnText');
+                    const btnLoading = document.getElementById('btnLoading');
+                    
+                    // Disable button
+                    btn.disabled = true;
+                    btn.classList.add('opacity-50', 'cursor-not-allowed');
+                    
+                    // Show loading text
+                    btnText.classList.add('hidden');
+                    btnLoading.classList.remove('hidden');
+                });
+            </script>
             
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
