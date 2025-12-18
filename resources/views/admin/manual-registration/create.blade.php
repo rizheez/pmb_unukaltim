@@ -270,19 +270,19 @@
                         </div>
 
                         <div>
-                            <label for="registration_path" class="block text-sm font-medium text-gray-700">Jalur
+                            <label for="registration_path_id" class="block text-sm font-medium text-gray-700">Jalur
                                 Pendaftaran <span class="text-red-500">*</span></label>
-                            <select name="registration_path" id="registration_path"
+                            <select name="registration_path_id" id="registration_path_id"
                                 class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm">
                                 <option value="">Pilih Jalur Pendaftaran</option>
                                 @foreach ($registrationPaths as $path)
-                                    <option value="{{ $path }}"
-                                        {{ old('registration_path') == $path ? 'selected' : '' }}>
-                                        {{ $path }}
+                                    <option value="{{ $path->id }}"
+                                        {{ old('registration_path_id') == $path->id ? 'selected' : '' }}>
+                                        {{ $path->name }}
                                     </option>
                                 @endforeach
                             </select>
-                            @error('registration_path')
+                            @error('registration_path_id')
                                 <span class="text-red-500 text-xs">{{ $message }}</span>
                             @enderror
                         </div>

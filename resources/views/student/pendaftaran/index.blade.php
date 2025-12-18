@@ -43,16 +43,16 @@
                         </div>
 
                         <div class="sm:col-span-2">
-                            <label for="registration_path" class="block text-sm font-medium text-gray-700">Jalur
+                            <label for="registration_path_id" class="block text-sm font-medium text-gray-700">Jalur
                                 Pendaftaran</label>
-                            <select name="registration_path" id="registration_path"
+                            <select name="registration_path_id" id="registration_path_id"
                                 class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm">
                                 <option value="">Pilih Jalur Pendaftaran</option>
                                 @foreach ($registrationPaths as $path)
-                                    <option value="{{ $path }}">{{ $path }}</option>
+                                    <option value="{{ $path->id }}">{{ $path->name }}</option>
                                 @endforeach
                             </select>
-                            @error('registration_path')
+                            @error('registration_path_id')
                                 <span class="text-red-500 text-xs">{{ $message }}</span>
                             @enderror
                         </div>
@@ -201,7 +201,7 @@
                                                 {{ $registration->registrationType->name }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                {{ $registration->registration_path ?? '-' }}
+                                                {{ $registration->registrationPath->name ?? ($registration->registration_path ?? '-') }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                                 {{ $registration->programStudiChoice1->full_name ?? '-' }}

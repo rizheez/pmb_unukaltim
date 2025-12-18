@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Fakultas;
 use App\Models\Registration;
+use App\Models\RegistrationPath;
 use App\Models\RegistrationPeriod;
 use App\Models\RegistrationType;
 use App\Models\StudentBiodata;
@@ -35,7 +36,7 @@ class ManualRegistrationController extends Controller
         }
 
         $registrationTypes = RegistrationType::active()->get();
-        $registrationPaths = ['Umum', 'Kelas Karyawan'];
+        $registrationPaths = RegistrationPath::active()->get();
 
         // Get active program studi grouped by fakultas
         $fakultas = Fakultas::active()
@@ -89,7 +90,7 @@ class ManualRegistrationController extends Controller
 
             // Registration
             'registration_type_id' => 'required|exists:registration_types,id',
-            'registration_path' => 'required|in:Umum,Kelas Karyawan',
+            'registration_path_id' => 'required|exists:registration_paths,id',
             'referral_source' => 'nullable|string|max:255',
             'referral_detail' => 'required_if:referral_source,Lainnya,Dosen/Panitia PMB UNU Kaltim|nullable|string|max:255',
             'choice_1' => 'required|exists:program_studi,id',
@@ -130,7 +131,7 @@ class ManualRegistrationController extends Controller
             'kk' => 'File KK',
             'certificate' => 'File Ijazah',
             'registration_type_id' => 'Jenis Pendaftaran',
-            'registration_path' => 'Jalur Pendaftaran',
+            'registration_path_id' => 'Jalur Pendaftaran',
             'referral_source' => 'Sumber Informasi',
             'referral_detail' => 'Detail Sumber Informasi',
             'choice_1' => 'Pilihan 1',
@@ -202,7 +203,7 @@ class ManualRegistrationController extends Controller
             Registration::create([
                 'user_id' => $user->id,
                 'registration_type_id' => $request->registration_type_id,
-                'registration_path' => $request->registration_path,
+                'registration_path_id' => $request->registration_path_id,
                 'referral_source' => $request->referral_source,
                 'referral_detail' => $request->referral_detail,
                 'choice_1' => $request->choice_1,
@@ -237,7 +238,7 @@ class ManualRegistrationController extends Controller
 
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Terjadi kesalahan: '.$e->getMessage());
+                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 }

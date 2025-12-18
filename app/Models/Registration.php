@@ -10,6 +10,7 @@ class Registration extends Model
         'user_id',
         'registration_type_id',
         'registration_path',
+        'registration_path_id',
         'referral_source',
         'referral_detail',
         'choice_1',
@@ -32,6 +33,11 @@ class Registration extends Model
     public function registrationType()
     {
         return $this->belongsTo(RegistrationType::class);
+    }
+
+    public function registrationPath()
+    {
+        return $this->belongsTo(RegistrationPath::class);
     }
 
     public function programStudiChoice1()

@@ -6,6 +6,7 @@ use App\Exports\StudentsExport;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 class StudentController extends Controller
@@ -79,9 +80,9 @@ class StudentController extends Controller
                 $detail = $student->registration->referral_detail;
 
                 if ($detail) {
-                    $referralInfo = '<div class="text-sm"><div class="font-medium text-gray-900">'.e($source).'</div><div class="text-gray-500 text-xs mt-0.5">'.e($detail).'</div></div>';
+                    $referralInfo = '<div class="text-sm"><div class="font-medium text-gray-900">' . e($source) . '</div><div class="text-gray-500 text-xs mt-0.5">' . e($detail) . '</div></div>';
                 } else {
-                    $referralInfo = '<div class="text-sm text-gray-900">'.e($source).'</div>';
+                    $referralInfo = '<div class="text-sm text-gray-900">' . e($source) . '</div>';
                 }
             }
 
@@ -90,7 +91,7 @@ class StudentController extends Controller
                 'email' => $student->email,
                 'phone' => $student->phone ?? '-',
                 'status' => $student->registration
-                    ? '<span class="px-2 py-1 text-xs rounded-full '.$student->registration->status_badge_class.'">'.$student->registration->status_label.'</span>'
+                    ? '<span class="px-2 py-1 text-xs rounded-full ' . $student->registration->status_badge_class . '">' . $student->registration->status_label . '</span>'
                     : '<span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800">Belum Daftar</span>',
                 'period_name' => $student->registration && $student->registration->registrationPeriod
                     ? $student->registration->registrationPeriod->name
@@ -99,7 +100,7 @@ class StudentController extends Controller
                 'registered_at' => optional($student->created_at)
                     ->locale('id')
                     ->translatedFormat('d F Y'),
-                'actions' => '<a href="'.route('admin.students.show', $student->id).'" class="text-indigo-600 hover:text-indigo-900">Detail</a>',
+                'actions' => '<a href="' . route('admin.students.show', $student->id) . '" class="text-indigo-600 hover:text-indigo-900">Detail</a>',
             ];
         });
 
@@ -127,7 +128,7 @@ class StudentController extends Controller
         $periodFilter = $request->get('period_filter');
         $statusFilter = $request->get('status_filter');
 
-        $filename = 'Data_Calon_Mahasiswa_'.date('Y-m-d_His').'.xlsx';
+        $filename = 'Data_Calon_Mahasiswa_' . date('Y-m-d_His') . '.xlsx';
 
         return Excel::download(
             new StudentsExport($periodFilter, $statusFilter),
@@ -156,7 +157,7 @@ class StudentController extends Controller
         }])->get();
 
         $registrationTypes = \App\Models\RegistrationType::where('is_active', true)->get();
-        $registrationPaths = ['Umum', 'Kelas Karyawan'];
+        $registrationPaths = \App\Models\RegistrationPath::where('is_active', true)->get();
 
         return view('admin.students.edit-biodata', compact('student', 'programStudis', 'fakultas', 'registrationTypes', 'registrationPaths'));
     }
@@ -173,13 +174,13 @@ class StudentController extends Controller
         // Validate all input
         $request->validate([
             // User data
-            'email' => 'required|email|unique:users,email,'.$student->id,
+            'email' => 'required|email|unique:users,email,' . $student->id,
             'phone' => 'required|string',
 
             // Biodata
             'name' => 'required|string|max:255',
-            'nik' => 'required|numeric|digits:16|unique:student_biodatas,nik,'.$student->studentBiodata->id,
-            'nisn' => 'nullable|numeric|unique:student_biodatas,nisn,'.$student->studentBiodata->id,
+            'nik' => 'required|numeric|digits:16|unique:student_biodatas,nik,' . $student->studentBiodata->id,
+            'nisn' => 'nullable|numeric|unique:student_biodatas,nisn,' . $student->studentBiodata->id,
             'gender' => 'required|in:Laki-laki,Perempuan',
             'birth_place' => 'required|string|max:255',
             'birth_date' => 'required|date|before:-15 years',
@@ -197,7 +198,7 @@ class StudentController extends Controller
 
             // Registration (if exists)
             'registration_type_id' => 'nullable|exists:registration_types,id',
-            'registration_path' => 'nullable|in:Umum,Kelas Karyawan',
+            'registration_path_id' => 'nullable|exists:registration_paths,id',
             'referral_source' => 'nullable|string|max:255',
             'referral_detail' => 'required_if:referral_source,Lainnya,Dosen/Panitia PMB UNU Kaltim|nullable|string|max:255',
             'choice_1' => 'nullable|exists:program_studi,id',
@@ -238,14 +239,14 @@ class StudentController extends Controller
             'kk' => 'File KK',
             'certificate' => 'File Ijazah',
             'registration_type_id' => 'Jenis Pendaftaran',
-            'registration_path' => 'Jalur Pendaftaran',
+            'registration_path_id' => 'Jalur Pendaftaran',
             'referral_source' => 'Sumber Informasi',
             'referral_detail' => 'Detail Sumber Informasi',
             'choice_1' => 'Pilihan 1',
             'choice_2' => 'Pilihan 2',
         ]);
 
-        \DB::beginTransaction();
+        DB::beginTransaction();
 
         try {
             // Update user account
@@ -321,7 +322,7 @@ class StudentController extends Controller
             if ($student->registration && $request->filled('registration_type_id')) {
                 $student->registration->update([
                     'registration_type_id' => $request->registration_type_id,
-                    'registration_path' => $request->registration_path,
+                    'registration_path_id' => $request->registration_path_id,
                     'referral_source' => $request->referral_source,
                     'referral_detail' => $request->referral_detail,
                     'choice_1' => $request->choice_1,
@@ -329,16 +330,16 @@ class StudentController extends Controller
                 ]);
             }
 
-            \DB::commit();
+            DB::commit();
 
             return redirect()->route('admin.students.show', $student->id)
                 ->with('success', 'Biodata mahasiswa berhasil diperbarui.');
         } catch (\Exception $e) {
-            \DB::rollBack();
+            DB::rollBack();
 
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Terjadi kesalahan: '.$e->getMessage());
+                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 }

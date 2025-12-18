@@ -106,10 +106,10 @@
                         <dd class="mt-1 text-sm text-gray-900">{{ $student->registration->registrationType->name }}
                         </dd>
                     </div>
-                    @if ($student->registration->registration_path)
+                    @if ($student->registration->registrationPath || $student->registration->registration_path)
                         <div class="sm:col-span-1">
                             <dt class="text-sm font-medium text-gray-500">Jalur Pendaftaran</dt>
-                            <dd class="mt-1 text-sm text-gray-900">{{ $student->registration->registration_path }}
+                            <dd class="mt-1 text-sm text-gray-900">{{ $student->registration->registrationPath->name ?? $student->registration->registration_path }}
                             </dd>
                         </div>
                     @endif

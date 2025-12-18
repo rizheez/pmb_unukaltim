@@ -70,6 +70,9 @@ Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->prefix
     Route::resource('registration-types', \App\Http\Controllers\Admin\RegistrationTypeController::class);
     Route::post('/registration-types/{registrationType}/toggle', [\App\Http\Controllers\Admin\RegistrationTypeController::class, 'toggleActive'])->name('registration-types.toggle');
 
+    // Registration Paths
+    Route::resource('registration-paths', \App\Http\Controllers\Admin\RegistrationPathController::class);
+
     // Fakultas routes
     Route::resource('fakultas', \App\Http\Controllers\Admin\FakultasController::class);
     Route::post('/fakultas/{fakulta}/toggle', [\App\Http\Controllers\Admin\FakultasController::class, 'toggleActive'])->name('fakultas.toggle');
@@ -96,4 +99,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Registration;
+use App\Models\RegistrationPath;
 use App\Models\RegistrationPeriod;
 use App\Models\RegistrationType;
 use Illuminate\Http\Request;
@@ -20,7 +21,7 @@ class StudentRegistrationController extends Controller
 
         // Check if there's an active registration period
         $activePeriod = RegistrationPeriod::active()->first();
-        
+
         if (!$activePeriod) {
             return redirect()->route('student.dashboard')
                 ->with('error', 'Tidak ada periode pendaftaran yang aktif saat ini.');
@@ -28,23 +29,23 @@ class StudentRegistrationController extends Controller
 
         $registration = Registration::where('user_id', Auth::id())->first();
         $registrationTypes = RegistrationType::active()->get();
-        $registrationPaths = ['Umum', 'Kelas Karyawan'];
-        
+        $registrationPaths = RegistrationPath::active()->get();
+
         // Get active program studi grouped by fakultas
         $fakultas = \App\Models\Fakultas::active()
-            ->with(['programStudi' => function($query) {
+            ->with(['programStudi' => function ($query) {
                 $query->active()->orderBy('jenjang')->orderBy('name');
             }])
             ->orderBy('name')
             ->get();
-        
+
         // Also get flat list for non-grouped dropdown
         $programStudi = \App\Models\ProgramStudi::with('fakultas')
             ->active()
             ->orderBy('jenjang')
             ->orderBy('name')
             ->get();
-        
+
         return view('student.pendaftaran.index', compact('registration', 'activePeriod', 'registrationTypes', 'registrationPaths', 'fakultas', 'programStudi'));
     }
 
@@ -52,14 +53,14 @@ class StudentRegistrationController extends Controller
     {
         // Check if there's an active period
         $activePeriod = RegistrationPeriod::active()->first();
-        
+
         if (!$activePeriod) {
             return redirect()->back()->with('error', 'Tidak ada periode pendaftaran yang aktif saat ini.');
         }
 
         $request->validate([
             'registration_type_id' => 'required|exists:registration_types,id',
-            'registration_path' => 'required|in:Umum,Kelas Karyawan',
+            'registration_path_id' => 'required|exists:registration_paths,id',
             'referral_source' => 'nullable|string|max:255',
             'referral_detail' => 'required_if:referral_source,Lainnya,Dosen/Panitia PMB UNU Kaltim|nullable|string|max:255',
             'choice_1' => 'required|exists:program_studi,id',
@@ -71,9 +72,9 @@ class StudentRegistrationController extends Controller
             'in' => ':attribute tidak valid.',
             'different' => 'Program studi :attribute tidak boleh sama.',
             'required_if' => ':attribute wajib diisi jika memilih "Lainnya".',
-        ],[
+        ], [
             'registration_type_id' => 'Jenis Pendaftaran',
-            'registration_path' => 'Jalur Pendaftaran',
+            'registration_path_id' => 'Jalur Pendaftaran',
             'referral_source' => 'Sumber Informasi',
             'referral_detail' => 'Detail Sumber Informasi',
             'choice_1' => 'Pilihan 1',
@@ -85,7 +86,7 @@ class StudentRegistrationController extends Controller
             ['user_id' => Auth::id()],
             [
                 'registration_type_id' => $request->registration_type_id,
-                'registration_path' => $request->registration_path,
+                'registration_path_id' => $request->registration_path_id,
                 'referral_source' => $request->referral_source,
                 'referral_detail' => $request->referral_detail,
                 'choice_1' => $request->choice_1,
