@@ -73,13 +73,15 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 3mm;
-            margin-bottom: 4mm;
+            margin-bottom: 10mm;
         }
 
         .step {
             display: flex;
             gap: 2mm;
             padding: 2mm;
+            margin-bottom: 5mm;
+            margin-top: 5mm;
             background: #f9fafb;
             border-radius: 2mm;
             border-left: 2px solid #0d9488;
@@ -104,7 +106,7 @@
         }
 
         .step-content h3 {
-            font-size: 9pt;
+            font-size: 11pt;
             font-weight: 600;
             color: #0d9488;
             margin-bottom: 0.5mm;
