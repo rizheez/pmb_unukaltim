@@ -255,45 +255,97 @@
     <nav class="fixed w-full bg-white/95 backdrop-blur-sm shadow-sm z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <div class="flex items-center space-x-3">
+                <!-- Logo -->
+                <div class="flex flex-col items-center">
                     @if ($settings['contact']->where('key', 'university_logo')->first()?->value)
                         <img src="{{ Storage::url($settings['contact']->where('key', 'university_logo')->first()->value) }}"
                             alt="Logo" class="h-10 w-10 object-contain">
                     @endif
-                    <span class="text-xl font-bold text-teal-600 font-serif-heading">PMB UNUKALTIM</span>
+                    <span class="text-sm font-bold text-teal-600 font-serif-heading leading-tight">PMB UNUKALTIM</span>
                 </div>
-                <div class="hidden md:flex space-x-8">
-                    <a href="#home" class="text-gray-700 hover:text-teal-600 transition">Beranda</a>
-                    <a href="#features" class="text-gray-700 hover:text-teal-600 transition">Keunggulan</a>
-                    <a href="#registration-guide" class="text-gray-700 hover:text-teal-600 transition">Alur
+
+                <!-- Desktop Menu (hidden on tablet and mobile) -->
+                <div class="hidden lg:flex space-x-6">
+                    <a href="#home" class="text-gray-700 hover:text-teal-600 transition text-sm">Beranda</a>
+                    <a href="#features" class="text-gray-700 hover:text-teal-600 transition text-sm">Keunggulan</a>
+                    <a href="#registration-guide" class="text-gray-700 hover:text-teal-600 transition text-sm">Alur
                         Pendaftaran</a>
-                    <a href="#programs" class="text-gray-700 hover:text-teal-600 transition">Program Studi</a>
-                    <a href="#about" class="text-gray-700 hover:text-teal-600 transition">Tentang</a>
-                    <a href="#contact" class="text-gray-700 hover:text-teal-600 transition">Kontak</a>
+                    <a href="#programs" class="text-gray-700 hover:text-teal-600 transition text-sm">Program Studi</a>
+                    <a href="#about" class="text-gray-700 hover:text-teal-600 transition text-sm">Tentang</a>
+                    <a href="#contact" class="text-gray-700 hover:text-teal-600 transition text-sm">Kontak</a>
                 </div>
-                <div>
+
+                <!-- Right side buttons -->
+                <div class="flex items-center gap-2">
+                    <!-- Mobile Menu Button -->
+                    <button id="mobile-menu-btn"
+                        class=" lg:hidden p-2  rounded-lg text-gray-700 hover:bg-gray-100 transition">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+
                     @auth
                         @if (auth()->user()->isAdmin())
                             <a href="{{ route('admin.dashboard') }}"
-                                class="bg-teal-600 hover:bg-teal-700 text-white px-6 py-2 rounded-full transition">
+                                class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-full transition text-sm">
                                 Dashboard
                             </a>
                         @else
                             <a href="{{ route('student.dashboard') }}"
-                                class="bg-teal-600 hover:bg-teal-700 text-white px-6 py-2 rounded-full transition">
+                                class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-full transition text-sm">
                                 Dashboard
                             </a>
                         @endif
                     @else
                         <a href="{{ route('login') }}"
-                            class="bg-teal-600 hover:bg-teal-700 text-white px-6 py-2 rounded-full transition">
+                            class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-full transition text-sm">
                             Login
                         </a>
                     @endauth
                 </div>
             </div>
+
+            <!-- Mobile Menu (hidden by default) -->
+            <div id="mobile-menu" class="hidden lg:hidden pb-4">
+                <div class="flex flex-col space-y-2 pt-2 border-t border-gray-200">
+                    <a href="#home"
+                        class="text-gray-700 hover:text-teal-600 hover:bg-teal-50 px-3 py-2 rounded-lg transition">Beranda</a>
+                    <a href="#features"
+                        class="text-gray-700 hover:text-teal-600 hover:bg-teal-50 px-3 py-2 rounded-lg transition">Keunggulan</a>
+                    <a href="#registration-guide"
+                        class="text-gray-700 hover:text-teal-600 hover:bg-teal-50 px-3 py-2 rounded-lg transition">Alur
+                        Pendaftaran</a>
+                    <a href="#programs"
+                        class="text-gray-700 hover:text-teal-600 hover:bg-teal-50 px-3 py-2 rounded-lg transition">Program
+                        Studi</a>
+                    <a href="#about"
+                        class="text-gray-700 hover:text-teal-600 hover:bg-teal-50 px-3 py-2 rounded-lg transition">Tentang</a>
+                    <a href="#contact"
+                        class="text-gray-700 hover:text-teal-600 hover:bg-teal-50 px-3 py-2 rounded-lg transition">Kontak</a>
+                </div>
+            </div>
         </div>
     </nav>
+
+    <!-- Mobile Menu Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            if (menuBtn && mobileMenu) {
+                menuBtn.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('hidden');
+                });
+
+                // Close menu when clicking a link
+                mobileMenu.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.add('hidden');
+                    });
+                });
+            }
+        });
+    </script>
 
     <!-- Hero Section -->
     <section id="home" class="pt-16 min-h-screen flex items-center hero-gradient relative overflow-hidden">
@@ -305,7 +357,8 @@
                     class="w-full h-full object-cover">
             </div>
             <!-- Dark Overlay untuk memastikan teks tetap terbaca -->
-            <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/40 hidden md:block"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/40 hidden md:block">
+            </div>
         @endif
 
         <!-- Mobile Background Image -->
