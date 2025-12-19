@@ -716,7 +716,7 @@
             </div>
 
             <!-- CTA Button -->
-            <div class="text-center mt-16">
+            <div class="text-center mt-16 flex flex-wrap justify-center gap-4">
                 @auth
                     @if (auth()->user()->isAdmin())
                         <a href="{{ route('admin.dashboard') }}"
@@ -738,6 +738,11 @@
                         Daftar Sekarang
                     </a>
                 @endauth
+                <a href="{{ route('guide') }}" target="_blank"
+                    class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border-2 border-white/30 hover:bg-white/20 text-white px-10 py-4 rounded-full font-semibold text-lg transition-all hover:scale-105">
+                    <i data-lucide="book-open" class="w-5 h-5"></i>
+                    Lihat Panduan
+                </a>
             </div>
         </div>
     </section>
