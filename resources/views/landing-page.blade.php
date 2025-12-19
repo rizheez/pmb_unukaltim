@@ -21,11 +21,11 @@
     <meta name="language" content="Indonesian">
 
     <!-- Canonical URL -->
-    <link rel="canonical" href="{{ url()->current() }}">
+    <link rel="canonical" href="{{ config('app.url') }}">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:url" content="{{ config('app.url') }}">
     <meta property="og:title"
         content="{{ $settings['hero']->where('key', 'hero_title')->first()->value ?? 'PMB Universitas Nahdlatul Ulama Kalimantan Timur' }}">
     <meta property="og:description"
