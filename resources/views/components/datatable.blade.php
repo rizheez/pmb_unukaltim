@@ -1,4 +1,4 @@
-@props(['id' => 'datatable', 'ajax' => null, 'columns' => []])
+@props(['id' => 'datatable', 'ajax' => null, 'columns' => [], 'order' => null])
 
 @php
     $tableId = str_replace('-', '_', $id);
@@ -131,9 +131,7 @@
                             [5, 10, 25, 50, 100],
                             [5, 10, 25, 50, 100]
                         ],
-                        order: [
-                            [0, 'desc']
-                        ]
+                        order: @json($order ?? [[0, 'desc']])
                     });
                 @else
                     // Client-side processing
@@ -161,9 +159,7 @@
                             [5, 10, 25, 50, 100],
                             [5, 10, 25, 50, 100]
                         ],
-                        order: [
-                            [0, 'desc']
-                        ]
+                        order: @json($order ?? [[0, 'desc']])
                     });
                 @endif
             }

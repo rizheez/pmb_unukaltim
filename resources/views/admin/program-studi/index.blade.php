@@ -30,7 +30,7 @@
 
     <div class="bg-white shadow rounded-lg overflow-hidden">
         <div class="p-6">
-            <x-datatable id="program-studi-table">
+            <x-datatable id="program-studi-table" :order="[1, 'asc']">
                 <thead class="bg-gray-50">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kode</th>
