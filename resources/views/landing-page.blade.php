@@ -337,7 +337,7 @@
 
                 </div>
                 @if ($activePeriod)
-                    <div class="mb-8 inline-block bg-white/20 backdrop-blur-sm rounded-lg px-6 py-3">
+                    <div class="mb-8 inline-block bg-white/20 backdrop-blur-sm rounded-lg px-6 py-3 my-3">
                         <p class="text-sm font-semibold">Periode Pendaftaran Aktif</p>
                         <p class="text-xs opacity-90">
                             {{ $activePeriod->name }}
