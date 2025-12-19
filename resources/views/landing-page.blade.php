@@ -482,8 +482,8 @@
                             <div
                                 class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/20 group-hover:bg-white/20 transition-all duration-300 group-hover:scale-105">
                                 <h3 class="text-lg font-bold text-white mb-2">Lengkapi Biodata</h3>
-                                <p class="text-sm text-gray-300 leading-relaxed">Isi data pribadi, data orang tua, &
-                                    upload dokumen yang diperlukan.</p>
+                                <p class="text-sm text-gray-300 leading-relaxed">Isi data pribadi & upload dokumen
+                                    yang diperlukan.</p>
                             </div>
                         </div>
 
