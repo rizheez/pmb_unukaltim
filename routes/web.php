@@ -14,6 +14,7 @@ Route::get('/robots.txt', [SitemapController::class, 'robots']);
 
 // Landing page (public)
 Route::get('/', [LandingPageController::class, 'index'])->name('landing-page');
+Route::get('/panduan', [LandingPageController::class, 'guide'])->name('guide');
 
 Route::middleware(['auth', \App\Http\Middleware\StudentMiddleware::class, 'verified'])->group(function () {
     // Dashboard

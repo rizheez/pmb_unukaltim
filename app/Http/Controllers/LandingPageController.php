@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Fakultas;
 use App\Models\LandingPageSetting;
-use App\Models\ProgramStudi;
 use App\Models\RegistrationPeriod;
 
 class LandingPageController extends Controller
@@ -16,7 +15,7 @@ class LandingPageController extends Controller
 
         // Get active program studi with fakultas
         $fakultas = Fakultas::active()
-            ->with(['programStudi' => function($query) {
+            ->with(['programStudi' => function ($query) {
                 $query->active()->orderBy('jenjang')->orderBy('name');
             }])
             ->orderBy('name')
@@ -26,5 +25,16 @@ class LandingPageController extends Controller
         $activePeriod = RegistrationPeriod::active()->first();
 
         return view('landing-page', compact('settings', 'fakultas', 'activePeriod'));
+    }
+
+    public function guide()
+    {
+        // Get settings for contact info
+        $settings = LandingPageSetting::getAllGrouped();
+
+        // Get active registration period
+        $activePeriod = RegistrationPeriod::active()->first();
+
+        return view('guide', compact('settings', 'activePeriod'));
     }
 }
