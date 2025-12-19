@@ -186,12 +186,15 @@
 
                         <div>
                             <label for="major" class="block text-sm font-medium text-gray-700">Jurusan
-                                Sekolah</label>
+                                Sekolah <span class="text-gray-400 font-normal">(Opsional)</span></label>
                             <input type="text" name="major" id="major" value="{{ old('major') }}"
+                                placeholder="Contoh: IPA, IPS, TKJ, Akuntansi"
                                 class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm">
                             @error('major')
                                 <span class="text-red-500 text-xs">{{ $message }}</span>
                             @enderror
+                            <p class="mt-1 text-xs text-gray-500">Kosongkan jika tidak ada jurusan
+                            </p>
                         </div>
                     </div>
                 </div>
