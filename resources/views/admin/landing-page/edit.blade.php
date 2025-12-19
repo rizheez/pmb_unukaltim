@@ -65,17 +65,42 @@
                     </div>
                 </div>
 
+                <!-- Background Image Desktop -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Background Image</label>
-                    @if ($settings['hero']->where('key', 'hero_background_image')->first()?->value)
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        <i data-lucide="monitor" class="w-4 h-4 inline mr-1"></i>
+                        Background Image (Desktop)
+                    </label>
+                    @if ($settings['hero']->where('key', 'hero_background_image_desktop')->first()?->value)
                         <div class="mb-2">
-                            <img src="{{ Storage::url($settings['hero']->where('key', 'hero_background_image')->first()->value) }}"
-                                alt="Current" class="h-32 rounded">
+                            <img src="{{ Storage::url($settings['hero']->where('key', 'hero_background_image_desktop')->first()->value) }}"
+                                alt="Current Desktop Background" class="h-32 rounded border-2 border-gray-200">
+                            <p class="text-xs text-gray-500 mt-1">Current desktop background</p>
                         </div>
                     @endif
-                    <input type="file" name="hero_background_image" accept="image/*"
+                    <input type="file" name="hero_background_image_desktop" accept="image/*"
                         class="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
-                    <p class="text-xs text-gray-500 mt-1">Max 2MB. Leave empty to keep current image.</p>
+                    <p class="text-xs text-gray-500 mt-1">Max 2MB. Recommended: 1920x1080px or larger. Leave empty to
+                        keep current image.</p>
+                </div>
+
+                <!-- Background Image Mobile -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        <i data-lucide="smartphone" class="w-4 h-4 inline mr-1"></i>
+                        Background Image (Mobile)
+                    </label>
+                    @if ($settings['hero']->where('key', 'hero_background_image_mobile')->first()?->value)
+                        <div class="mb-2">
+                            <img src="{{ Storage::url($settings['hero']->where('key', 'hero_background_image_mobile')->first()->value) }}"
+                                alt="Current Mobile Background" class="h-32 rounded border-2 border-gray-200">
+                            <p class="text-xs text-gray-500 mt-1">Current mobile background</p>
+                        </div>
+                    @endif
+                    <input type="file" name="hero_background_image_mobile" accept="image/*"
+                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                    <p class="text-xs text-gray-500 mt-1">Max 2MB. Recommended: 768x1024px (portrait). Leave empty to
+                        keep current image.</p>
                 </div>
             </div>
         </div>

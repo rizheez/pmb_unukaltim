@@ -106,6 +106,11 @@
             font-family: 'Inter', sans-serif;
         }
 
+        .text-outline-black {
+            -webkit-text-stroke: 1.7px rgba(22, 141, 117, 1);
+            text-stroke: 1.7px rgba(22, 141, 117, 1);
+        }
+
         /* Khusus Heading/Judul menggunakan Merriweather agar terlihat berwibawa/akademis */
         h1,
         h2,
@@ -153,6 +158,95 @@
         .scroll-smooth {
             scroll-behavior: smooth;
         }
+
+        /* Registration Guide Animations */
+        .step-badge {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .step-badge:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .step-card {
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            transform: translateX(10px);
+        }
+
+        .timeline-line {
+            background: linear-gradient(90deg,
+                    #99f6e4 0%,
+                    #14b8a6 25%,
+                    #0d9488 50%,
+                    #14b8a6 75%,
+                    #99f6e4 100%);
+            background-size: 200% 100%;
+            animation: shimmer 3s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(0.8);
+                opacity: 0.8;
+            }
+
+            50% {
+                transform: scale(1);
+                opacity: 0.4;
+            }
+
+            100% {
+                transform: scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        .pulse-ring::before {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 9999px;
+            border: 3px solid #14b8a6;
+            animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, #14b8a6 0%, #0891b2 100%);
+            box-shadow: 0 10px 40px -10px rgba(20, 184, 166, 0.5);
+        }
+
+        .step-glow {
+            box-shadow: 0 0 30px rgba(20, 184, 166, 0.3), 0 0 60px rgba(20, 184, 166, 0.1);
+        }
     </style>
 </head>
 
@@ -171,6 +265,8 @@
                 <div class="hidden md:flex space-x-8">
                     <a href="#home" class="text-gray-700 hover:text-teal-600 transition">Beranda</a>
                     <a href="#features" class="text-gray-700 hover:text-teal-600 transition">Keunggulan</a>
+                    <a href="#registration-guide" class="text-gray-700 hover:text-teal-600 transition">Alur
+                        Pendaftaran</a>
                     <a href="#programs" class="text-gray-700 hover:text-teal-600 transition">Program Studi</a>
                     <a href="#about" class="text-gray-700 hover:text-teal-600 transition">Tentang</a>
                     <a href="#contact" class="text-gray-700 hover:text-teal-600 transition">Kontak</a>
@@ -201,29 +297,45 @@
 
     <!-- Hero Section -->
     <section id="home" class="pt-16 min-h-screen flex items-center hero-gradient relative overflow-hidden">
-        @if ($settings['hero']->where('key', 'hero_background_image')->first()?->value)
-            <!-- Background Image -->
-            <div class="absolute inset-0">
-                <img src="{{ Storage::url($settings['hero']->where('key', 'hero_background_image')->first()->value) }}"
+        <!-- Desktop Background Image -->
+        @if ($settings['hero']->where('key', 'hero_background_image_desktop')->first()?->value)
+            <div class="absolute inset-0 hidden md:block">
+                <img src="{{ Storage::url($settings['hero']->where('key', 'hero_background_image_desktop')->first()->value) }}"
                     alt="Kampus Universitas Nahdlatul Ulama Kalimantan Timur - PMB UNU Kaltim"
                     class="w-full h-full object-cover">
             </div>
             <!-- Dark Overlay untuk memastikan teks tetap terbaca -->
-            <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/60"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/40 hidden md:block"></div>
+        @endif
+
+        <!-- Mobile Background Image -->
+        @if ($settings['hero']->where('key', 'hero_background_image_mobile')->first()?->value)
+            <div class="absolute inset-0 md:hidden">
+                <img src="{{ Storage::url($settings['hero']->where('key', 'hero_background_image_mobile')->first()->value) }}"
+                    alt="Kampus Universitas Nahdlatul Ulama Kalimantan Timur - PMB UNU Kaltim"
+                    class="w-full h-full object-cover">
+            </div>
+            <!-- Dark Overlay untuk memastikan teks tetap terbaca -->
+            <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/40 md:hidden"></div>
         @endif
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
             <div class="text-center text-white fade-in">
-                <h1 class="text-5xl md:text-6xl font-bold mb-6">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6 text-white text-outline-black">
                     {{ $settings['hero']->where('key', 'hero_title')->first()->value ?? 'Selamat Datang' }}
                 </h1>
-                <p class="text-2xl md:text-3xl font-light mb-4">
-                    {{ $settings['hero']->where('key', 'hero_subtitle')->first()->value ?? '' }}
-                </p>
-                <p class="text-lg md:text-xl mb-8 max-w-3xl mx-auto opacity-90">
-                    {{ $settings['hero']->where('key', 'hero_description')->first()->value ?? '' }}
-                </p>
 
+                <div class="bg-black/20 backdrop-blur-sm px-6 py-4 rounded-xl">
+
+                    <p class="text-xl md:text-3xl font-light mb-3 text-white/90">
+                        {{ $settings['hero']->where('key', 'hero_subtitle')->first()->value ?? '' }}
+                    </p>
+
+                    <p class="text-base md:text-xl max-w-3xl mx-auto text-white/80">
+                        {{ $settings['hero']->where('key', 'hero_description')->first()->value ?? '' }}
+                    </p>
+
+                </div>
                 @if ($activePeriod)
                     <div class="mb-8 inline-block bg-white/20 backdrop-blur-sm rounded-lg px-6 py-3">
                         <p class="text-sm font-semibold">Periode Pendaftaran Aktif</p>
@@ -294,6 +406,285 @@
                         </p>
                     </div>
                 @endforeach
+            </div>
+        </div>
+    </section>
+
+    <!-- Registration Guide Section -->
+    <section id="registration-guide"
+        class="py-24 bg-gradient-to-br from-slate-900 via-teal-900 to-slate-900 relative overflow-hidden">
+        <!-- Background Decorations -->
+        <div class="absolute inset-0 opacity-20">
+            <div class="absolute top-20 left-10 w-72 h-72 bg-teal-500 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-20 right-10 w-96 h-96 bg-cyan-500 rounded-full blur-3xl"></div>
+            <div
+                class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-teal-400 rounded-full blur-3xl">
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <!-- Section Header -->
+            <div class="text-center mb-20">
+                <span
+                    class="inline-block px-4 py-2 bg-teal-500/20 backdrop-blur-sm border border-teal-500/30 rounded-full text-teal-300 text-sm font-semibold mb-4">
+                    <i data-lucide="route" class="w-4 h-4 inline mr-2"></i>
+                    Panduan Lengkap
+                </span>
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
+                    Alur Pendaftaran <span
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-cyan-400">PMB</span>
+                </h2>
+                <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+                    Ikuti 5 langkah mudah berikut untuk menyelesaikan pendaftaran mahasiswa baru
+                </p>
+            </div>
+
+            <!-- Desktop Timeline (Hidden on Mobile) -->
+            <div class="hidden lg:block">
+                <div class="relative">
+                    <!-- Animated Connecting Line -->
+                    <div class="absolute top-24 left-0 right-0 h-1.5 rounded-full timeline-line"
+                        style="margin: 0 8%;"></div>
+
+                    <div class="grid grid-cols-5 gap-6 relative">
+                        <!-- Step 1 -->
+                        <div class="flex flex-col items-center text-center group">
+                            <div class="relative mb-6">
+                                <div
+                                    class="step-badge step-number w-28 h-28 rounded-full flex items-center justify-center relative z-10 pulse-ring step-glow">
+                                    <div class="text-center">
+                                        <i data-lucide="user-plus"
+                                            class="text-white w-10 h-10 mx-auto mb-1 group-hover:scale-110 transition-transform"></i>
+                                        <span class="text-white/80 text-xs font-medium">Step 1</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/20 group-hover:bg-white/20 transition-all duration-300 group-hover:scale-105">
+                                <h3 class="text-lg font-bold text-white mb-2">Registrasi Akun</h3>
+                                <p class="text-sm text-gray-300 leading-relaxed">Buat akun dengan email aktif &
+                                    verifikasi untuk mengaktifkan akun.</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="flex flex-col items-center text-center group" style="animation-delay: 0.1s">
+                            <div class="relative mb-6">
+                                <div
+                                    class="step-badge step-number w-28 h-28 rounded-full flex items-center justify-center relative z-10 step-glow">
+                                    <div class="text-center">
+                                        <i data-lucide="file-text"
+                                            class="text-white w-10 h-10 mx-auto mb-1 group-hover:scale-110 transition-transform"></i>
+                                        <span class="text-white/80 text-xs font-medium">Step 2</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/20 group-hover:bg-white/20 transition-all duration-300 group-hover:scale-105">
+                                <h3 class="text-lg font-bold text-white mb-2">Lengkapi Biodata</h3>
+                                <p class="text-sm text-gray-300 leading-relaxed">Isi data pribadi, data orang tua, &
+                                    upload dokumen yang diperlukan.</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="flex flex-col items-center text-center group" style="animation-delay: 0.2s">
+                            <div class="relative mb-6">
+                                <div
+                                    class="step-badge step-number w-28 h-28 rounded-full flex items-center justify-center relative z-10 float-animation step-glow">
+                                    <div class="text-center">
+                                        <i data-lucide="graduation-cap"
+                                            class="text-white w-10 h-10 mx-auto mb-1 group-hover:scale-110 transition-transform"></i>
+                                        <span class="text-white/80 text-xs font-medium">Step 3</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/20 group-hover:bg-white/20 transition-all duration-300 group-hover:scale-105">
+                                <h3 class="text-lg font-bold text-white mb-2">Pilih Program Studi</h3>
+                                <p class="text-sm text-gray-300 leading-relaxed">Pilih program studi & jalur
+                                    pendaftaran yang sesuai.</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 4 -->
+                        <div class="flex flex-col items-center text-center group" style="animation-delay: 0.3s">
+                            <div class="relative mb-6">
+                                <div
+                                    class="step-badge step-number w-28 h-28 rounded-full flex items-center justify-center relative z-10 step-glow">
+                                    <div class="text-center">
+                                        <i data-lucide="shield-check"
+                                            class="text-white w-10 h-10 mx-auto mb-1 group-hover:scale-110 transition-transform"></i>
+                                        <span class="text-white/80 text-xs font-medium">Step 4</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/20 group-hover:bg-white/20 transition-all duration-300 group-hover:scale-105">
+                                <h3 class="text-lg font-bold text-white mb-2">Verifikasi Data</h3>
+                                <p class="text-sm text-gray-300 leading-relaxed">Tunggu verifikasi admin & kabar untuk
+                                    proses daftar ulang.</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 5 -->
+                        <div class="flex flex-col items-center text-center group" style="animation-delay: 0.4s">
+                            <div class="relative mb-6">
+                                <div
+                                    class="step-badge step-number w-28 h-28 rounded-full flex items-center justify-center relative z-10 step-glow">
+                                    <div class="text-center">
+                                        <i data-lucide="party-popper"
+                                            class="text-white w-10 h-10 mx-auto mb-1 group-hover:scale-110 transition-transform"></i>
+                                        <span class="text-white/80 text-xs font-medium">Step 5</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                class="bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/20 group-hover:bg-white/20 transition-all duration-300 group-hover:scale-105">
+                                <h3 class="text-lg font-bold text-white mb-2">Daftar Ulang</h3>
+                                <p class="text-sm text-gray-300 leading-relaxed">Lakukan daftar ulang & selamat
+                                    bergabung menjadi mahasiswa baru!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile/Tablet Cards (Hidden on Large Desktop) -->
+            <div class="lg:hidden space-y-4">
+                <!-- Step 1 -->
+                <div
+                    class="step-card bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/20 hover:bg-white/20">
+                    <div class="flex items-center gap-4">
+                        <div class="flex-shrink-0">
+                            <div class="step-number w-14 h-14 rounded-full flex items-center justify-center">
+                                <i data-lucide="user-plus" class="text-white w-7 h-7"></i>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span
+                                    class="text-xs font-semibold text-teal-400 bg-teal-500/20 px-2 py-1 rounded-full">Step
+                                    1</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-white">Registrasi Akun</h3>
+                            <p class="text-sm text-gray-300">Buat akun dengan email aktif & verifikasi untuk
+                                mengaktifkan akun.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div
+                    class="step-card bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/20 hover:bg-white/20">
+                    <div class="flex items-center gap-4">
+                        <div class="flex-shrink-0">
+                            <div class="step-number w-14 h-14 rounded-full flex items-center justify-center">
+                                <i data-lucide="file-text" class="text-white w-7 h-7"></i>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span
+                                    class="text-xs font-semibold text-teal-400 bg-teal-500/20 px-2 py-1 rounded-full">Step
+                                    2</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-white">Lengkapi Biodata</h3>
+                            <p class="text-sm text-gray-300">Isi data pribadi, data orang tua, & upload dokumen yang
+                                diperlukan.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div
+                    class="step-card bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/20 hover:bg-white/20">
+                    <div class="flex items-center gap-4">
+                        <div class="flex-shrink-0">
+                            <div class="step-number w-14 h-14 rounded-full flex items-center justify-center">
+                                <i data-lucide="graduation-cap" class="text-white w-7 h-7"></i>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span
+                                    class="text-xs font-semibold text-teal-400 bg-teal-500/20 px-2 py-1 rounded-full">Step
+                                    3</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-white">Pilih Program Studi</h3>
+                            <p class="text-sm text-gray-300">Pilih program studi & jalur pendaftaran yang sesuai.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div
+                    class="step-card bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/20 hover:bg-white/20">
+                    <div class="flex items-center gap-4">
+                        <div class="flex-shrink-0">
+                            <div class="step-number w-14 h-14 rounded-full flex items-center justify-center">
+                                <i data-lucide="shield-check" class="text-white w-7 h-7"></i>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span
+                                    class="text-xs font-semibold text-teal-400 bg-teal-500/20 px-2 py-1 rounded-full">Step
+                                    4</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-white">Verifikasi Data</h3>
+                            <p class="text-sm text-gray-300">Tunggu verifikasi admin & kabar untuk proses daftar ulang.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div
+                    class="step-card bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/20 hover:bg-white/20">
+                    <div class="flex items-center gap-4">
+                        <div class="flex-shrink-0">
+                            <div class="step-number w-14 h-14 rounded-full flex items-center justify-center">
+                                <i data-lucide="party-popper" class="text-white w-7 h-7"></i>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span
+                                    class="text-xs font-semibold text-teal-400 bg-teal-500/20 px-2 py-1 rounded-full">Step
+                                    5</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-white">Daftar Ulang</h3>
+                            <p class="text-sm text-gray-300">Lakukan daftar ulang & selamat bergabung menjadi mahasiswa
+                                baru!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA Button -->
+            <div class="text-center mt-16">
+                @auth
+                    @if (auth()->user()->isAdmin())
+                        <a href="{{ route('admin.dashboard') }}"
+                            class="inline-flex items-center gap-2 bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-400 hover:to-cyan-400 text-white px-10 py-4 rounded-full font-semibold text-lg transition-all shadow-lg shadow-teal-500/30 hover:shadow-xl hover:shadow-teal-500/40 hover:scale-105">
+                            <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                            Dashboard Admin
+                        </a>
+                    @else
+                        <a href="{{ route('student.dashboard') }}"
+                            class="inline-flex items-center gap-2 bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-400 hover:to-cyan-400 text-white px-10 py-4 rounded-full font-semibold text-lg transition-all shadow-lg shadow-teal-500/30 hover:shadow-xl hover:shadow-teal-500/40 hover:scale-105">
+                            <i data-lucide="rocket" class="w-5 h-5"></i>
+                            Mulai Pendaftaran
+                        </a>
+                    @endif
+                @else
+                    <a href="{{ route('register') }}"
+                        class="inline-flex items-center gap-2 bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-400 hover:to-cyan-400 text-white px-10 py-4 rounded-full font-semibold text-lg transition-all shadow-lg shadow-teal-500/30 hover:shadow-xl hover:shadow-teal-500/40 hover:scale-105">
+                        <i data-lucide="user-plus" class="w-5 h-5"></i>
+                        Daftar Sekarang
+                    </a>
+                @endauth
             </div>
         </div>
     </section>
