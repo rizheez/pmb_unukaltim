@@ -15,10 +15,15 @@
         <div class="bg-gradient-to-r from-teal-500 to-cyan-600 rounded-lg shadow-lg text-white p-6 relative overflow-hidden">
             <div class="relative z-10">
                 <h2 class="text-2xl font-bold mb-2">Selamat Datang di Website PMB UNUKALTIM</h2>
-                <p class="text-teal-100 max-w-2xl">
+                <p class="text-teal-100 max-w-2xl mb-4">
                     Sistem Penerimaan Mahasiswa Baru Universitas Nahdlatul Ulama Kalimantan Timur.
                     Silakan lengkapi biodata dan ikuti alur pendaftaran yang tersedia.
                 </p>
+                <a href="{{ route('guide.view') }}" target="_blank"
+                    class="inline-flex items-center gap-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-medium transition">
+                    <i data-lucide="book-open" class="w-4 h-4"></i>
+                    Lihat Panduan Lengkap
+                </a>
             </div>
             <!-- Decorative Elements -->
             <div class="absolute right-0 top-0 h-full w-1/3 opacity-10 transform translate-x-10 -translate-y-10">
