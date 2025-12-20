@@ -1,7 +1,17 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-BOlJYpxU.css",
+    "file": "assets/app-BRy7MoDt.css",
     "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/css/guide-view.css": {
+    "file": "assets/guide-view-6j0v-u3V.css",
+    "src": "resources/css/guide-view.css",
+    "isEntry": true
+  },
+  "resources/css/landing-page.css": {
+    "file": "assets/landing-page-BdYQQAKd.css",
+    "src": "resources/css/landing-page.css",
     "isEntry": true
   },
   "resources/js/app.js": {

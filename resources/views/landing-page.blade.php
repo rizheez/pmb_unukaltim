@@ -100,166 +100,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Merriweather:wght@300;400;700;900&display=swap"
         rel="stylesheet">
-    <style>
-        /* Default untuk body text tetap Inter agar bersih */
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-
-        .text-outline-black {
-            -webkit-text-stroke: 1.7px rgba(22, 141, 117, 1);
-            text-stroke: 1.7px rgba(22, 141, 117, 1);
-        }
-
-        /* Khusus Heading/Judul menggunakan Merriweather agar terlihat berwibawa/akademis */
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6,
-        .font-serif-heading {
-            font-family: 'Merriweather', serif;
-        }
-
-        .gradient-bg {
-            background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%);
-        }
-
-        .hero-gradient {
-            background: linear-gradient(135deg, rgba(13, 148, 136, 0.90) 0%, rgba(6, 182, 212, 0.90) 100%);
-        }
-
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-
-        .card-hover:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-
-        .fade-in {
-            animation: fadeIn 0.8s ease-in;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .scroll-smooth {
-            scroll-behavior: smooth;
-        }
-
-        /* Registration Guide Animations */
-        .step-badge {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .step-badge:hover {
-            transform: scale(1.1) rotate(5deg);
-        }
-
-        .step-card {
-            transition: all 0.3s ease;
-        }
-
-        .step-card:hover {
-            transform: translateX(10px);
-        }
-
-        .timeline-line {
-            background: linear-gradient(90deg,
-                    #99f6e4 0%,
-                    #14b8a6 25%,
-                    #0d9488 50%,
-                    #14b8a6 75%,
-                    #99f6e4 100%);
-            background-size: 200% 100%;
-            animation: shimmer 3s linear infinite;
-        }
-
-        @keyframes shimmer {
-            0% {
-                background-position: 200% 0;
-            }
-
-            100% {
-                background-position: -200% 0;
-            }
-        }
-
-        @keyframes pulse-ring {
-            0% {
-                transform: scale(0.8);
-                opacity: 0.8;
-            }
-
-            50% {
-                transform: scale(1);
-                opacity: 0.4;
-            }
-
-            100% {
-                transform: scale(1.2);
-                opacity: 0;
-            }
-        }
-
-        .pulse-ring::before {
-            content: '';
-            position: absolute;
-            inset: -8px;
-            border-radius: 9999px;
-            border: 3px solid #14b8a6;
-            animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-
-        @keyframes float {
-
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-
-        .float-animation {
-            animation: float 3s ease-in-out infinite;
-        }
-
-        .step-number {
-            background: linear-gradient(135deg, #14b8a6 0%, #0891b2 100%);
-            box-shadow: 0 10px 40px -10px rgba(20, 184, 166, 0.5);
-        }
-
-        .step-glow {
-            box-shadow: 0 0 30px rgba(20, 184, 166, 0.3), 0 0 60px rgba(20, 184, 166, 0.1);
-        }
-
-        /* Progress Bar */
-        .scroll-progress {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #0d9488 0%, #06b6d4 50%, #f59e0b 100%);
-            z-index: 9999;
-            transition: width 0.1s ease-out;
-            box-shadow: 0 0 10px rgba(13, 148, 136, 0.5);
-        }
-    </style>
+    @vite('resources/css/landing-page.css')
 </head>
 
 <body class="scroll-smooth">
@@ -454,12 +295,12 @@
     <!-- Features Section -->
     <section id="features" class="py-20 bg-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
+            <div class="text-center mb-16 reveal">
                 <h2 class="text-4xl font-bold text-gray-900 mb-4">Keunggulan Kami</h2>
                 <p class="text-xl text-gray-600">Mengapa memilih kami untuk masa depan pendidikan Anda</p>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-8">
+            <div class="grid md:grid-cols-3 gap-8 reveal-stagger">
                 @foreach (['feature_1', 'feature_2', 'feature_3'] as $feature)
                     <div class="bg-white rounded-2xl p-8 card-hover">
                         <div class="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mb-6">
@@ -764,8 +605,8 @@
 
     <!-- Programs Section -->
     <section id="programs" class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 reveal   ">
+            <div class="text-center mb-16 ">
                 <h2 class="text-4xl font-bold text-gray-900 mb-4">Program Studi</h2>
                 <p class="text-xl text-gray-600">Pilih program studi yang sesuai dengan minat dan bakatmu</p>
             </div>
@@ -806,7 +647,7 @@
     <section id="about" class="py-20 bg-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid md:grid-cols-2 gap-12 items-center">
-                <div>
+                <div class="reveal-left">
                     <h2 class="text-4xl font-bold text-gray-900 mb-6">
                         {{ $settings['about']->where('key', 'about_title')->first()->value ?? 'Tentang Kami' }}
                     </h2>
@@ -814,7 +655,7 @@
                         <p>{{ $settings['about']->where('key', 'about_description')->first()->value ?? '' }}</p>
                     </div>
                 </div>
-                <div class="relative">
+                <div class="relative reveal-right">
                     @if ($settings['about']->where('key', 'about_image')->first()?->value)
                         <!-- Display uploaded image -->
                         <div class="aspect-square rounded-3xl overflow-hidden shadow-2xl">
@@ -833,12 +674,12 @@
     <!-- Contact Section -->
     <section id="contact" class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
+            <div class="text-center mb-16 reveal">
                 <h2 class="text-4xl font-bold text-gray-900 mb-4">Hubungi Kami</h2>
                 <p class="text-xl text-gray-600">Kami siap membantu menjawab pertanyaan Anda</p>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-8">
+            <div class="grid md:grid-cols-3 gap-8 reveal-stagger">
                 <div class="text-center p-6">
                     <div class="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
                         <i data-lucide="map-pin" class="text-teal-600 w-8 h-8"></i>
@@ -999,6 +840,23 @@
                 }
             });
         });
+
+        // Scroll Reveal Animation
+        const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-stagger');
+
+        const revealOnScroll = () => {
+            const windowHeight = window.innerHeight;
+            revealElements.forEach(el => {
+                const elementTop = el.getBoundingClientRect().top;
+                const revealPoint = 150;
+                if (elementTop < windowHeight - revealPoint) {
+                    el.classList.add('visible');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', revealOnScroll);
+        revealOnScroll(); // Run once on load
     </script>
 </body>
 
