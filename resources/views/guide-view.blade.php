@@ -1101,8 +1101,17 @@
             <h3>Butuh Bantuan?</h3>
             <div class="contact-grid">
                 @if ($settings['contact']->where('key', 'contact_phone_1')->first()?->value)
-                    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings['contact']->where('key', 'contact_phone_1')->first()->value) }}"
-                        target="_blank" class="contact-btn whatsapp">
+                    @php
+                        $phone1 = $settings['contact']->where('key', 'contact_phone_1')->first()->value;
+                        $label1 = 'Panitia PMB UNU Kaltim';
+                        $waNumber1 = preg_replace('/[^0-9]/', '', $phone1);
+                        if (substr($waNumber1, 0, 1) === '0') {
+                            $waNumber1 = '62' . substr($waNumber1, 1);
+                        }
+                        $waText1 = urlencode("Halo {$label1}");
+                    @endphp
+                    <a href="https://wa.me/{{ $waNumber1 }}?text={{ $waText1 }}" target="_blank"
+                        class="contact-btn whatsapp">
                         <i data-lucide="message-circle"></i>
                         <span>{{ $settings['contact']->where('key', 'contact_phone_1')->first()->value }}</span>
                     </a>
