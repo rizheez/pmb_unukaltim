@@ -4,416 +4,1162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panduan Pendaftaran - PMB UNU Kaltim</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Primary Meta Tags -->
+    <title>Panduan Pendaftaran Mahasiswa Baru - PMB UNU Kaltim {{ date('Y') }}</title>
+    <meta name="title" content="Panduan Pendaftaran Mahasiswa Baru - PMB UNU Kaltim {{ date('Y') }}">
     <meta name="description"
-        content="Panduan lengkap pendaftaran mahasiswa baru Universitas Nahdlatul Ulama Kalimantan Timur">
+        content="Panduan lengkap cara daftar mahasiswa baru di Universitas Nahdlatul Ulama Kalimantan Timur. 5 langkah mudah pendaftaran online PMB UNU Kaltim.">
+    <meta name="keywords"
+        content="panduan PMB UNU Kaltim, cara daftar kuliah Samarinda, pendaftaran mahasiswa baru Kaltim, alur PMB UNU, syarat pendaftaran kuliah">
+    <meta name="author" content="Universitas Nahdlatul Ulama Kalimantan Timur">
+    <meta name="robots" content="index, follow">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ route('guide.view') }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="{{ route('guide.view') }}">
+    <meta property="og:title" content="Panduan Pendaftaran Mahasiswa Baru - PMB UNU Kaltim {{ date('Y') }}">
+    <meta property="og:description"
+        content="Panduan lengkap cara daftar mahasiswa baru di Universitas Nahdlatul Ulama Kalimantan Timur. 5 langkah mudah pendaftaran online.">
+    <meta property="og:image" content="{{ asset('assets/images/logo_unu.png') }}">
+    <meta property="og:locale" content="id_ID">
+    <meta property="og:site_name" content="PMB UNU Kaltim">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{{ route('guide.view') }}">
+    <meta name="twitter:title" content="Panduan Pendaftaran Mahasiswa Baru - PMB UNU Kaltim">
+    <meta name="twitter:description"
+        content="Panduan lengkap cara daftar mahasiswa baru di Universitas Nahdlatul Ulama Kalimantan Timur.">
+    <meta name="twitter:image" content="{{ asset('assets/images/logo_unu.png') }}">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="apple-touch-icon" href="{{ asset('assets/images/logo_unu.png') }}">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "Panduan Pendaftaran Mahasiswa Baru UNU Kaltim",
+        "description": "Langkah-langkah mendaftar sebagai mahasiswa baru di Universitas Nahdlatul Ulama Kalimantan Timur",
+        "totalTime": "PT30M",
+        "step": [
+            {
+                "@type": "HowToStep",
+                "name": "Registrasi Akun",
+                "text": "Buka website PMB, klik Daftar, isi email aktif, nama, dan password. Verifikasi email."
+            },
+            {
+                "@type": "HowToStep",
+                "name": "Lengkapi Biodata",
+                "text": "Login, lengkapi data pribadi: NIK, NISN, TTL, alamat, dan upload foto 4x6 latar merah."
+            },
+            {
+                "@type": "HowToStep",
+                "name": "Upload Dokumen",
+                "text": "Upload KTP, Kartu Keluarga, dan Ijazah/SKL. Format: PDF/JPG/PNG, maks 2MB."
+            },
+            {
+                "@type": "HowToStep",
+                "name": "Pilih Program Studi",
+                "text": "Pilih jenis pendaftaran, jalur masuk, dan 2 pilihan program studi."
+            },
+            {
+                "@type": "HowToStep",
+                "name": "Verifikasi & Daftar Ulang",
+                "text": "Tunggu verifikasi Tim PMB, lalu lakukan daftar ulang setelah dinyatakan lolos."
+            }
+        ]
+    }
+    </script>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://unpkg.com/lucide@latest" defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@400;700&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
 
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --primary-light: #14b8a6;
+            --accent: #f59e0b;
+            --accent-light: #fbbf24;
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', sans-serif;
+            background: #f8fafc;
+            overflow-x: hidden;
         }
 
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6,
-        .font-serif-heading {
-            font-family: 'Merriweather', serif;
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
         }
 
-        .gradient-bg {
-            background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%);
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+            z-index: 9999;
+            transition: width 0.1s ease;
         }
 
-        .step-number-gradient {
-            background: linear-gradient(135deg, #14b8a6 0%, #0891b2 100%);
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 1rem 2rem;
+            z-index: 100;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            padding: 0.75rem 2rem;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+            background: rgba(13, 148, 136, 0.1);
+        }
+
+        .nav-brand {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-brand img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary) 0%, #0891b2 50%, var(--primary-dark) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 6rem 2rem 4rem;
+        }
+
+        /* Animated Background */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+            animation: float 30s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(1deg);
+            }
+        }
+
+        /* Floating Shapes */
+        .floating-shape {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: floatShape 20s ease-in-out infinite;
+        }
+
+        .floating-shape:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: -100px;
+            right: -100px;
+            animation-delay: 0s;
+        }
+
+        .floating-shape:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            bottom: -50px;
+            left: -50px;
+            animation-delay: -5s;
+        }
+
+        .floating-shape:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            top: 50%;
+            right: 10%;
+            animation-delay: -10s;
+        }
+
+        @keyframes floatShape {
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            33% {
+                transform: translate(30px, -30px) scale(1.1);
+            }
+
+            66% {
+                transform: translate(-20px, 20px) scale(0.9);
+            }
+        }
+
+        .hero-content {
+            text-align: center;
+            color: white;
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease forwards;
+            opacity: 0;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            animation: fadeInUp 0.8s ease 0.2s forwards;
+            opacity: 0;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease 0.4s forwards;
+            opacity: 0;
+        }
+
+        .period-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 1rem 1.5rem;
+            border-radius: 1rem;
+            animation: fadeInUp 0.8s ease 0.6s forwards;
+            opacity: 0;
+        }
+
+        .period-box i {
+            width: 2rem;
+            height: 2rem;
+        }
+
+        .free-badge {
+            position: absolute;
+            top: 6rem;
+            right: 2rem;
+            background: var(--accent);
+            color: #1e293b;
+            padding: 1rem 1.5rem;
+            border-radius: 1rem;
+            font-weight: 800;
+            font-size: 1.25rem;
+            transform: rotate(5deg);
+            box-shadow: 0 10px 40px rgba(245, 158, 11, 0.4);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: rotate(5deg) scale(1);
+            }
+
+            50% {
+                transform: rotate(5deg) scale(1.05);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+
+            40% {
+                transform: translateX(-50%) translateY(-15px);
+            }
+
+            60% {
+                transform: translateX(-50%) translateY(-7px);
+            }
+        }
+
+        /* Main Content */
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 4rem 1.5rem;
+        }
+
+        /* Section Title */
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-title p {
+            color: #64748b;
+        }
+
+        /* Steps Timeline */
+        .steps-timeline {
+            position: relative;
+        }
+
+        .steps-timeline::before {
+            content: '';
+            position: absolute;
+            left: 2rem;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 3px;
+        }
+
+        .step-item {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: all 0.6s ease;
+        }
+
+        .step-item.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .step-number {
+            flex-shrink: 0;
+            width: 4rem;
+            height: 4rem;
+            background: linear-gradient(135deg, var(--primary) 0%, #0891b2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            box-shadow: 0 10px 30px rgba(13, 148, 136, 0.3);
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+
+        .step-item:hover .step-number {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(13, 148, 136, 0.4);
+        }
+
+        .step-card {
+            flex: 1;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .step-item:hover .step-card {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary-light);
+        }
+
+        .step-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .step-card h3 i {
+            color: var(--primary);
+        }
+
+        .step-card p {
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .step-card p strong {
+            color: var(--primary);
+        }
+
+        /* Info Cards Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 4rem 0;
+        }
+
+        .info-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .info-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-card.docs {
+            border-top: 4px solid var(--primary);
+        }
+
+        .info-card.tips {
+            border-top: 4px solid #10b981;
+        }
+
+        .info-card.avoid {
+            border-top: 4px solid #ef4444;
+        }
+
+        .info-card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-card-icon {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .info-card.docs .info-card-icon {
+            background: rgba(13, 148, 136, 0.1);
+            color: var(--primary);
+        }
+
+        .info-card.tips .info-card-icon {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+
+        .info-card.avoid .info-card-icon {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .info-card-title {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .info-card ul {
+            list-style: none;
+        }
+
+        .info-card ul li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .info-card ul li i {
+            width: 1rem;
+            height: 1rem;
+        }
+
+        .info-card.docs ul li i {
+            color: var(--primary);
+        }
+
+        .info-card.tips ul li i {
+            color: #10b981;
+        }
+
+        .info-card.avoid ul li i {
+            color: #ef4444;
+        }
+
+        /* QR Section */
+        .qr-section {
+            background: linear-gradient(135deg, var(--primary) 0%, #0891b2 100%);
+            padding: 3rem;
+            border-radius: 2rem;
+            margin: 4rem 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 0.6s ease;
+        }
+
+        .qr-section.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .qr-section::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            top: -150px;
+            right: -150px;
+        }
+
+        .qr-code-wrapper {
+            background: white;
+            padding: 1rem;
+            border-radius: 1rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            animation: floatQR 3s ease-in-out infinite;
+        }
+
+        @keyframes floatQR {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .qr-code-wrapper img {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+        }
+
+        .qr-section h3 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            /* justify-content: center; */
+            gap: 0.5rem;
+        }
+
+        .qr-url {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            margin: 4rem 0;
+        }
+
+        .contact-section h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .contact-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.5rem;
+            border-radius: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .contact-btn.whatsapp {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .contact-btn.whatsapp:hover {
+            background: #166534;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(22, 101, 52, 0.2);
+        }
+
+        .contact-btn.email {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .contact-btn.email:hover {
+            background: #1e40af;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(30, 64, 175, 0.2);
+        }
+
+        /* Warning Box */
+        .warning-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fffbeb 100%);
+            border: 2px solid #f59e0b;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            margin: 4rem 0;
+        }
+
+        .warning-box-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .warning-box-icon {
+            width: 3rem;
+            height: 3rem;
+            background: #f59e0b;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .warning-box h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #92400e;
+        }
+
+        .warning-box ul {
+            list-style: none;
+        }
+
+        .warning-box ul li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            color: #78350f;
+        }
+
+        .warning-box ul li i {
+            color: #f59e0b;
+            margin-top: 0.25rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, #f0fdfa 0%, #ecfeff 100%);
+            border-radius: 2rem;
+            margin: 4rem 0;
+        }
+
+        .cta-section h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            color: #64748b;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: linear-gradient(135deg, var(--primary) 0%, #0891b2 100%);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            box-shadow: 0 10px 40px rgba(13, 148, 136, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(13, 148, 136, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            background: #1e293b;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        footer p {
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            .qr-section {
+                flex-direction: row;
+                text-align: left;
+            }
+
+            .steps-timeline::before {
+                left: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0.75rem 1rem;
+            }
+
+            .free-badge {
+                top: 1rem;
+                right: 1rem;
+                font-size: 1rem;
+                padding: 0.75rem 1rem;
+            }
+
+            .steps-timeline::before {
+                left: 1.75rem;
+            }
+
+            .step-item {
+                gap: 1rem;
+            }
+
+            .step-number {
+                width: 3.5rem;
+                height: 3.5rem;
+                font-size: 1.25rem;
+            }
         }
     </style>
 </head>
 
-<body class="bg-gray-50 min-h-screen">
+<body>
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
     <!-- Navigation -->
-    <nav class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <a href="{{ route('landing-page') }}"
-                    class="flex items-center space-x-2 text-teal-600 hover:text-teal-700 transition">
-                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
-                    <span class="font-medium">Kembali</span>
-                </a>
-                <span class="text-xl font-bold text-teal-600 font-serif-heading">PMB UNUKALTIM</span>
-                <a href="{{ route('guide') }}"
-                    class="flex items-center space-x-2 text-gray-600 hover:text-teal-600 transition">
-                    <i data-lucide="printer" class="w-5 h-5"></i>
-                    <span class="hidden sm:inline font-medium">Cetak</span>
-                </a>
+    <nav class="navbar" id="navbar">
+        <div class="navbar-content">
+            <a href="{{ route('landing-page') }}" class="nav-link">
+                <i data-lucide="arrow-left"></i>
+                <span>Kembali</span>
+            </a>
+            <div class="nav-brand">
+                <img src="{{ asset('assets/images/logo_unu.png') }}" alt="Logo">
+                <span>PMB UNUKALTIM</span>
             </div>
+            <a href="{{ route('guide') }}" class="nav-link">
+                <i data-lucide="printer"></i>
+                <span>Cetak</span>
+            </a>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="gradient-bg text-white py-12 md:py-20">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-                <i data-lucide="book-open" class="w-5 h-5"></i>
-                <span class="text-sm font-medium">Panduan Lengkap</span>
+    <section class="hero">
+        <div class="floating-shape"></div>
+        <div class="floating-shape"></div>
+        <div class="floating-shape"></div>
+
+        <div class="free-badge">
+            ✨ GRATIS!
+        </div>
+
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i data-lucide="book-open"></i>
+                <span>Panduan Lengkap</span>
             </div>
-            <h1 class="text-3xl md:text-5xl font-bold mb-4 font-serif-heading">
-                Panduan Pendaftaran <br class="hidden sm:block">Mahasiswa Baru
-            </h1>
-            <p class="text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
-                Universitas Nahdlatul Ulama Kalimantan Timur
-            </p>
+            <h1>Panduan Pendaftaran<br>Mahasiswa Baru</h1>
+            <p>Universitas Nahdlatul Ulama Kalimantan Timur</p>
 
             @if ($activePeriod)
-                <div class="mt-8 inline-flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-xl px-6 py-4">
-                    <i data-lucide="calendar" class="w-6 h-6"></i>
-                    <div class="text-left">
-                        <p class="text-sm font-semibold">{{ $activePeriod->name }}</p>
-                        <p class="text-xs text-white/80">
+                <div class="period-box">
+                    <i data-lucide="calendar"></i>
+                    <div style="text-align: left;">
+                        <div style="font-weight: 600;">{{ $activePeriod->name }}</div>
+                        <div style="font-size: 0.9rem; opacity: 0.9;">
                             {{ \Carbon\Carbon::parse($activePeriod->start_date)->locale('id')->translatedFormat('d M Y') }}
                             -
                             {{ \Carbon\Carbon::parse($activePeriod->end_date)->locale('id')->translatedFormat('d M Y') }}
-                        </p>
+                        </div>
                     </div>
                 </div>
             @endif
         </div>
+
+        <div class="scroll-indicator">
+            <a href="#content" style="color: white;">
+                <i data-lucide="chevrons-down" style="width: 2rem; height: 2rem;"></i>
+            </a>
+        </div>
     </section>
 
     <!-- Main Content -->
-    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <!-- Steps Section -->
-        <section class="mb-16">
-            <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center font-serif-heading">
-                Langkah-Langkah Pendaftaran
-            </h2>
-
-            <div class="space-y-6">
-                <!-- Step 1 -->
-                <div
-                    class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
-                    <div class="flex gap-4">
-                        <div class="flex-shrink-0">
-                            <div
-                                class="step-number-gradient w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center shadow-lg">
-                                <i data-lucide="user-plus" class="w-6 h-6 md:w-7 md:h-7 text-white"></i>
-                            </div>
-                        </div>
-                        <div class="flex-1">
-                            <div class="flex items-center gap-2 mb-2">
-                                <span class="text-xs font-semibold text-teal-600 bg-teal-50 px-2 py-1 rounded-full">Step
-                                    1</span>
-                            </div>
-                            <h3 class="text-lg md:text-xl font-bold text-gray-900 mb-2">Registrasi Akun</h3>
-                            <p class="text-gray-600 leading-relaxed">
-                                Buka website PMB, klik tombol <strong class="text-teal-600">"Daftar"</strong>.
-                                Isi email aktif, nama lengkap, dan password.
-                                Cek email untuk verifikasi dan aktifkan akun Anda.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Step 2 -->
-                <div
-                    class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
-                    <div class="flex gap-4">
-                        <div class="flex-shrink-0">
-                            <div
-                                class="step-number-gradient w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center shadow-lg">
-                                <i data-lucide="file-text" class="w-6 h-6 md:w-7 md:h-7 text-white"></i>
-                            </div>
-                        </div>
-                        <div class="flex-1">
-                            <div class="flex items-center gap-2 mb-2">
-                                <span class="text-xs font-semibold text-teal-600 bg-teal-50 px-2 py-1 rounded-full">Step
-                                    2</span>
-                            </div>
-                            <h3 class="text-lg md:text-xl font-bold text-gray-900 mb-2">Lengkapi Biodata</h3>
-                            <p class="text-gray-600 leading-relaxed">
-                                Login ke akun Anda, lalu lengkapi data pribadi: NIK, NISN, tempat tanggal lahir, alamat
-                                lengkap,
-                                dan upload foto 4x6 dengan latar belakang merah.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Step 3 -->
-                <div
-                    class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
-                    <div class="flex gap-4">
-                        <div class="flex-shrink-0">
-                            <div
-                                class="step-number-gradient w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center shadow-lg">
-                                <i data-lucide="upload" class="w-6 h-6 md:w-7 md:h-7 text-white"></i>
-                            </div>
-                        </div>
-                        <div class="flex-1">
-                            <div class="flex items-center gap-2 mb-2">
-                                <span class="text-xs font-semibold text-teal-600 bg-teal-50 px-2 py-1 rounded-full">Step
-                                    3</span>
-                            </div>
-                            <h3 class="text-lg md:text-xl font-bold text-gray-900 mb-2">Upload Dokumen</h3>
-                            <p class="text-gray-600 leading-relaxed">
-                                Upload dokumen yang diperlukan: <strong>KTP</strong>, <strong>Kartu Keluarga</strong>,
-                                dan
-                                <strong>Ijazah/SKL</strong>. Format file: PDF, JPG, atau PNG dengan ukuran maksimal 2MB.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Step 4 -->
-                <div
-                    class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
-                    <div class="flex gap-4">
-                        <div class="flex-shrink-0">
-                            <div
-                                class="step-number-gradient w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center shadow-lg">
-                                <i data-lucide="graduation-cap" class="w-6 h-6 md:w-7 md:h-7 text-white"></i>
-                            </div>
-                        </div>
-                        <div class="flex-1">
-                            <div class="flex items-center gap-2 mb-2">
-                                <span class="text-xs font-semibold text-teal-600 bg-teal-50 px-2 py-1 rounded-full">Step
-                                    4</span>
-                            </div>
-                            <h3 class="text-lg md:text-xl font-bold text-gray-900 mb-2">Pilih Program Studi</h3>
-                            <p class="text-gray-600 leading-relaxed">
-                                Pilih jenis pendaftaran, jalur masuk, dan <strong>2 pilihan program studi</strong>
-                                sesuai dengan minat dan bakat Anda.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Step 5 -->
-                <div
-                    class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
-                    <div class="flex gap-4">
-                        <div class="flex-shrink-0">
-                            <div
-                                class="step-number-gradient w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center shadow-lg">
-                                <i data-lucide="shield-check" class="w-6 h-6 md:w-7 md:h-7 text-white"></i>
-                            </div>
-                        </div>
-                        <div class="flex-1">
-                            <div class="flex items-center gap-2 mb-2">
-                                <span class="text-xs font-semibold text-teal-600 bg-teal-50 px-2 py-1 rounded-full">Step
-                                    5</span>
-                            </div>
-                            <h3 class="text-lg md:text-xl font-bold text-gray-900 mb-2">Verifikasi & Daftar Ulang</h3>
-                            <p class="text-gray-600 leading-relaxed">
-                                Tunggu proses verifikasi dari Tim PMB. Setelah data diverifikasi dan dinyatakan lolos,
-                                Anda akan dihubungi untuk proses <strong>daftar ulang</strong> dan informasi
-                                selanjutnya.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <main id="content">
+        <section class="section-title">
+            <h2>Langkah-Langkah Pendaftaran</h2>
+            <p>Ikuti 5 langkah mudah berikut untuk mendaftar</p>
         </section>
 
-        <!-- Info Cards -->
-        <section class="grid md:grid-cols-3 gap-6 mb-16">
-            <!-- Dokumen Diperlukan -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center">
-                        <i data-lucide="file-check" class="w-5 h-5 text-teal-600"></i>
-                    </div>
-                    <h3 class="font-bold text-gray-900">Dokumen Diperlukan</h3>
-                </div>
-                <ul class="space-y-2 text-sm text-gray-600">
-                    <li class="flex items-center gap-2">
-                        <i data-lucide="check" class="w-4 h-4 text-teal-500"></i>
-                        Foto 4x6 latar merah
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <i data-lucide="check" class="w-4 h-4 text-teal-500"></i>
-                        Scan/Foto KTP
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <i data-lucide="check" class="w-4 h-4 text-teal-500"></i>
-                        Scan/Foto Kartu Keluarga
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <i data-lucide="check" class="w-4 h-4 text-teal-500"></i>
-                        Scan/Foto Ijazah/SKL
-                    </li>
-
-                </ul>
-            </div>
-
-            <!-- Tips Sukses -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
-                        <i data-lucide="lightbulb" class="w-5 h-5 text-emerald-600"></i>
-                    </div>
-                    <h3 class="font-bold text-gray-900">Tips Sukses</h3>
-                </div>
-                <ul class="space-y-2 text-sm text-gray-600">
-                    <li class="flex items-center gap-2">
-                        <i data-lucide="check" class="w-4 h-4 text-emerald-500"></i>
-                        Gunakan email aktif
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <i data-lucide="check" class="w-4 h-4 text-emerald-500"></i>
-                        Siapkan dokumen sebelum daftar
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <i data-lucide="check" class="w-4 h-4 text-emerald-500"></i>
-                        Pastikan foto jelas & terbaca
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <i data-lucide="check" class="w-4 h-4 text-emerald-500"></i>
-                        Isi data sesuai dokumen resmi
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <i data-lucide="check" class="w-4 h-4 text-emerald-500"></i>
-                        Simpan nomor WA panitia
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Yang Harus Dihindari -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-                        <i data-lucide="alert-triangle" class="w-5 h-5 text-red-600"></i>
-                    </div>
-                    <h3 class="font-bold text-gray-900">Yang Harus Dihindari</h3>
-                </div>
-                <ul class="space-y-2 text-sm text-gray-600">
-                    <li class="flex items-center gap-2">
-                        <i data-lucide="x" class="w-4 h-4 text-red-500"></i>
-                        Email tidak aktif
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <i data-lucide="x" class="w-4 h-4 text-red-500"></i>
-                        Upload foto blur/tidak jelas
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <i data-lucide="x" class="w-4 h-4 text-red-500"></i>
-                        Data tidak sesuai KTP
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <i data-lucide="x" class="w-4 h-4 text-red-500"></i>
-                        Lupa password akun
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <i data-lucide="x" class="w-4 h-4 text-red-500"></i>
-                        Tunggu deadline terlalu lama
-                    </li>
-                </ul>
-            </div>
-        </section>
-
-        <!-- QR Section -->
-        <section class="gradient-bg rounded-2xl p-6 md:p-8 text-white mb-12">
-            <div class="flex flex-col md:flex-row items-center gap-6">
-                <div class="flex-shrink-0 w-24 h-24 md:w-28 md:h-28 bg-white rounded-xl p-2 shadow-lg">
-                    <img src="{{ asset('assets/images/qr-code-with-logo.png') }}" alt="QR Code PMB"
-                        class="w-full h-full object-contain">
-                </div>
-                <div class="text-center md:text-left">
-                    <h3
-                        class="text-xl md:text-2xl font-bold mb-2 flex items-center justify-center md:justify-start gap-2">
-                        <i data-lucide="globe" class="w-6 h-6"></i>
-                        Akses Website PMB
+        <!-- Steps Timeline -->
+        <div class="steps-timeline">
+            <div class="step-item">
+                <div class="step-number">1</div>
+                <div class="step-card">
+                    <h3>
+                        <i data-lucide="user-plus"></i>
+                        Registrasi Akun
                     </h3>
-                    <p class="text-white/90 mb-2">Scan QR Code atau kunjungi:</p>
-                    <p class="text-lg font-semibold bg-white/20 inline-block px-4 py-2 rounded-lg">
-                        {{ config('app.url') }}
+                    <p>Buka website PMB, klik tombol <strong>"Daftar"</strong>. Isi email aktif, nama lengkap, dan
+                        password. Cek email untuk verifikasi dan aktifkan akun Anda.</p>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-number">2</div>
+                <div class="step-card">
+                    <h3>
+                        <i data-lucide="file-text"></i>
+                        Lengkapi Biodata
+                    </h3>
+                    <p>Login ke akun Anda, lalu lengkapi data pribadi: NIK, NISN, tempat tanggal lahir, alamat lengkap,
+                        dan <strong>upload foto 4x6 latar merah</strong>.</p>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-number">3</div>
+                <div class="step-card">
+                    <h3>
+                        <i data-lucide="upload"></i>
+                        Upload Dokumen
+                    </h3>
+                    <p>Upload dokumen yang diperlukan: <strong>KTP</strong>, <strong>Kartu Keluarga</strong>, dan
+                        <strong>Ijazah/SKL</strong>. Format: PDF, JPG, atau PNG (maks 2MB).
                     </p>
                 </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-number">4</div>
+                <div class="step-card">
+                    <h3>
+                        <i data-lucide="graduation-cap"></i>
+                        Pilih Program Studi
+                    </h3>
+                    <p>Pilih jenis pendaftaran, jalur masuk, dan <strong>2 pilihan program studi</strong> sesuai dengan
+                        minat dan bakat Anda.</p>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-number">5</div>
+                <div class="step-card">
+                    <h3>
+                        <i data-lucide="shield-check"></i>
+                        Verifikasi & Daftar Ulang
+                    </h3>
+                    <p>Tunggu proses verifikasi dari Tim PMB. Setelah dinyatakan lolos, Anda akan dihubungi untuk proses
+                        <strong>daftar ulang</strong> dan informasi selanjutnya.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Cards Grid -->
+        <div class="info-grid">
+            <div class="info-card docs">
+                <div class="info-card-header">
+                    <div class="info-card-icon">
+                        <i data-lucide="file-check"></i>
+                    </div>
+                    <div class="info-card-title">Dokumen Diperlukan</div>
+                </div>
+                <ul>
+                    <li><i data-lucide="check"></i> Foto 4x6 latar merah</li>
+                    <li><i data-lucide="check"></i> Scan/Foto KTP</li>
+                    <li><i data-lucide="check"></i> Scan/Foto Kartu Keluarga</li>
+                    <li><i data-lucide="check"></i> Scan/Foto Ijazah/SKL</li>
+                </ul>
+            </div>
+
+            <div class="info-card tips">
+                <div class="info-card-header">
+                    <div class="info-card-icon">
+                        <i data-lucide="lightbulb"></i>
+                    </div>
+                    <div class="info-card-title">Tips Sukses</div>
+                </div>
+                <ul>
+                    <li><i data-lucide="check"></i> Gunakan email aktif</li>
+                    <li><i data-lucide="check"></i> Siapkan dokumen sebelum daftar</li>
+                    <li><i data-lucide="check"></i> Pastikan foto jelas & terbaca</li>
+                    <li><i data-lucide="check"></i> Isi data sesuai dokumen resmi</li>
+                    <li><i data-lucide="check"></i> Simpan nomor WA panitia</li>
+                </ul>
+            </div>
+
+            <div class="info-card avoid">
+                <div class="info-card-header">
+                    <div class="info-card-icon">
+                        <i data-lucide="alert-triangle"></i>
+                    </div>
+                    <div class="info-card-title">Yang Harus Dihindari</div>
+                </div>
+                <ul>
+                    <li><i data-lucide="x"></i> Email tidak aktif</li>
+                    <li><i data-lucide="x"></i> Upload foto blur/tidak jelas</li>
+                    <li><i data-lucide="x"></i> Data tidak sesuai KTP</li>
+                    <li><i data-lucide="x"></i> Lupa password akun</li>
+                    <li><i data-lucide="x"></i> Tunggu deadline terlalu lama</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- QR Section -->
+        <section class="qr-section">
+            <div class="qr-code-wrapper">
+                <img src="{{ asset('assets/images/qr-code-with-logo.png') }}" alt="QR Code PMB">
+            </div>
+            <div>
+                <h3>
+                    <i data-lucide="globe"></i>
+                    Daftar Sekarang!
+                </h3>
+                <p style="margin: 1rem 0; opacity: 0.9;">Scan QR Code dengan kamera HP atau kunjungi:</p>
+                <span class="qr-url">{{ config('app.url') }}</span>
             </div>
         </section>
 
         <!-- Contact Section -->
-        <section class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 mb-12">
-            <h3 class="text-xl font-bold text-gray-900 mb-6 text-center">Butuh Bantuan?</h3>
-            <div class="flex flex-col sm:flex-row justify-center gap-4 sm:gap-8">
+        <section class="contact-section">
+            <h3>Butuh Bantuan?</h3>
+            <div class="contact-grid">
                 @if ($settings['contact']->where('key', 'contact_phone_1')->first()?->value)
                     <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings['contact']->where('key', 'contact_phone_1')->first()->value) }}"
-                        target="_blank"
-                        class="flex items-center justify-center gap-3 bg-green-50 hover:bg-green-100 text-green-700 px-6 py-3 rounded-xl transition">
-                        <i data-lucide="message-circle" class="w-5 h-5"></i>
-                        <span
-                            class="font-medium">{{ $settings['contact']->where('key', 'contact_phone_1')->first()->value }}</span>
+                        target="_blank" class="contact-btn whatsapp">
+                        <i data-lucide="message-circle"></i>
+                        <span>{{ $settings['contact']->where('key', 'contact_phone_1')->first()->value }}</span>
                     </a>
                 @endif
                 @if ($settings['contact']->where('key', 'contact_email')->first()?->value)
                     <a href="mailto:{{ $settings['contact']->where('key', 'contact_email')->first()->value }}"
-                        class="flex items-center justify-center gap-3 bg-blue-50 hover:bg-blue-100 text-blue-700 px-6 py-3 rounded-xl transition">
-                        <i data-lucide="mail" class="w-5 h-5"></i>
-                        <span
-                            class="font-medium">{{ $settings['contact']->where('key', 'contact_email')->first()->value }}</span>
+                        class="contact-btn email">
+                        <i data-lucide="mail"></i>
+                        <span>{{ $settings['contact']->where('key', 'contact_email')->first()->value }}</span>
                     </a>
                 @endif
             </div>
         </section>
 
-        <!-- Important Notes -->
-        <section class="bg-amber-50 border border-amber-200 rounded-2xl p-6 mb-12">
-            <div class="flex items-start gap-4">
-                <div class="flex-shrink-0 w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
-                    <i data-lucide="alert-circle" class="w-5 h-5 text-amber-600"></i>
+        <!-- Warning Box -->
+        <section class="warning-box">
+            <div class="warning-box-header">
+                <div class="warning-box-icon">
+                    <i data-lucide="alert-circle"></i>
                 </div>
-                <div>
-                    <h3 class="font-bold text-amber-800 mb-3">Catatan Penting</h3>
-                    <ul class="space-y-2 text-sm text-amber-700">
-                        <li class="flex items-start gap-2">
-                            <i data-lucide="info" class="w-4 h-4 mt-0.5 flex-shrink-0"></i>
-                            <span>Pendaftaran <strong>GRATIS</strong>, tidak dipungut biaya apapun.</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <i data-lucide="info" class="w-4 h-4 mt-0.5 flex-shrink-0"></i>
-                            <span>Panitia <strong>TIDAK PERNAH</strong> meminta transfer uang melalui
-                                WhatsApp/telepon.</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <i data-lucide="info" class="w-4 h-4 mt-0.5 flex-shrink-0"></i>
-                            <span>Hubungi panitia resmi jika mengalami kendala teknis.</span>
-                        </li>
-                    </ul>
-                </div>
+                <h4>Catatan Penting</h4>
             </div>
+            <ul>
+                <li>
+                    <i data-lucide="info"></i>
+                    <span>Pendaftaran <strong>GRATIS</strong>, tidak dipungut biaya apapun.</span>
+                </li>
+                <li>
+                    <i data-lucide="info"></i>
+                    <span>Panitia <strong>TIDAK PERNAH</strong> meminta transfer uang melalui WhatsApp/telepon.</span>
+                </li>
+                <li>
+                    <i data-lucide="info"></i>
+                    <span>Hubungi panitia resmi jika mengalami kendala teknis.</span>
+                </li>
+            </ul>
         </section>
 
         <!-- CTA Section -->
-        <section class="text-center">
+        <section class="cta-section">
+            <h3>Siap Untuk Mendaftar?</h3>
+            <p>Mulai perjalanan akademikmu bersama UNU Kaltim!</p>
             @auth
                 @if (auth()->user()->isAdmin())
-                    <a href="{{ route('admin.dashboard') }}"
-                        class="inline-flex items-center gap-2 gradient-bg text-white px-8 py-4 rounded-full font-semibold text-lg hover:opacity-90 transition shadow-lg">
-                        <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    <a href="{{ route('admin.dashboard') }}" class="cta-btn">
+                        <i data-lucide="layout-dashboard"></i>
                         Dashboard Admin
                     </a>
                 @else
-                    <a href="{{ route('student.dashboard') }}"
-                        class="inline-flex items-center gap-2 gradient-bg text-white px-8 py-4 rounded-full font-semibold text-lg hover:opacity-90 transition shadow-lg">
-                        <i data-lucide="rocket" class="w-5 h-5"></i>
-                        Mulai Pendaftaran
+                    <a href="{{ route('student.dashboard') }}" class="cta-btn">
+                        <i data-lucide="rocket"></i>
+                        Lanjutkan Pendaftaran
                     </a>
                 @endif
             @else
-                <a href="{{ route('register') }}"
-                    class="inline-flex items-center gap-2 gradient-bg text-white px-8 py-4 rounded-full font-semibold text-lg hover:opacity-90 transition shadow-lg">
-                    <i data-lucide="user-plus" class="w-5 h-5"></i>
+                <a href="{{ route('register') }}" class="cta-btn">
+                    <i data-lucide="user-plus"></i>
                     Daftar Sekarang
                 </a>
             @endauth
@@ -421,17 +1167,63 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-8">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p class="text-gray-400 text-sm">
-                © {{ date('Y') }} Universitas Nahdlatul Ulama Kalimantan Timur. All rights reserved.
-            </p>
-        </div>
+    <footer>
+        <p>© {{ date('Y') }} Universitas Nahdlatul Ulama Kalimantan Timur. All rights reserved.</p>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             lucide.createIcons();
+
+            // Progress Bar
+            const progressBar = document.getElementById('progressBar');
+            window.addEventListener('scroll', function() {
+                const scrollTop = window.scrollY;
+                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const scrollPercent = (scrollTop / docHeight) * 100;
+                progressBar.style.width = scrollPercent + '%';
+            });
+
+            // Navbar scroll effect
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            // Scroll animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+
+            // Observe step items
+            document.querySelectorAll('.step-item').forEach((item, index) => {
+                item.style.transitionDelay = (index * 0.1) + 's';
+                observer.observe(item);
+            });
+
+            // Observe info cards
+            document.querySelectorAll('.info-card').forEach((item, index) => {
+                item.style.transitionDelay = (index * 0.15) + 's';
+                observer.observe(item);
+            });
+
+            // Observe QR section
+            document.querySelectorAll('.qr-section').forEach(item => {
+                observer.observe(item);
+            });
         });
     </script>
 </body>

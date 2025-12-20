@@ -41,6 +41,14 @@ class SitemapController extends Controller
         $sitemap .= '<priority>0.7</priority>';
         $sitemap .= '</url>';
 
+        // Panduan Lengkap Page (Digital Guide)
+        $sitemap .= '<url>';
+        $sitemap .= '<loc>'.route('guide.view').'</loc>';
+        $sitemap .= '<lastmod>'.now()->toAtomString().'</lastmod>';
+        $sitemap .= '<changefreq>monthly</changefreq>';
+        $sitemap .= '<priority>0.8</priority>';
+        $sitemap .= '</url>';
+
         $sitemap .= '</urlset>';
 
         return response($sitemap, 200)
