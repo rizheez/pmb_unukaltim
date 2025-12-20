@@ -910,7 +910,7 @@
             </a>
             <div class="nav-brand">
                 <img src="{{ asset('assets/images/logo_unu.png') }}" alt="Logo">
-                <span>PMB UNUKALTIM</span>
+                <span class="md:block hidden">PMB UNUKALTIM</span>
             </div>
             <a href="{{ route('guide') }}" target="_blank" class="nav-link">
                 <i data-lucide="printer"></i>

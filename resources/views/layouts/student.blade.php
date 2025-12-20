@@ -65,6 +65,17 @@
                     <i data-lucide="file-text" class="w-5 h-5 mr-3"></i>
                     Pendaftaran
                 </a>
+
+                {{-- Daftar Ulang - Uncomment jika fitur diaktifkan
+                @if (auth()->user()->registration && in_array(auth()->user()->registration->status, ['verified', 'accepted']))
+                    <a href="{{ route('student.daftar-ulang.index') }}"
+                        class="flex items-center px-4 py-3 rounded-lg transition-colors
+                        {{ request()->routeIs('student.daftar-ulang.*') ? 'bg-teal-900 text-white' : 'text-teal-100 hover:bg-teal-700' }}">
+                        <i data-lucide="clipboard-check" class="w-5 h-5 mr-3"></i>
+                        Daftar Ulang
+                    </a>
+                @endif
+                --}}
             </nav>
 
             {{-- <div class="p-4 border-t border-teal-700">

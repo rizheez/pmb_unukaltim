@@ -41,6 +41,10 @@ Route::middleware(['auth', \App\Http\Middleware\StudentMiddleware::class, 'verif
     // Verification
     Route::post('/student/verifications/mark-read', [\App\Http\Controllers\Student\VerificationController::class, 'markAsRead'])
         ->name('student.verifications.mark-read');
+
+    // Daftar Ulang (Re-registration)
+    Route::get('/student/daftar-ulang', [\App\Http\Controllers\Student\ReRegistrationController::class, 'index'])
+        ->name('student.daftar-ulang.index');
 });
 
 Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->prefix('admin')->name('admin.')->group(function () {
