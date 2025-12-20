@@ -27,17 +27,17 @@ class StudentDashboardController extends Controller
         // Get unread rejected verifications
         $rejectedVerifications = $biodata
             ? $biodata->verifications()
-                ->where('status', 'rejected')
-                ->where('is_read', false)
-                ->get()
+            ->where('status', 'rejected')
+            ->where('is_read', false)
+            ->get()
             : collect();
 
         $steps = [
-            ['name' => 'Pengisian Biodata', 'completed' => (bool) $biodata, 'active' => ! $biodata],
-            ['name' => 'Pendaftaran', 'completed' => (bool) $registration, 'active' => $biodata && ! $registration],
-            // ['name' => 'Pembayaran', 'completed' => false, 'active' => false],
-            ['name' => 'Proses Ujian', 'completed' => false, 'active' => false],
-            ['name' => 'Registrasi Ulang', 'completed' => false, 'active' => false],
+            ['name' => 'Registrasi Akun', 'completed' => true, 'active' => false], // User sudah login, berarti sudah registrasi
+            ['name' => 'Lengkapi Biodata', 'completed' => (bool) $biodata, 'active' => ! $biodata],
+            ['name' => 'Pilih Program Studi', 'completed' => (bool) $registration, 'active' => $biodata && ! $registration],
+            ['name' => 'Verifikasi Data', 'completed' => false, 'active' => (bool) $registration],
+            ['name' => 'Daftar Ulang', 'completed' => false, 'active' => false],
             ['name' => 'Selesai', 'completed' => false, 'active' => false],
         ];
 
