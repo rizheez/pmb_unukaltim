@@ -45,16 +45,17 @@
                 </div>
             </div>
 
-            <x-datatable id="students-table" ajax="{{ route('admin.students.datatable') }}" :columns="[
-                ['data' => 'name', 'name' => 'name'],
-                ['data' => 'email', 'name' => 'email'],
-                ['data' => 'phone', 'name' => 'phone'],
-                ['data' => 'status', 'name' => 'status', 'orderable' => false],
-                ['data' => 'period_name', 'name' => 'period_name', 'orderable' => false],
-                ['data' => 'referral_source', 'name' => 'referral_source', 'orderable' => false],
-                ['data' => 'registered_at', 'name' => 'registered_at'],
-                ['data' => 'actions', 'name' => 'actions', 'orderable' => false, 'searchable' => false],
-            ]">
+            <x-datatable id="students-table" ajax="{{ route('admin.students.datatable') }}" :order="[6, 'desc']"
+                :columns="[
+                    ['data' => 'name', 'name' => 'name'],
+                    ['data' => 'email', 'name' => 'email'],
+                    ['data' => 'phone', 'name' => 'phone'],
+                    ['data' => 'status', 'name' => 'status', 'orderable' => false],
+                    ['data' => 'period_name', 'name' => 'period_name', 'orderable' => false],
+                    ['data' => 'referral_source', 'name' => 'referral_source', 'orderable' => false],
+                    ['data' => 'registered_at', 'name' => 'registered_at'],
+                    ['data' => 'actions', 'name' => 'actions', 'orderable' => false, 'searchable' => false],
+                ]">
                 <thead class="bg-gray-50">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">

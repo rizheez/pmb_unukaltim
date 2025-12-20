@@ -146,14 +146,17 @@
 
             <!-- Major -->
             <div>
-                <label for="major" class="block text-sm font-medium text-gray-700">Jurusan Sekolah</label>
+                <label for="major" class="block text-sm font-medium text-gray-700">Jurusan Sekolah <span
+                        class="text-gray-400 font-normal">(Opsional)</span></label>
                 <div class="mt-1">
                     <input type="text" wire:model="major" id="major"
+                        placeholder="Contoh: IPA, IPS, TKJ, Akuntansi"
                         class="shadow-sm focus:ring-teal-500 focus:border-teal-500 block w-full sm:text-sm border-gray-300 rounded-md">
                 </div>
                 @error('major')
                     <span class="text-red-500 text-xs">{{ $message }}</span>
                 @enderror
+                <p class="text-xs text-gray-500 mt-1">Kosongkan jika tidak ada jurusan</p>
             </div>
         </div>
 
