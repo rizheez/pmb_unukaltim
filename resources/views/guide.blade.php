@@ -362,7 +362,6 @@
                     <li>Scan/Foto KTP</li>
                     <li>Scan/Foto Kartu Keluarga</li>
                     <li>Scan/Foto Ijazah/SKL</li>
-                    <li>NISN (jika ada)</li>
                 </ul>
             </div>
             <div class="column">

@@ -37,4 +37,15 @@ class LandingPageController extends Controller
 
         return view('guide', compact('settings', 'activePeriod'));
     }
+
+    public function guideView()
+    {
+        // Get settings for contact info
+        $settings = LandingPageSetting::getAllGrouped();
+
+        // Get active registration period
+        $activePeriod = RegistrationPeriod::active()->first();
+
+        return view('guide-view', compact('settings', 'activePeriod'));
+    }
 }

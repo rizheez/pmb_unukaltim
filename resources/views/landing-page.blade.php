@@ -738,7 +738,7 @@
                         Daftar Sekarang
                     </a>
                 @endauth
-                <a href="{{ route('guide') }}" target="_blank"
+                <a href="{{ route('guide.view') }}"
                     class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border-2 border-white/30 hover:bg-white/20 text-white px-10 py-4 rounded-full font-semibold text-lg transition-all hover:scale-105">
                     <i data-lucide="book-open" class="w-5 h-5"></i>
                     Lihat Panduan

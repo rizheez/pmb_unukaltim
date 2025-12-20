@@ -32,12 +32,14 @@ class StudentDashboardController extends Controller
             ->get()
             : collect();
 
+        $isVerified = $registration && $registration->status === 'verified';
+
         $steps = [
             ['name' => 'Registrasi Akun', 'completed' => true, 'active' => false], // User sudah login, berarti sudah registrasi
             ['name' => 'Lengkapi Biodata', 'completed' => (bool) $biodata, 'active' => ! $biodata],
             ['name' => 'Pilih Program Studi', 'completed' => (bool) $registration, 'active' => $biodata && ! $registration],
-            ['name' => 'Verifikasi Data', 'completed' => false, 'active' => (bool) $registration],
-            ['name' => 'Daftar Ulang', 'completed' => false, 'active' => false],
+            ['name' => 'Verifikasi Data', 'completed' => $isVerified, 'active' => $registration && ! $isVerified],
+            ['name' => 'Daftar Ulang', 'completed' => false, 'active' => $isVerified],
             ['name' => 'Selesai', 'completed' => false, 'active' => false],
         ];
 
