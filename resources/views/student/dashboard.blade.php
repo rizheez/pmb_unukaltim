@@ -241,13 +241,48 @@
                                     class="font-medium text-gray-900">{{ optional($registration->programStudiChoice2)->full_name ?? '-' }}</span>
                             </div>
                         @endif
-                        <div class="flex justify-between">
+                        <div class="flex justify-between border-b pb-2">
                             <span class="text-gray-500">Status</span>
                             <span
                                 class="px-2 py-1 text-xs font-semibold rounded-full {{ $registration->status_badge_class }}">
                                 {{ $registration->status_label }}
                             </span>
                         </div>
+
+                        {{-- Show accepted program studi if accepted --}}
+                        @if ($registration->status === 'accepted' && $registration->acceptedProgramStudi)
+                            <div class="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <i data-lucide="party-popper" class="h-5 w-5 text-green-600"></i>
+                                    <span class="font-semibold text-green-800">Selamat! Anda Diterima</span>
+                                </div>
+                                <div class="text-sm text-green-700">
+                                    <span class="text-gray-600">Diterima di Program Studi:</span>
+                                    <p class="font-bold text-green-900 text-base mt-1">
+                                        {{ $registration->acceptedProgramStudi->full_name }}
+                                    </p>
+                                </div>
+                            </div>
+                        @endif
+
+                        {{-- Show rejection reason if rejected --}}
+                        @if ($registration->status === 'rejected')
+                            <div class="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <i data-lucide="x-circle" class="h-5 w-5 text-red-600"></i>
+                                    <span class="font-semibold text-red-800">Pendaftaran Ditolak</span>
+                                </div>
+                                @if ($registration->rejection_reason)
+                                    <div class="text-sm text-red-700">
+                                        <span class="text-gray-600">Alasan:</span>
+                                        <p class="text-red-900 mt-1">{{ $registration->rejection_reason }}</p>
+                                    </div>
+                                @endif
+                                <p class="text-xs text-gray-500 mt-2">
+                                    Jika ada pertanyaan, silakan hubungi panitia PMB.
+                                </p>
+                            </div>
+                        @endif
                     </div>
                 @else
                     <div class="text-center py-4">
@@ -287,15 +322,24 @@
                     @foreach ($steps as $index => $step)
                         <div class="flex flex-col items-center group">
                             <span
-                                class="h-8 w-8 rounded-full flex items-center justify-center ring-4 ring-white {{ $step['completed'] ? 'bg-teal-600' : ($step['active'] ? 'bg-blue-600' : 'bg-gray-200') }}">
-                                @if ($step['completed'])
+                                class="h-8 w-8 rounded-full flex items-center justify-center ring-4 ring-white
+                                @if ($step['failed']) bg-red-600
+                                @elseif($step['completed']) bg-teal-600
+                                @elseif($step['active']) bg-blue-600
+                                @else bg-gray-200 @endif">
+                                @if ($step['failed'])
+                                    <i data-lucide="x" class="h-5 w-5 text-white"></i>
+                                @elseif ($step['completed'])
                                     <i data-lucide="check" class="h-5 w-5 text-white"></i>
                                 @else
                                     <span class="text-white text-xs">{{ $index + 1 }}</span>
                                 @endif
                             </span>
                             <span
-                                class="mt-2 text-xs font-medium {{ $step['active'] || $step['completed'] ? 'text-gray-900' : 'text-gray-500' }}">{{ $step['name'] }}</span>
+                                class="mt-2 text-xs font-medium
+                                @if ($step['failed']) text-red-600
+                                @elseif($step['active'] || $step['completed']) text-gray-900
+                                @else text-gray-500 @endif">{{ $step['name'] }}</span>
                         </div>
                     @endforeach
                 </div>

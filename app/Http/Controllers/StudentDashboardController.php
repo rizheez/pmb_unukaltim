@@ -14,7 +14,9 @@ class StudentDashboardController extends Controller
         $biodata = StudentBiodata::with('verifications')
             ->where('user_id', Auth::id())
             ->first();
-        $registration = Registration::where('user_id', Auth::id())->first();
+        $registration = Registration::with(['acceptedProgramStudi', 'programStudiChoice1', 'programStudiChoice2', 'registrationType'])
+            ->where('user_id', Auth::id())
+            ->first();
 
         // Get published announcements
         $announcements = Announcement::where('is_published', true)
@@ -27,20 +29,22 @@ class StudentDashboardController extends Controller
         // Get unread rejected verifications
         $rejectedVerifications = $biodata
             ? $biodata->verifications()
-            ->where('status', 'rejected')
-            ->where('is_read', false)
-            ->get()
+                ->where('status', 'rejected')
+                ->where('is_read', false)
+                ->get()
             : collect();
 
-        $isVerified = $registration && $registration->status === 'verified';
+        $isVerified = $registration && in_array($registration->status, ['verified', 'accepted']);
+        $isRejected = $registration && $registration->status === 'rejected';
+        $isAccepted = $registration && $registration->status === 'accepted';
 
         $steps = [
-            ['name' => 'Registrasi Akun', 'completed' => true, 'active' => false], // User sudah login, berarti sudah registrasi
-            ['name' => 'Lengkapi Biodata', 'completed' => (bool) $biodata, 'active' => ! $biodata],
-            ['name' => 'Pilih Program Studi', 'completed' => (bool) $registration, 'active' => $biodata && ! $registration],
-            ['name' => 'Verifikasi Data', 'completed' => $isVerified, 'active' => $registration && ! $isVerified],
-            ['name' => 'Daftar Ulang', 'completed' => false, 'active' => $isVerified],
-            ['name' => 'Selesai', 'completed' => false, 'active' => false],
+            ['name' => 'Registrasi Akun', 'completed' => true, 'active' => false, 'failed' => false],
+            ['name' => 'Lengkapi Biodata', 'completed' => (bool) $biodata, 'active' => ! $biodata, 'failed' => false],
+            ['name' => 'Pilih Program Studi', 'completed' => (bool) $registration, 'active' => $biodata && ! $registration, 'failed' => false],
+            ['name' => 'Verifikasi Data', 'completed' => $isVerified || $isAccepted, 'active' => $registration && ! $isVerified && ! $isRejected, 'failed' => $isRejected],
+            ['name' => 'Daftar Ulang', 'completed' => false, 'active' => $isAccepted, 'failed' => false],
+            ['name' => 'Selesai', 'completed' => false, 'active' => false, 'failed' => false],
         ];
 
         return view('student.dashboard', compact('biodata', 'registration', 'steps', 'announcements', 'activePeriod', 'rejectedVerifications'));

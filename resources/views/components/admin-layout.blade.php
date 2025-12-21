@@ -13,6 +13,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.5.2/flowbite.min.css" />
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -107,7 +108,7 @@
                     Jenis Pendaftaran
                 </a>
 
-                 <a href="{{ route('admin.registration-paths.index') }}"
+                <a href="{{ route('admin.registration-paths.index') }}"
                     class="flex items-center px-4 py-3 rounded-lg transition-colors
                     {{ request()->routeIs('admin.registration-paths.*') ? 'bg-teal-900 text-white' : 'text-teal-100 hover:bg-teal-700' }}">
                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -335,6 +336,9 @@
     </div>
 
     @stack('scripts')
+
+    <!-- Flowbite CDN (Admin Only) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.5.2/flowbite.min.js"></script>
 </body>
 
 </html>
