@@ -27,17 +27,21 @@ class StudentController extends Controller
         $start = $request->get('start', 0);
         $length = $request->get('length', 10);
         $search = $request->get('search')['value'] ?? '';
-        $orderColumn = $request->get('order')[0]['column'] ?? 0;
-        $orderDir = $request->get('order')[0]['dir'] ?? 'asc';
+        $orderColumn = $request->get('order')[0]['column'] ?? null;
+        $orderDir = $request->get('order')[0]['dir'] ?? 'desc';
         $statusFilter = $request->get('status_filter'); // Filter status
         $periodFilter = $request->get('period_filter'); // Filter period
-        $columns = ['name', 'email', 'phone', 'created_at'];
-        $orderBy = $columns[$orderColumn] ?? 'created_at';
+
+        // Column mapping for datatable ordering
+        $columns = ['name', 'email', 'phone', 'registered_at'];
+        $orderBy = isset($orderColumn) && isset($columns[$orderColumn]) ? $columns[$orderColumn] : 'registered_at';
 
         // Hanya tampilkan mahasiswa yang sudah mendaftar (punya registration)
-        $query = User::with(['studentBiodata', 'registration.registrationPeriod'])
+        $query = User::with(['studentBiodata', 'registration.registrationPeriod', 'registration.programStudiChoice1', 'registration.programStudiChoice2'])
             ->where('role', 'student')
-            ->whereHas('registration'); // Exclude yang belum daftar
+            ->whereHas('registration') // Exclude yang belum daftar
+            ->leftJoin('registrations', 'users.id', '=', 'registrations.user_id')
+            ->select('users.*', 'registrations.created_at as registered_at');
 
         // Filter by Status
         if ($statusFilter && $statusFilter !== 'all') {
@@ -56,9 +60,9 @@ class StudentController extends Controller
         // Search
         if ($search) {
             $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%")
-                    ->orWhere('phone', 'like', "%{$search}%")
+                $q->where('users.name', 'like', "%{$search}%")
+                    ->orWhere('users.email', 'like', "%{$search}%")
+                    ->orWhere('users.phone', 'like', "%{$search}%")
                     ->orWhereHas('registration', function ($regQuery) use ($search) {
                         $regQuery->where('referral_source', 'like', "%{$search}%")
                             ->orWhere('referral_detail', 'like', "%{$search}%");
@@ -70,8 +74,14 @@ class StudentController extends Controller
         $totalRecords = User::where('role', 'student')->whereHas('registration')->count();
         $filteredRecords = $query->count();
 
-        $students = $query->orderBy($orderBy, $orderDir)
-            ->skip($start)
+        // Order by - default is registration.created_at descending
+        if ($orderBy === 'registered_at') {
+            $query->orderBy('registrations.created_at', $orderDir);
+        } else {
+            $query->orderBy('users.'.$orderBy, $orderDir);
+        }
+
+        $students = $query->skip($start)
             ->take($length)
             ->get();
 
@@ -418,7 +428,7 @@ class StudentController extends Controller
                 $acceptedProdi->name
             ));
         } catch (\Exception $e) {
-            \Log::error('Failed to send acceptance email: ' . $e->getMessage());
+            \Log::error('Failed to send acceptance email: '.$e->getMessage());
         }
 
         return response()->json([
@@ -460,7 +470,7 @@ class StudentController extends Controller
                 $request->reason
             ));
         } catch (\Exception $e) {
-            \Log::error('Failed to send rejection email: ' . $e->getMessage());
+            \Log::error('Failed to send rejection email: '.$e->getMessage());
         }
 
         return response()->json([
