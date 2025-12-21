@@ -18,6 +18,9 @@ class DatabaseSeeder extends Seeder
             FakultasSeeder::class,
             ProgramStudiSeeder::class,
             LandingPageSettingSeeder::class,
+            RegistrationPathSeeder::class,
+            RegistrationTypeSeeder::class,
+            AdminUserSeeder::class,
         ]);
 
         User::factory(10)->create();

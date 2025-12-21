@@ -1,18 +1,71 @@
 <x-admin-layout>
     <div class="space-y-6">
-        <!-- Header -->
-        <div class="flex items-center justify-between">
-            <div>
-                <h1 class="text-2xl font-bold text-gray-900">Dashboard</h1>
-                <p class="text-sm text-gray-500 mt-1">Selamat datang di sistem PMB UNU Kaltim</p>
+        <!-- Header with Period Filter -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">Dashboard</h1>
+                    <p class="text-sm text-gray-500 mt-1">Selamat datang di sistem PMB UNU Kaltim</p>
+                </div>
+
+                <!-- Period Filter -->
+                <div class="flex items-center gap-4">
+                    @if ($selectedPeriod)
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm font-medium text-gray-700">Periode:</span>
+                            <div class="flex items-center gap-2 bg-teal-50 border border-teal-200 rounded-lg px-3 py-2">
+                                <span class="text-sm font-semibold text-teal-800">{{ $selectedPeriod->name }}</span>
+                                @if ($activePeriod && $selectedPeriod->id === $activePeriod->id)
+                                    <span class="px-2 py-0.5 text-xs font-medium bg-teal-500 text-white rounded-full">
+                                        Active
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+                    @endif
+
+                    @if ($allPeriods->count() > 1)
+                        <div class="relative">
+                            <select
+                                onchange="window.location.href='{{ route('admin.dashboard') }}?period_id=' + this.value"
+                                class="block w-full pl-3 pr-10 py-2 text-sm border-gray-300 focus:outline-none focus:ring-teal-500 focus:border-teal-500 rounded-lg">
+                                <option value="">Pilih Periode</option>
+                                @foreach ($allPeriods as $period)
+                                    <option value="{{ $period->id }}"
+                                        {{ $selectedPeriod && $selectedPeriod->id === $period->id ? 'selected' : '' }}>
+                                        {{ $period->name }}
+                                        @if ($activePeriod && $period->id === $activePeriod->id)
+                                            (Active)
+                                        @endif
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    @endif
+                </div>
             </div>
-            @if ($activePeriod)
-                <div class="bg-teal-50 border border-teal-200 rounded-lg px-4 py-2">
-                    <p class="text-sm font-medium text-teal-800">{{ $activePeriod->name }}</p>
-                    <p class="text-xs text-teal-600">
-                        {{ $activePeriod->start_date->format('d M Y') }} -
-                        {{ $activePeriod->end_date->format('d M Y') }}
-                    </p>
+
+            @if ($selectedPeriod)
+                <div class="mt-4 pt-4 border-t border-gray-200">
+                    <div class="flex items-center gap-6 text-sm text-gray-600">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                </path>
+                            </svg>
+                            <span>{{ $selectedPeriod->start_date->format('d M Y') }} -
+                                {{ $selectedPeriod->end_date->format('d M Y') }}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span>Gelombang {{ $selectedPeriod->wave_number }} -
+                                {{ $selectedPeriod->academic_year }}</span>
+                        </div>
+                    </div>
                 </div>
             @endif
         </div>

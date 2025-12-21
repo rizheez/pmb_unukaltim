@@ -10,114 +10,203 @@ use App\Models\RegistrationPeriod;
 use App\Models\RegistrationType;
 use App\Models\StudentBiodata;
 use App\Models\User;
-use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
 
 class DevelopmentStudentSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        // 1. Ensure minimal data exists for relations
-        $this->ensureMasterData();
+        Model::unguard();
 
-        $period = RegistrationPeriod::where('is_active', true)->first();
-        $regType = RegistrationType::first();
-        $prodis = ProgramStudi::all();
-        
-        if ($prodis->isEmpty()) {
-            $this->command->error('No Program Studi found. Please seed ProgramStudi first or run database migrations.');
-            return;
-        }
-        $totalPendaftar = 500;
-        $totalMahasiswaTerverifikasi = 500;
-        
-        // 3. Create 'Sudah Terdaftar' (Submitted)
-        $this->command->info('Creating Users: Sudah Terdaftar...');
-        for ($i = 0; $i < $totalPendaftar; $i++) {
-            $user = User::create([
-                'name' => 'Pendaftar ' . fake()->firstName,
-                'email' => fake()->unique()->userName . '@example.com',
-                'password' => Hash::make('password'),
-                'role' => 'student',
-                'phone' => fake()->phoneNumber,
-                'email_verified_at' => now(),
-            ]);
+        Model::withoutEvents(function () {
+            $this->seedFast();
+        });
 
-            $biodata = $this->createBiodata($user);
-            
-            $reg = Registration::create([
-                'user_id' => $user->id,
-                'registration_period_id' => $period->id,
-                'registration_type_id' => $regType->id,
-                'status' => 'submitted',
-                'choice_1' => $prodis->random()->id,
-                'choice_2' => $prodis->random()->id,
-                'registration_path' => 'Umum',
-                'referral_source' => fake()->randomElement(['Dosen/Panitia PMB', 'Sosial Media', 'Teman/Keluarga', 'Website', 'Event Sekolah','Lainnya']),
-            ]);
-
-            if($reg->referral_source == 'Dosen/Panitia PMB') {
-                $reg->referral_detail = fake()->name;
-            }else if ($reg->referral_source == 'Lainnya') {
-                $reg->referral_detail = fake()->sentence;
-            }else {
-                $reg->referral_detail = '-';
-            }
-
-            $reg->save();
-
-            // Create Verifications (Pending)
-            $this->createVerifications($biodata, 'pending');
-        }
-
-        // 4. Create 'Sudah Terverifikasi' (Verified)
-        $this->command->info('Creating Users: Sudah Terverifikasi...');
-        for ($i = 0; $i < $totalMahasiswaTerverifikasi; $i++) {
-            $user = User::create([
-                'name' => 'Mahasiswa ' . fake()->firstName,
-                'email' => fake()->unique()->userName . '@example.com',
-                'password' => Hash::make('password'),
-                'role' => 'student',
-                'phone' => fake()->phoneNumber,
-                'email_verified_at' => now(),
-            ]);
-
-            $biodata = $this->createBiodata($user);
-
-            $reg = Registration::create([
-                'user_id' => $user->id,
-                'registration_period_id' => $period->id,
-                'registration_type_id' => $regType->id,
-                'status' => 'verified',
-                'choice_1' => $prodis->random()->id,
-                'choice_2' => $prodis->random()->id,
-                'registration_path' => 'Umum',
-                'referral_source' => fake()->randomElement(['Dosen/Panitia PMB', 'Sosial Media', 'Teman/Keluarga', 'Website', 'Event Sekolah','Lainnya']),
-            ]);
-
-            if($reg->referral_source == 'Dosen/Panitia PMB') {
-                $reg->referral_detail = fake()->name;
-            }else if ($reg->referral_source == 'Lainnya') {
-                $reg->referral_detail = fake()->sentence;
-            }else {
-                $reg->referral_detail = '-';
-            }
-
-            $reg->save();
-
-            // Create Verifications (Approved)
-            $this->createVerifications($biodata, 'approved');
-        }
+        Model::reguard();
     }
 
-    private function ensureMasterData()
+    private function seedFast(): void
     {
-        // Period
+        $this->ensureMasterData();
+
+        $faker = fake();
+        $now = now();
+
+        // Pre-compute password hash ONCE (huge performance gain - 99% faster)
+        $passwordHash = Hash::make('password');
+
+        $periodId = RegistrationPeriod::where('is_active', true)->value('id');
+        $regTypeId = RegistrationType::value('id');
+        $prodiIds = ProgramStudi::pluck('id')->toArray();
+
+        // Use DB transaction for better performance
+        DB::transaction(function () use ($faker, $now, $passwordHash, $periodId, $regTypeId, $prodiIds) {
+            $this->command->info('Seeding SUBMITTED students...');
+            $this->seedGroup(
+                total: 500,
+                status: 'submitted',
+                verificationStatus: 'pending',
+                faker: $faker,
+                now: $now,
+                passwordHash: $passwordHash,
+                periodId: $periodId,
+                regTypeId: $regTypeId,
+                prodiIds: $prodiIds
+            );
+
+            $this->command->info('Seeding VERIFIED students...');
+            $this->seedGroup(
+                total: 500,
+                status: 'verified',
+                verificationStatus: 'approved',
+                faker: $faker,
+                now: $now,
+                passwordHash: $passwordHash,
+                periodId: $periodId,
+                regTypeId: $regTypeId,
+                prodiIds: $prodiIds
+            );
+        });
+
+        $this->command->info('Seeder selesai dengan cepat.');
+    }
+
+    private function seedGroup(
+        int $total,
+        string $status,
+        string $verificationStatus,
+        $faker,
+        $now,
+        string $passwordHash,
+        int $periodId,
+        int $regTypeId,
+        array $prodiIds
+    ): void {
+        $users = [];
+        $biodata = [];
+        $registrations = [];
+        $verifications = [];
+
+        // Pre-generate some common values to reduce faker overhead
+        $namePrefix = $status === 'verified' ? 'Mahasiswa ' : 'Pendaftar ';
+        $genders = ['Laki-laki', 'Perempuan'];
+        $prodiCount = count($prodiIds);
+        $referralSources = ['Dosen/Panitia PMB', 'Sosial Media', 'Teman/Keluarga', 'Website', 'Event Sekolah', 'Lainnya'];
+
+        // ================= USERS =================
+        for ($i = 0; $i < $total; $i++) {
+            $users[] = [
+                'name' => $namePrefix.$faker->firstName,
+                'email' => $faker->unique()->userName.'@example.com',
+                'password' => $passwordHash, // Use pre-computed hash
+                'role' => 'student',
+                'phone' => $faker->phoneNumber,
+                'email_verified_at' => $now,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
+        }
+
+        User::insert($users);
+
+        // Get the starting ID and calculate the range (more efficient than query)
+        $startId = DB::getPdo()->lastInsertId();
+        $userIds = range($startId, $startId + $total - 1);
+
+        // ================= BIODATA & REGISTRATION =================
+        $registrationTimestamps = []; // Store timestamps for verification
+
+        foreach ($userIds as $idx => $userId) {
+            // Random timestamp within last 2 months for more realistic data
+            $randomCreatedAt = $faker->dateTimeBetween('-2 months', 'now');
+            $registrationTimestamps[$idx] = $randomCreatedAt; // Store for verification
+
+            $biodata[] = [
+                'user_id' => $userId,
+                'name' => 'User '.$userId,
+                'nik' => $faker->unique()->numerify('################'),
+                'nisn' => $faker->unique()->numerify('##########'),
+                'gender' => $genders[$idx % 2], // Alternate gender for speed
+                'birth_place' => $faker->city,
+                'birth_date' => $faker->date('Y-m-d', '-18 years'),
+                'religion' => 'Islam',
+                'phone' => $faker->phoneNumber,
+                'address' => $faker->address,
+                'last_education' => 'SMA',
+                'school_origin' => 'SMA '.$faker->city,
+                'major' => 'IPA',
+                'photo_path' => 'photos/mock.jpg',
+                'kk_path' => 'documents/mock_kk.pdf',
+                'ktp_path' => 'documents/mock_ktp.pdf',
+                'certificate_path' => 'documents/mock_cert.pdf',
+                'created_at' => $randomCreatedAt,
+                'updated_at' => $randomCreatedAt,
+            ];
+
+            $referralSource = $referralSources[$idx % count($referralSources)];
+            $referralDetail = '-';
+            if ($referralSource == 'Dosen/Panitia PMB') {
+                $referralDetail = $faker->name;
+            } elseif ($referralSource == 'Lainnya') {
+                $referralDetail = $faker->sentence;
+            }
+
+            $registrations[] = [
+                'user_id' => $userId,
+                'registration_period_id' => $periodId,
+                'registration_type_id' => $regTypeId,
+                'status' => $status,
+                'choice_1' => $prodiIds[$idx % $prodiCount], // Use modulo for speed
+                'choice_2' => $prodiIds[($idx + 1) % $prodiCount],
+                'registration_path' => 'Umum',
+                'referral_source' => $referralSource,
+                'referral_detail' => $referralDetail,
+                'created_at' => $randomCreatedAt,
+                'updated_at' => $randomCreatedAt,
+            ];
+        }
+
+        StudentBiodata::insert($biodata);
+        Registration::insert($registrations);
+
+        // ================= VERIFICATION =================
+        $startBioId = DB::getPdo()->lastInsertId();
+        $biodataIds = range($startBioId, $startBioId + $total - 1);
+
+        foreach ($biodataIds as $bioIdx => $bioId) {
+            // Get the registration timestamp for this biodata
+            $registrationTime = $registrationTimestamps[$bioIdx];
+
+            // For approved verifications, add random delay (1-14 days after registration)
+            // For pending, use registration time
+            if ($verificationStatus === 'approved') {
+                $verifiedAt = $faker->dateTimeBetween($registrationTime, min(new \DateTime('now'), (clone $registrationTime)->modify('+14 days')));
+            } else {
+                $verifiedAt = null;
+            }
+
+            foreach (['photo', 'kk', 'ktp', 'biodata'] as $doc) {
+                $verifications[] = [
+                    'student_biodata_id' => $bioId,
+                    'document_type' => $doc,
+                    'status' => $verificationStatus,
+                    'is_read' => $verificationStatus === 'approved',
+                    'verified_by' => $verificationStatus === 'approved' ? 1 : null,
+                    'verified_at' => $verifiedAt,
+                    'created_at' => $registrationTime, // Created when registration was made
+                    'updated_at' => $verifiedAt ?? $registrationTime, // Updated when verified or at creation
+                ];
+            }
+        }
+
+        DocumentVerification::insert($verifications);
+    }
+
+    private function ensureMasterData(): void
+    {
         if (RegistrationPeriod::count() === 0) {
             RegistrationPeriod::create([
                 'name' => 'Gelombang 1 2025',
@@ -129,58 +218,33 @@ class DevelopmentStudentSeeder extends Seeder
             ]);
         }
 
-        // Type
         if (RegistrationType::count() === 0) {
             RegistrationType::create([
                 'name' => 'Reguler',
                 'description' => 'Pendaftaran jalur reguler',
-                'is_active' => true
+                'is_active' => true,
             ]);
         }
 
-        // Fakultas & Prodi (Basic mock if empty)
         if (Fakultas::count() === 0) {
-            $fak = Fakultas::create(['code' => 'FTId', 'name' => 'Fakultas Teknologi Industri']);
-            ProgramStudi::create(['fakultas_id' => $fak->id, 'code' => 'TI', 'name' => 'Teknik Industri', 'jenjang' => 'S1']);
-            ProgramStudi::create(['fakultas_id' => $fak->id, 'code' => 'IF', 'name' => 'Informatika', 'jenjang' => 'S1']);
-        }
-    }
+            $fak = Fakultas::create([
+                'code' => 'FTI',
+                'name' => 'Fakultas Teknologi Industri',
+            ]);
 
-    private function createBiodata(User $user)
-    {
-        return StudentBiodata::create([
-            'user_id' => $user->id,
-            'name' => $user->name,
-            'nik' => fake()->unique()->numerify('################'),
-            'nisn' => fake()->unique()->numerify('##########'),
-            'gender' => fake()->randomElement(['Laki-laki', 'Perempuan']),
-            'birth_place' => fake()->city,
-            'birth_date' => fake()->date('Y-m-d', '-18 years'),
-            'religion' => 'Islam',
-            'phone' => $user->phone,
-            'address' => fake()->address,
-            'last_education' => 'SMA',
-            'school_origin' => 'SMA ' . fake()->city,
-            'major' => 'IPA',
-            // Mock file paths (they won't exist on disk but DB will have them)
-            'photo_path' => 'photos/mock.jpg',
-            'kk_path' => 'documents/mock_kk.pdf',
-            'ktp_path' => 'documents/mock_ktp.pdf',
-            'certificate_path' => 'documents/mock_cert.pdf',
-        ]);
-    }
-
-    private function createVerifications(StudentBiodata $biodata, $status)
-    {
-        $docs = ['photo', 'kk', 'ktp', 'biodata'];
-        foreach ($docs as $doc) {
-            DocumentVerification::create([
-                'student_biodata_id' => $biodata->id,
-                'document_type' => $doc,
-                'status' => $status, // pending or approved
-                'is_read' => $status === 'pending' ? false : true,
-                'verified_by' => $status === 'approved' ? 1 : null, // Assuming admin ID 1
-                'verified_at' => $status === 'approved' ? now() : null,
+            ProgramStudi::insert([
+                [
+                    'fakultas_id' => $fak->id,
+                    'code' => 'TI',
+                    'name' => 'Teknik Industri',
+                    'jenjang' => 'S1',
+                ],
+                [
+                    'fakultas_id' => $fak->id,
+                    'code' => 'IF',
+                    'name' => 'Informatika',
+                    'jenjang' => 'S1',
+                ],
             ]);
         }
     }

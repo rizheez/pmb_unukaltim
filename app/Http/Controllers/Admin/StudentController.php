@@ -80,9 +80,9 @@ class StudentController extends Controller
                 $detail = $student->registration->referral_detail;
 
                 if ($detail) {
-                    $referralInfo = '<div class="text-sm"><div class="font-medium text-gray-900">' . e($source) . '</div><div class="text-gray-500 text-xs mt-0.5">' . e($detail) . '</div></div>';
+                    $referralInfo = '<div class="text-sm"><div class="font-medium text-gray-900">'.e($source).'</div><div class="text-gray-500 text-xs mt-0.5">'.e($detail).'</div></div>';
                 } else {
-                    $referralInfo = '<div class="text-sm text-gray-900">' . e($source) . '</div>';
+                    $referralInfo = '<div class="text-sm text-gray-900">'.e($source).'</div>';
                 }
             }
 
@@ -91,16 +91,16 @@ class StudentController extends Controller
                 'email' => $student->email,
                 'phone' => $student->phone ?? '-',
                 'status' => $student->registration
-                    ? '<span class="px-2 py-1 text-xs rounded-full ' . $student->registration->status_badge_class . '">' . $student->registration->status_label . '</span>'
+                    ? '<span class="px-2 py-1 text-xs rounded-full '.$student->registration->status_badge_class.'">'.$student->registration->status_label.'</span>'
                     : '<span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800">Belum Daftar</span>',
                 'period_name' => $student->registration && $student->registration->registrationPeriod
                     ? $student->registration->registrationPeriod->name
                     : '-',
                 'referral_source' => $referralInfo,
-                'registered_at' => optional($student->created_at)
+                'registered_at' => optional($student->registration->created_at)
                     ->locale('id')
                     ->translatedFormat('d F Y'),
-                'actions' => '<a href="' . route('admin.students.show', $student->id) . '" class="text-indigo-600 hover:text-indigo-900">Detail</a>',
+                'actions' => '<a href="'.route('admin.students.show', $student->id).'" class="text-indigo-600 hover:text-indigo-900">Detail</a>',
             ];
         });
 
@@ -128,7 +128,7 @@ class StudentController extends Controller
         $periodFilter = $request->get('period_filter');
         $statusFilter = $request->get('status_filter');
 
-        $filename = 'Data_Calon_Mahasiswa_' . date('Y-m-d_His') . '.xlsx';
+        $filename = 'Data_Calon_Mahasiswa_'.date('Y-m-d_His').'.xlsx';
 
         return Excel::download(
             new StudentsExport($periodFilter, $statusFilter),
@@ -174,13 +174,13 @@ class StudentController extends Controller
         // Validate all input
         $request->validate([
             // User data
-            'email' => 'required|email|unique:users,email,' . $student->id,
+            'email' => 'required|email|unique:users,email,'.$student->id,
             'phone' => 'required|string',
 
             // Biodata
             'name' => 'required|string|max:255',
-            'nik' => 'required|numeric|digits:16|unique:student_biodatas,nik,' . $student->studentBiodata->id,
-            'nisn' => 'nullable|numeric|unique:student_biodatas,nisn,' . $student->studentBiodata->id,
+            'nik' => 'required|numeric|digits:16|unique:student_biodatas,nik,'.$student->studentBiodata->id,
+            'nisn' => 'nullable|numeric|unique:student_biodatas,nisn,'.$student->studentBiodata->id,
             'gender' => 'required|in:Laki-laki,Perempuan',
             'birth_place' => 'required|string|max:255',
             'birth_date' => 'required|date|before:-15 years',
@@ -339,7 +339,7 @@ class StudentController extends Controller
 
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+                ->with('error', 'Terjadi kesalahan: '.$e->getMessage());
         }
     }
 }
