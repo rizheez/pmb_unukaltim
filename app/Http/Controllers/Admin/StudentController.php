@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Exports\StudentsExport;
 use App\Http\Controllers\Controller;
+use App\Mail\StudentAcceptedMail;
+use App\Mail\StudentRejectedMail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 
 class StudentController extends Controller
@@ -407,6 +410,17 @@ class StudentController extends Controller
 
         $acceptedProdi = \App\Models\ProgramStudi::find($request->program_studi_id);
 
+        // Send acceptance email
+        try {
+            Mail::to($student->email)->send(new StudentAcceptedMail(
+                $student,
+                $student->registration,
+                $acceptedProdi->name
+            ));
+        } catch (\Exception $e) {
+            \Log::error('Failed to send acceptance email: ' . $e->getMessage());
+        }
+
         return response()->json([
             'success' => true,
             'message' => 'Mahasiswa berhasil diterima di '.$acceptedProdi->name,
@@ -437,6 +451,17 @@ class StudentController extends Controller
             'rejected_by' => auth()->id(),
             'rejection_reason' => $request->reason,
         ]);
+
+        // Send rejection email
+        try {
+            Mail::to($student->email)->send(new StudentRejectedMail(
+                $student,
+                $student->registration,
+                $request->reason
+            ));
+        } catch (\Exception $e) {
+            \Log::error('Failed to send rejection email: ' . $e->getMessage());
+        }
 
         return response()->json([
             'success' => true,

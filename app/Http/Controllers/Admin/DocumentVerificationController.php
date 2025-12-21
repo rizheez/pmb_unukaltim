@@ -3,16 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\DocumentRejectedMail;
 use App\Models\StudentBiodata;
 use App\Models\DocumentVerification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class DocumentVerificationController extends Controller
 {
     public function verify(Request $request, $biodataId)
     {
         $biodata = StudentBiodata::findOrFail($biodataId);
-        
+
         $request->validate([
             'document_type' => 'required|in:kk,ktp,certificate,photo,biodata',
             'status' => 'required|in:approved,rejected',
@@ -34,8 +36,21 @@ class DocumentVerificationController extends Controller
             ]
         );
 
-        $message = $request->status === 'approved' 
-            ? 'Dokumen berhasil disetujui.' 
+        // Send email if document is rejected
+        if ($request->status === 'rejected' && $biodata->user) {
+            try {
+                Mail::to($biodata->user->email)->send(new DocumentRejectedMail(
+                    $biodata->user,
+                    $request->document_type,
+                    $request->notes
+                ));
+            } catch (\Exception $e) {
+                \Log::error('Failed to send document rejection email: ' . $e->getMessage());
+            }
+        }
+
+        $message = $request->status === 'approved'
+            ? 'Dokumen berhasil disetujui.'
             : 'Dokumen ditolak. Notifikasi telah dikirim ke student.';
 
         return back()->with('success', $message);
@@ -44,14 +59,14 @@ class DocumentVerificationController extends Controller
     public function bulkVerify(Request $request, $biodataId)
     {
         $biodata = StudentBiodata::findOrFail($biodataId);
-        
+
         // Log incoming request for debugging
         \Log::info('Verification Request', [
             'biodata_id' => $biodataId,
             'raw_verifications' => $request->verifications,
             'all_input' => $request->all()
         ]);
-        
+
         // Filter out verifications without status
         $verifications = collect($request->verifications ?? [])
             ->filter(function ($verification) {
@@ -65,7 +80,7 @@ class DocumentVerificationController extends Controller
         }
 
         $request->merge(['verifications' => $verifications]);
-        
+
         $request->validate([
             'verifications' => 'required|array',
             'verifications.*.document_type' => 'required|in:kk,ktp,certificate,photo,biodata',
@@ -74,6 +89,7 @@ class DocumentVerificationController extends Controller
         ]);
 
         $count = 0;
+        $rejectedDocs = [];
         foreach ($verifications as $verificationData) {
             $created = DocumentVerification::updateOrCreate(
                 [
@@ -88,14 +104,37 @@ class DocumentVerificationController extends Controller
                     'is_read' => false,
                 ]
             );
-            
+
+            // Collect rejected documents to send emails
+            if ($verificationData['status'] === 'rejected') {
+                $rejectedDocs[] = [
+                    'type' => $verificationData['document_type'],
+                    'notes' => $verificationData['notes'] ?? null,
+                ];
+            }
+
             \Log::info('Verification Created/Updated', [
                 'verification_id' => $created->id,
                 'document_type' => $verificationData['document_type'],
                 'status' => $verificationData['status']
             ]);
-            
+
             $count++;
+        }
+
+        // Send emails for rejected documents
+        if (!empty($rejectedDocs) && $biodata->user) {
+            foreach ($rejectedDocs as $doc) {
+                try {
+                    Mail::to($biodata->user->email)->send(new DocumentRejectedMail(
+                        $biodata->user,
+                        $doc['type'],
+                        $doc['notes']
+                    ));
+                } catch (\Exception $e) {
+                    \Log::error('Failed to send document rejection email: ' . $e->getMessage());
+                }
+            }
         }
 
         // Check and update registration status if all documents are verified
@@ -105,7 +144,7 @@ class DocumentVerificationController extends Controller
         }
 
         \Log::info('Verification Complete', ['count' => $count]);
-        
+
         return back()->with('success', "Berhasil memverifikasi {$count} dokumen.");
     }
 }
