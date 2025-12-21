@@ -18,6 +18,13 @@ class Registration extends Model
         'choice_3',
         'status',
         'registration_period_id',
+        'accepted_at',
+        'accepted_by',
+        'acceptance_notes',
+        'accepted_program_studi_id',
+        'rejected_at',
+        'rejected_by',
+        'rejection_reason',
     ];
 
     public function user()
@@ -53,6 +60,14 @@ class Registration extends Model
     public function programStudiChoice3()
     {
         return $this->belongsTo(ProgramStudi::class, 'choice_3');
+    }
+
+    /**
+     * Prodi yang diterima (final acceptance)
+     */
+    public function acceptedProgramStudi()
+    {
+        return $this->belongsTo(ProgramStudi::class, 'accepted_program_studi_id');
     }
 
     /**
@@ -136,6 +151,9 @@ class Registration extends Model
             'verified' => 'Terverifikasi',
             'accepted' => 'Diterima',
             'rejected' => 'Ditolak',
+            're_registration_pending' => 'Menunggu Daftar Ulang',
+            're_registration_verified' => 'Daftar Ulang Terverifikasi',
+            'enrolled' => 'Terdaftar Sebagai Mahasiswa',
         ];
 
         return $labels[$this->status] ?? ucfirst($this->status);
@@ -152,8 +170,42 @@ class Registration extends Model
             'verified' => 'bg-green-100 text-green-800',
             'accepted' => 'bg-teal-100 text-teal-800',
             'rejected' => 'bg-red-100 text-red-800',
+            're_registration_pending' => 'bg-yellow-100 text-yellow-800',
+            're_registration_verified' => 'bg-indigo-100 text-indigo-800',
+            'enrolled' => 'bg-purple-100 text-purple-800',
         ];
 
         return $classes[$this->status] ?? 'bg-gray-100 text-gray-800';
+    }
+
+    /**
+     * Check if status can transition to new status
+     */
+    public function canTransitionTo($newStatus): bool
+    {
+        $allowedTransitions = [
+            'verified' => ['accepted', 'rejected'],
+            'accepted' => ['re_registration_pending'],
+            're_registration_pending' => ['re_registration_verified'],
+            're_registration_verified' => ['enrolled'],
+        ];
+
+        return in_array($newStatus, $allowedTransitions[$this->status] ?? []);
+    }
+
+    /**
+     * Relationship to user who accepted
+     */
+    public function acceptedBy()
+    {
+        return $this->belongsTo(User::class, 'accepted_by');
+    }
+
+    /**
+     * Relationship to user who rejected
+     */
+    public function rejectedBy()
+    {
+        return $this->belongsTo(User::class, 'rejected_by');
     }
 }

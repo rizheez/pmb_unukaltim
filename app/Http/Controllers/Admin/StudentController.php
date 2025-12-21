@@ -100,7 +100,7 @@ class StudentController extends Controller
                 'registered_at' => optional($student->registration->created_at)
                     ->locale('id')
                     ->translatedFormat('d F Y'),
-                'actions' => '<a href="'.route('admin.students.show', $student->id).'" class="text-indigo-600 hover:text-indigo-900">Detail</a>',
+                'actions' => $this->buildActionButtons($student),
             ];
         });
 
@@ -341,5 +341,106 @@ class StudentController extends Controller
                 ->withInput()
                 ->with('error', 'Terjadi kesalahan: '.$e->getMessage());
         }
+    }
+
+    /**
+     * Build action buttons based on student status
+     */
+    private function buildActionButtons($student)
+    {
+        $buttons = [];
+        $registration = $student->registration;
+
+        // Detail button (always show)
+        $buttons[] = '<a href="'.route('admin.students.show', $student->id).'" class="text-indigo-600 hover:text-indigo-900 font-medium">Detail</a>';
+
+        // Accept/Reject buttons (only for verified status)
+        if ($registration && $registration->status === 'verified') {
+            // Prepare prodi choices data for modal
+            $choice1Name = $registration->programStudiChoice1->name ?? '';
+            $choice1Id = $registration->choice_1 ?? 0;
+            $choice2Name = $registration->programStudiChoice2->name ?? '';
+            $choice2Id = $registration->choice_2 ?? 0;
+
+            $buttons[] = '<button onclick="openAcceptModal('.$student->id.', \''.addslashes($student->name).'\', '.$choice1Id.', \''.addslashes($choice1Name).'\', '.$choice2Id.', \''.addslashes($choice2Name).'\')" class="text-green-600 hover:text-green-900 font-medium">Terima</button>';
+            $buttons[] = '<button onclick="openRejectModal('.$student->id.', \''.addslashes($student->name).'\')" class="text-red-600 hover:text-red-900 font-medium">Tolak</button>';
+        }
+
+        return '<div class="flex items-center gap-3 whitespace-nowrap">'.implode('', $buttons).'</div>';
+    }
+
+    /**
+     * Accept a student
+     */
+    public function accept(Request $request, $id)
+    {
+        $request->validate([
+            'program_studi_id' => 'required|exists:program_studi,id',
+        ], [
+            'program_studi_id.required' => 'Pilih program studi yang diterima',
+            'program_studi_id.exists' => 'Program studi tidak valid',
+        ]);
+
+        $student = User::with('registration.programStudiChoice1', 'registration.programStudiChoice2')->findOrFail($id);
+
+        if (! $student->registration || $student->registration->status !== 'verified') {
+            return response()->json(['error' => 'Status tidak valid untuk diterima'], 400);
+        }
+
+        // Validate that selected prodi is one of the student's choices
+        $validProdiIds = array_filter([
+            $student->registration->choice_1,
+            $student->registration->choice_2,
+        ]);
+
+        if (! in_array($request->program_studi_id, $validProdiIds)) {
+            return response()->json(['error' => 'Program studi harus salah satu dari pilihan mahasiswa'], 400);
+        }
+
+        $student->registration->update([
+            'status' => 'accepted',
+            'accepted_at' => now(),
+            'accepted_by' => auth()->id(),
+            'acceptance_notes' => $request->notes,
+            'accepted_program_studi_id' => $request->program_studi_id,
+        ]);
+
+        $acceptedProdi = \App\Models\ProgramStudi::find($request->program_studi_id);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Mahasiswa berhasil diterima di '.$acceptedProdi->name,
+        ]);
+    }
+
+    /**
+     * Reject a student
+     */
+    public function reject(Request $request, $id)
+    {
+        $request->validate([
+            'reason' => 'required|string|max:500',
+        ], [
+            'reason.required' => 'Alasan penolakan wajib diisi',
+            'reason.max' => 'Alasan penolakan maksimal 500 karakter',
+        ]);
+
+        $student = User::with('registration')->findOrFail($id);
+
+        if (! $student->registration || $student->registration->status !== 'verified') {
+            return response()->json(['error' => 'Status tidak valid untuk ditolak'], 400);
+        }
+
+        $student->registration->update([
+            'status' => 'rejected',
+            'rejected_at' => now(),
+            'rejected_by' => auth()->id(),
+            'rejection_reason' => $request->reason,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Mahasiswa berhasil ditolak',
+        ]);
     }
 }

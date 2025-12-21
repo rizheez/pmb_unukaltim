@@ -56,6 +56,8 @@ Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->prefix
     Route::get('/students/export', [\App\Http\Controllers\Admin\StudentController::class, 'export'])->name('students.export');
     Route::get('/students/{id}', [\App\Http\Controllers\Admin\StudentController::class, 'show'])->name('students.show');
     Route::post('/students/{biodata}/verify', [\App\Http\Controllers\Admin\DocumentVerificationController::class, 'bulkVerify'])->name('students.verify');
+    Route::post('/students/{id}/accept', [\App\Http\Controllers\Admin\StudentController::class, 'accept'])->name('students.accept');
+    Route::post('/students/{id}/reject', [\App\Http\Controllers\Admin\StudentController::class, 'reject'])->name('students.reject');
 
     // Manual Registration
     Route::get('/manual-registration/create', [\App\Http\Controllers\Admin\ManualRegistrationController::class, 'create'])->name('manual-registration.create');
