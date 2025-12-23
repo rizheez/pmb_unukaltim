@@ -202,6 +202,7 @@ class ManualRegistrationController extends Controller
             // Create registration
             Registration::create([
                 'user_id' => $user->id,
+                'registration_number' => Registration::generateRegistrationNumber($activePeriod),
                 'registration_type_id' => $request->registration_type_id,
                 'registration_path_id' => $request->registration_path_id,
                 'referral_source' => $request->referral_source,
@@ -211,6 +212,7 @@ class ManualRegistrationController extends Controller
                 'status' => 'submitted',
                 'registration_period_id' => $activePeriod->id,
             ]);
+
 
             // Send email notification with credentials
             $user->notify(new StudentAccountCreated($password));

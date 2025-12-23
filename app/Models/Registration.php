@@ -8,6 +8,7 @@ class Registration extends Model
 {
     protected $fillable = [
         'user_id',
+        'registration_number',
         'registration_type_id',
         'registration_path',
         'registration_path_id',
@@ -26,6 +27,39 @@ class Registration extends Model
         'rejected_by',
         'rejection_reason',
     ];
+
+    /**
+     * Generate unique registration number for a given period
+     * Format: [ACADEMIC_YEAR][WAVE][SEQUENCE] e.g. 25260100001
+     */
+    public static function generateRegistrationNumber(RegistrationPeriod $period): string
+    {
+        // Parse academic year (2025/2026 -> 2526)
+        $years = explode('/', $period->academic_year);
+        $academicYear = substr($years[0], -2) . substr($years[1] ?? $years[0], -2);
+
+        // Format wave number (1 -> 01)
+        $wave = str_pad($period->wave_number, 2, '0', STR_PAD_LEFT);
+
+        // Get next sequence number for this period
+        $lastRegistration = self::where('registration_period_id', $period->id)
+            ->whereNotNull('registration_number')
+            ->orderByRaw('CAST(SUBSTRING(registration_number, -5) AS UNSIGNED) DESC')
+            ->first();
+
+        if ($lastRegistration) {
+            $lastSequence = (int) substr($lastRegistration->registration_number, -5);
+            $nextSequence = $lastSequence + 1;
+        } else {
+            $nextSequence = 1;
+        }
+
+        // Format sequence (1 -> 00001)
+        $sequence = str_pad($nextSequence, 5, '0', STR_PAD_LEFT);
+
+        return $academicYear . $wave . $sequence;
+    }
+
 
     public function user()
     {

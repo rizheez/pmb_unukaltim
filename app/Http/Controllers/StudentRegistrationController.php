@@ -15,14 +15,14 @@ class StudentRegistrationController extends Controller
     {
         $biodata = \App\Models\StudentBiodata::where('user_id', Auth::id())->first();
 
-        if (!$biodata) {
+        if (! $biodata) {
             return redirect()->route('student.biodata.index')->with('error', 'Silakan lengkapi biodata terlebih dahulu sebelum mendaftar.');
         }
 
         // Check if there's an active registration period
         $activePeriod = RegistrationPeriod::active()->first();
 
-        if (!$activePeriod) {
+        if (! $activePeriod) {
             return redirect()->route('student.dashboard')
                 ->with('error', 'Tidak ada periode pendaftaran yang aktif saat ini.');
         }
@@ -54,7 +54,7 @@ class StudentRegistrationController extends Controller
         // Check if there's an active period
         $activePeriod = RegistrationPeriod::active()->first();
 
-        if (!$activePeriod) {
+        if (! $activePeriod) {
             return redirect()->back()->with('error', 'Tidak ada periode pendaftaran yang aktif saat ini.');
         }
 
@@ -85,6 +85,7 @@ class StudentRegistrationController extends Controller
         Registration::updateOrCreate(
             ['user_id' => Auth::id()],
             [
+                'registration_number' => Registration::generateRegistrationNumber($activePeriod),
                 'registration_type_id' => $request->registration_type_id,
                 'registration_path_id' => $request->registration_path_id,
                 'referral_source' => $request->referral_source,

@@ -64,7 +64,8 @@ class StudentController extends Controller
                     ->orWhere('users.email', 'like', "%{$search}%")
                     ->orWhere('users.phone', 'like', "%{$search}%")
                     ->orWhereHas('registration', function ($regQuery) use ($search) {
-                        $regQuery->where('referral_source', 'like', "%{$search}%")
+                        $regQuery->where('registration_number', 'like', "%{$search}%")
+                            ->orWhere('referral_source', 'like', "%{$search}%")
                             ->orWhere('referral_detail', 'like', "%{$search}%");
                     });
             });
@@ -100,6 +101,7 @@ class StudentController extends Controller
             }
 
             return [
+                'registration_number' => $student->registration?->registration_number ?? '-',
                 'name' => $student->name,
                 'email' => $student->email,
                 'phone' => $student->phone ?? '-',

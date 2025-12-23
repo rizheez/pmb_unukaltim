@@ -45,8 +45,9 @@
                 </div>
             </div>
 
-            <x-datatable id="students-table" ajax="{{ route('admin.students.datatable') }}" :order="[6, 'desc']"
+            <x-datatable id="students-table" ajax="{{ route('admin.students.datatable') }}" :order="[7, 'desc']"
                 :columns="[
+                    ['data' => 'registration_number', 'name' => 'registration_number'],
                     ['data' => 'name', 'name' => 'name'],
                     ['data' => 'email', 'name' => 'email'],
                     ['data' => 'phone', 'name' => 'phone'],
@@ -58,6 +59,9 @@
                 ]">
                 <thead class="bg-gray-50">
                     <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            No. Pendaftaran
+                        </th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Nama
                         </th>

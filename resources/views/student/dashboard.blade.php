@@ -225,10 +225,16 @@
                 @if ($registration)
                     <div class="space-y-3 text-sm">
                         <div class="flex justify-between border-b pb-2">
+                            <span class="text-gray-500">No. Pendaftaran</span>
+                            <span
+                                class="font-medium text-gray-900 font-mono">{{ $registration->registration_number ?? '-' }}</span>
+                        </div>
+                        <div class="flex justify-between border-b pb-2">
                             <span class="text-gray-500">Jenis Pendaftaran</span>
                             <span
                                 class="font-medium text-gray-900">{{ $registration->registrationType->name ?? '-' }}</span>
                         </div>
+
                         <div class="flex justify-between border-b pb-2">
                             <span class="text-gray-500">Pilihan 1</span>
                             <span
