@@ -275,6 +275,17 @@
                 {{-- Pendaftaran --}}
                 <div>
                     <h3 class="text-lg font-medium text-gray-900 border-b pb-2 mb-4">Data Pendaftaran</h3>
+                    @if ($student->registration && $student->registration->registration_number)
+                        <div class="bg-blue-50 border border-blue-200 rounded-md p-4 mb-4">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="hash" class="h-5 w-5 text-blue-600"></i>
+                                <p class="text-sm text-blue-700">
+                                    Nomor Pendaftaran: <span
+                                        class="font-mono font-bold">{{ $student->registration->registration_number }}</span>
+                                </p>
+                            </div>
+                        </div>
+                    @endif
                     <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
                         <div>
                             <label for="registration_type_id" class="block text-sm font-medium text-gray-700">Jenis
@@ -297,9 +308,9 @@
                         </div>
 
                         <div>
-                            <label for="registration_path" class="block text-sm font-medium text-gray-700">Jalur
+                            <label for="registration_path_id" class="block text-sm font-medium text-gray-700">Jalur
                                 Pendaftaran <span class="text-red-500">*</span></label>
-                            <select name="registration_path" id="registration_path"
+                            <select name="registration_path_id" id="registration_path_id"
                                 class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm">
                                 <option value="">Pilih Jalur Pendaftaran</option>
                                 @foreach ($registrationPaths as $path)

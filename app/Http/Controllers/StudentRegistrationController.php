@@ -82,22 +82,33 @@ class StudentRegistrationController extends Controller
             'choice_3' => 'Pilihan 3',
         ]);
 
+        // Check if user already has a registration
+        $existingRegistration = Registration::where('user_id', Auth::id())->first();
+
+        $data = [
+            'registration_type_id' => $request->registration_type_id,
+            'registration_path_id' => $request->registration_path_id,
+            'referral_source' => $request->referral_source,
+            'referral_detail' => $request->referral_detail,
+            'choice_1' => $request->choice_1,
+            'choice_2' => $request->choice_2,
+            'choice_3' => $request->choice_3,
+            'status' => 'submitted',
+            'registration_period_id' => $activePeriod->id,
+        ];
+
+        // Only generate registration number for new registrations
+        if (!$existingRegistration || !$existingRegistration->registration_number) {
+            $data['registration_number'] = Registration::generateRegistrationNumber($activePeriod);
+        }
+
         Registration::updateOrCreate(
             ['user_id' => Auth::id()],
-            [
-                'registration_number' => Registration::generateRegistrationNumber($activePeriod),
-                'registration_type_id' => $request->registration_type_id,
-                'registration_path_id' => $request->registration_path_id,
-                'referral_source' => $request->referral_source,
-                'referral_detail' => $request->referral_detail,
-                'choice_1' => $request->choice_1,
-                'choice_2' => $request->choice_2,
-                'choice_3' => $request->choice_3,
-                'status' => 'submitted',
-                'registration_period_id' => $activePeriod->id,
-            ]
+            $data
         );
 
-        return redirect()->route('student.pendaftaran.index')->with('success', 'Pendaftaran berhasil dikirim!');
+        $message = $existingRegistration ? 'Pendaftaran berhasil diperbarui!' : 'Pendaftaran berhasil dikirim!';
+        return redirect()->route('student.pendaftaran.index')->with('success', $message);
+
     }
 }
