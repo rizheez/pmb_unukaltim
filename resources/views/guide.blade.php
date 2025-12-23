@@ -608,8 +608,10 @@
                         <div class="step-number">1</div>
                         <div class="step-title">Registrasi Akun</div>
                     </div>
-                    <p class="step-desc">Buka website PMB, klik <strong>"Daftar"</strong>. Isi email aktif, nama, dan
-                        password. Verifikasi email melalui link yang dikirim.</p>
+                    <p class="step-desc">Buka website PMB, klik <strong>"Daftar"</strong>. Isi email aktif, nama,
+                        <strong style="color: var(--accent);">nomor WhatsApp aktif</strong>, dan password. Verifikasi
+                        email melalui link yang dikirim.
+                    </p>
                 </div>
 
                 <div class="step-card">
@@ -627,7 +629,8 @@
                         <div class="step-title">Upload Dokumen</div>
                     </div>
                     <p class="step-desc">Upload <strong>KTP</strong>, <strong>Kartu Keluarga</strong>, dan
-                        <strong>Ijazah/SKL</strong>. Format: PDF/JPG/PNG, maks 2MB.</p>
+                        <strong>Ijazah/SKL</strong>. Format: PDF/JPG/PNG, maks 2MB.
+                    </p>
                 </div>
 
                 <div class="step-card">
@@ -646,7 +649,8 @@
                     </div>
                     <p class="step-desc">Tunggu verifikasi Tim PMB. Setelah lolos, Anda akan dihubungi untuk proses
                         <strong>daftar ulang</strong> dan pembayaran UKT. Pantau email dan status pendaftaran Anda
-                        secara berkala.</p>
+                        secara berkala.
+                    </p>
                 </div>
             </div>
 
@@ -672,6 +676,7 @@
                     </div>
                     <ul>
                         <li>Gunakan email aktif</li>
+                        <li><strong>Gunakan nomor WA aktif</strong></li>
                         <li>Siapkan dokumen sebelum daftar</li>
                         <li>Pastikan foto jelas & terbaca</li>
                         <li>Isi data sesuai dokumen resmi</li>
@@ -686,6 +691,7 @@
                     </div>
                     <ul>
                         <li>Menggunakan email tidak aktif</li>
+                        <li><strong>Nomor WA tidak aktif</strong></li>
                         <li>Upload foto blur/tidak jelas</li>
                         <li>Isi data tidak sesuai KTP</li>
                         <li>Lupa password akun</li>

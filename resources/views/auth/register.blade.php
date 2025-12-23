@@ -22,10 +22,25 @@
 
         <!-- Phone Number -->
         <div class="mt-4">
-            <x-input-label for="phone" value="Nomor HP / WhatsApp" />
+            <x-input-label for="phone">
+                Nomor HP / WhatsApp <span class="text-red-500">*</span>
+            </x-input-label>
             <x-text-input id="phone" class="block mt-1 w-full" type="tel" name="phone" :value="old('phone')"
                 required autocomplete="tel" placeholder="08123456789" />
             <x-input-error :messages="$errors->get('phone')" class="mt-2" />
+            <div class="mt-2 p-3 bg-amber-50 border border-amber-200 rounded-md">
+                <p class="text-xs text-amber-800 font-semibold flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                    </svg>
+                    Gunakan Nomor WhatsApp Aktif!
+                </p>
+                <p class="text-xs text-amber-700 mt-1">
+                    Informasi penting seperti status pendaftaran, jadwal daftar ulang, dan pengumuman akan dikirim
+                    melalui WhatsApp.
+                </p>
+            </div>
             <p class="mt-1 text-xs text-gray-500">Contoh: 08123456789 (tanpa spasi atau tanda hubung)</p>
         </div>
 

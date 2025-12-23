@@ -53,7 +53,7 @@
             {
                 "@type": "HowToStep",
                 "name": "Registrasi Akun",
-                "text": "Buka website PMB, klik Daftar, isi email aktif, nama, dan password. Verifikasi email."
+                "text": "Buka website PMB, klik Daftar, isi email aktif, nama, nomor WhatsApp aktif, dan password. Verifikasi email."
             },
             {
                 "@type": "HowToStep",
@@ -167,8 +167,18 @@
                         <i data-lucide="user-plus"></i>
                         Registrasi Akun
                     </h3>
-                    <p>Buka website PMB, klik tombol <strong>"Daftar"</strong>. Isi email aktif, nama lengkap, dan
-                        password. Cek email untuk verifikasi dan aktifkan akun Anda.</p>
+                    <p>Buka website PMB, klik tombol <strong>"Daftar"</strong>. Isi email aktif, nama lengkap,
+                        <strong class="text-teal-600">nomor WhatsApp aktif</strong>, dan password. Cek email untuk
+                        verifikasi dan aktifkan akun Anda.
+                    </p>
+                    <div class="mt-3 p-3 bg-amber-50 border border-amber-300 rounded-lg text-sm">
+                        <p class="font-semibold text-amber-800 flex items-center gap-2">
+                            <i data-lucide="alert-circle" style="width: 16px; height: 16px;"></i>
+                            Penting: Gunakan Nomor WhatsApp Aktif!
+                        </p>
+                        <p class="text-amber-700 mt-1">Informasi penting seperti status pendaftaran dan jadwal daftar
+                            ulang akan dikirim melalui WhatsApp.</p>
+                    </div>
                 </div>
             </div>
 
@@ -249,6 +259,7 @@
                 </div>
                 <ul>
                     <li><i data-lucide="check"></i> Gunakan email aktif</li>
+                    <li><i data-lucide="check"></i> <strong>Gunakan nomor WhatsApp aktif</strong></li>
                     <li><i data-lucide="check"></i> Siapkan dokumen sebelum daftar</li>
                     <li><i data-lucide="check"></i> Pastikan foto jelas & terbaca</li>
                     <li><i data-lucide="check"></i> Isi data sesuai dokumen resmi</li>
@@ -265,6 +276,7 @@
                 </div>
                 <ul>
                     <li><i data-lucide="x"></i> Email tidak aktif</li>
+                    <li><i data-lucide="x"></i> <strong>Nomor WhatsApp tidak aktif</strong></li>
                     <li><i data-lucide="x"></i> Upload foto blur/tidak jelas</li>
                     <li><i data-lucide="x"></i> Data tidak sesuai KTP</li>
                     <li><i data-lucide="x"></i> Lupa password akun</li>

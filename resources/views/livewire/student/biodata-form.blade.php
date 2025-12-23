@@ -98,7 +98,9 @@
 
             <!-- Phone -->
             <div>
-                <label for="phone" class="block text-sm font-medium text-gray-700">Nomor Handphone / WhatsApp</label>
+                <label for="phone" class="block text-sm font-medium text-gray-700">
+                    Nomor Handphone / WhatsApp <span class="text-red-500">*</span>
+                </label>
                 <div class="mt-1">
                     <input type="text" wire:model="phone" id="phone"
                         class="shadow-sm focus:ring-teal-500 focus:border-teal-500 block w-full sm:text-sm border-gray-300 rounded-md">
@@ -106,6 +108,15 @@
                 @error('phone')
                     <span class="text-red-500 text-xs">{{ $message }}</span>
                 @enderror
+                <div class="mt-2 p-3 bg-amber-50 border border-amber-200 rounded-md">
+                    <p class="text-xs text-amber-800 font-semibold flex items-center gap-1">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                        </svg>
+                        Gunakan Nomor WhatsApp Aktif!
+                    </p>
+                </div>
                 <p class="text-xs text-gray-500 mt-1">Contoh: 08123456789 (tanpa tanda - atau +62)</p>
             </div>
 
