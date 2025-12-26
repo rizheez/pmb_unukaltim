@@ -41,8 +41,7 @@ class DocumentVerificationController extends Controller
             try {
                 Mail::to($biodata->user->email)->send(new DocumentRejectedMail(
                     $biodata->user,
-                    $request->document_type,
-                    $request->notes
+                    [['type' => $request->document_type, 'notes' => $request->notes]]
                 ));
             } catch (\Exception $e) {
                 \Log::error('Failed to send document rejection email: ' . $e->getMessage());
@@ -122,18 +121,15 @@ class DocumentVerificationController extends Controller
             $count++;
         }
 
-        // Send emails for rejected documents
+        // Send ONE email for all rejected documents
         if (!empty($rejectedDocs) && $biodata->user) {
-            foreach ($rejectedDocs as $doc) {
-                try {
-                    Mail::to($biodata->user->email)->send(new DocumentRejectedMail(
-                        $biodata->user,
-                        $doc['type'],
-                        $doc['notes']
-                    ));
-                } catch (\Exception $e) {
-                    \Log::error('Failed to send document rejection email: ' . $e->getMessage());
-                }
+            try {
+                Mail::to($biodata->user->email)->send(new DocumentRejectedMail(
+                    $biodata->user,
+                    $rejectedDocs
+                ));
+            } catch (\Exception $e) {
+                \Log::error('Failed to send document rejection email: ' . $e->getMessage());
             }
         }
 

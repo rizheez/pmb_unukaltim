@@ -16,17 +16,26 @@ class DocumentRejectedMail extends Mailable
     use Queueable, SerializesModels;
 
     public User $student;
-    public string $documentType;
-    public ?string $notes;
+    public array $rejectedDocuments;
 
     /**
      * Create a new message instance.
+     *
+     * @param User $student
+     * @param array $documents Array of ['type' => string, 'notes' => string|null]
      */
-    public function __construct(User $student, string $documentType, ?string $notes = null)
+    public function __construct(User $student, array $documents)
     {
         $this->student = $student;
-        $this->documentType = $documentType;
-        $this->notes = $notes;
+
+        // Process documents with labels immediately
+        $this->rejectedDocuments = collect($documents)->map(function ($doc) {
+            return [
+                'type' => $doc['type'],
+                'label' => $this->getDocumentLabel($doc['type']),
+                'notes' => $doc['notes'] ?? null,
+            ];
+        })->all();
     }
 
     /**
@@ -35,7 +44,7 @@ class DocumentRejectedMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Dokumen Pendaftaran Perlu Diperbaiki - PMB UNUK Kaltim',
+            subject: 'Dokumen Pendaftaran Perlu Diperbaiki - PMB UNU Kaltim',
         );
     }
 
@@ -46,19 +55,13 @@ class DocumentRejectedMail extends Mailable
     {
         return new Content(
             markdown: 'emails.document-rejected',
-            with: [
-                'student' => $this->student,
-                'documentType' => $this->documentType,
-                'documentLabel' => $this->getDocumentLabel(),
-                'notes' => $this->notes,
-            ],
         );
     }
 
     /**
      * Get human-readable document type label
      */
-    protected function getDocumentLabel(): string
+    protected function getDocumentLabel(string $documentType): string
     {
         $labels = [
             'kk' => 'Kartu Keluarga (KK)',
@@ -68,7 +71,7 @@ class DocumentRejectedMail extends Mailable
             'biodata' => 'Data Biodata',
         ];
 
-        return $labels[$this->documentType] ?? ucfirst($this->documentType);
+        return $labels[$documentType] ?? ucfirst($documentType);
     }
 
     /**

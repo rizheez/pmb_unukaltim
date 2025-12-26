@@ -1,35 +1,36 @@
 <x-mail::message>
-    # Dokumen Perlu Diperbaiki
+# Dokumen Perlu Diperbaiki
 
-    Yth. {{ $student->name }},
+Yth. {{ $student->name }},
 
-    Kami telah memeriksa dokumen pendaftaran Anda. Mohon maaf, terdapat dokumen yang **perlu diperbaiki** atau
-    **diunggah ulang**:
+Kami telah memeriksa dokumen pendaftaran Anda. Mohon maaf, terdapat {{ count($rejectedDocuments) }} dokumen yang **perlu diperbaiki** atau **diunggah ulang**:
 
-    <x-mail::panel>
-        **Dokumen:** {{ $documentLabel }}
+@foreach ($rejectedDocuments as $doc)
+<x-mail::panel>
+**Dokumen:** {{ $doc['label'] }}
 
-        @if ($notes)
-            **Catatan dari Tim Verifikasi:**
+@if ($doc['notes'])
+**Catatan dari Tim Verifikasi:**
 
-            {{ $notes }}
-        @endif
-    </x-mail::panel>
+{{ $doc['notes'] }}
+@endif
+</x-mail::panel>
+@endforeach
 
-    ## Langkah yang Perlu Dilakukan
+## Langkah yang Perlu Dilakukan
 
-    1. Login ke portal PMB menggunakan akun Anda
-    2. Buka halaman **Dokumen Pendaftaran**
-    3. Perbaiki atau unggah ulang dokumen yang ditandai
-    4. Pastikan dokumen sesuai dengan ketentuan yang berlaku
+1. Login ke portal PMB menggunakan akun Anda
+2. Buka halaman **Biodata**
+3. Perbaiki atau unggah ulang dokumen yang ditandai
+4. Pastikan dokumen sesuai dengan ketentuan yang berlaku
 
-    <x-mail::button :url="config('app.url') . '/login'">
-        Perbaiki Dokumen Sekarang
-    </x-mail::button>
+<x-mail::button :url="config('app.url') . '/login'">
+Perbaiki Dokumen Sekarang
+</x-mail::button>
 
-    Jika Anda memiliki pertanyaan, silakan hubungi panitia PMB.
+Jika Anda memiliki pertanyaan, silakan hubungi panitia PMB.
 
-    Salam,<br>
-    **Tim Verifikasi PMB**<br>
-    {{ config('app.name') }}
+Salam,<br>
+**Tim Verifikasi PMB UNU Kaltim**<br>
+{{ config('app.name') }}
 </x-mail::message>
