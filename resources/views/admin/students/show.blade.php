@@ -407,6 +407,32 @@
 
 
 
+    <style>
+        /* Fix SweetAlert2 buttons visibility - override Tailwind preflight */
+        .swal2-actions button {
+            padding: 10px 24px !important;
+            font-size: 14px !important;
+            font-weight: 600 !important;
+            border-radius: 6px !important;
+        }
+        .swal2-confirm {
+            background-color: #0d9488 !important;
+            color: white !important;
+            border: none !important;
+        }
+        .swal2-confirm:hover {
+            background-color: #0f766e !important;
+        }
+        .swal2-cancel {
+            background-color: #6b7280 !important;
+            color: white !important;
+            border: none !important;
+        }
+        .swal2-cancel:hover {
+            background-color: #4b5563 !important;
+        }
+    </style>
+
     <script>
         // Form validation and confirmation
         document.addEventListener('DOMContentLoaded', function() {
@@ -442,8 +468,6 @@
                         text: 'Apakah Anda yakin ingin menyimpan verifikasi ini?',
                         icon: 'question',
                         showCancelButton: true,
-                        confirmButtonColor: '#0d9488',
-                        cancelButtonColor: '#6b7280',
                         confirmButtonText: 'Ya, Simpan',
                         cancelButtonText: 'Batal'
                     }).then((result) => {
